@@ -157,7 +157,17 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="LevelMap.h" />
+    <ClInclude Include="PlayerProgression.h" />
+    <ClInclude Include="PlayerInventory.h" />
+    <ClInclude Include="EnemySystem.h" />
+    <ClInclude Include="LootSystem.h" />
+    <ClInclude Include="LevelOneSession.h" />
+    <ClInclude Include="LevelOneView.h" />
+    <ClInclude Include="LevelTypes.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="AttackInput.h" />
+    <ClInclude Include="BasicAttack.h" />
     <ClInclude Include="PrototypeWorld.h" />
     <ClInclude Include="SpriteImage.h" />
     <ClInclude Include="CombatVisualData.h" />
@@ -167,7 +177,16 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="LevelMap.cpp" />
+    <ClCompile Include="PlayerProgression.cpp" />
+    <ClCompile Include="PlayerInventory.cpp" />
+    <ClCompile Include="EnemySystem.cpp" />
+    <ClCompile Include="LootSystem.cpp" />
+    <ClCompile Include="LevelOneSession.cpp" />
+    <ClCompile Include="LevelOneView.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="AttackInput.cpp" />
+    <ClCompile Include="BasicAttack.cpp" />
     <ClCompile Include="PrototypeWorld.cpp" />
     <ClCompile Include="SpriteImage.cpp" />
     <ClCompile Include="PostProcessing.cpp" />

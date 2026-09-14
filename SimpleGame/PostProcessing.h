@@ -19,7 +19,7 @@ struct PostSettings
 // Scene-linear HDR -> half-size blur/bloom -> SDR composite. UI is drawn afterwards.
 class PostProcessing
 {
-public:
+  public:
     ~PostProcessing();
     PostProcessing() = default;
     PostProcessing(const PostProcessing&) = delete;
@@ -30,7 +30,8 @@ public:
     void Composite();
     std::string Status() const;
     PostSettings settings;
-private:
+
+  private:
     bool MakeProgram();
     void ReleaseTargets();
     void BindSources(GLuint scene, GLuint blurred, GLuint bloom);
