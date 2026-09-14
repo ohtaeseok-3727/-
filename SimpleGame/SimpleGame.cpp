@@ -42,9 +42,26 @@ namespace {
         if(!world.Started() && key>='1' && key<='2') world.Select(key-'1');
         if(key=='p') { paused=!paused; world.SetPaused(paused); }
         if(key=='r') world.Reset();
+        if(renderer && key=='[') {
+            auto& exposure=renderer->Effects().exposure;
+            exposure-=.1f; if(exposure<.1f) exposure=.1f;
+        }
+        if(renderer && key==']') {
+            auto& exposure=renderer->Effects().exposure;
+            exposure+=.1f; if(exposure>5.f) exposure=5.f;
+        }
     }
     void KeyUp(unsigned char key,int,int) { keys[static_cast<unsigned char>(std::tolower(key))]=false; }
-    void SpecialDown(int key,int,int) { if(key>=0 && key<256) arrows[key]=true; }
+    void SpecialDown(int key,int,int) {
+        if(key<0 || key>=256 || arrows[key]) return;
+        arrows[key]=true;
+        if(!renderer) return;
+        auto& fx=renderer->Effects();
+        if(key==GLUT_KEY_F1) fx.enabled=!fx.enabled;
+        if(key==GLUT_KEY_F2) fx.bloom=!fx.bloom;
+        if(key==GLUT_KEY_F3) fx.vignette=!fx.vignette;
+        if(key==GLUT_KEY_F4) fx.edgeBlur=!fx.edgeBlur;
+    }
     void SpecialUp(int key,int,int) { if(key>=0 && key<256) arrows[key]=false; }
     void Entry(int state) { if(state==GLUT_LEFT) ClearInput(); }
     void Timer(int) {
@@ -90,6 +107,7 @@ int main(int argc,char** argv)
     world.Reset(); previous=std::chrono::steady_clock::now();
     glutTimerFunc(0,Timer,0);
     std::cout<<"Choose 1/2. Move: WASD/arrows. Run: Shift. Pause: P. Home: R. Exit: Esc.\n";
+    std::cout<<"Post FX: F1 all, F2 bloom, F3 vignette, F4 edge blur, [/] exposure.\n";
     glutMainLoop();
     // Freeglut close callback releases GPU objects before context destruction.
     return 0;

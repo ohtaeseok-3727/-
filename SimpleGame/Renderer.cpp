@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Renderer.h"
 #include "SpriteImage.h"
+#include "CombatVisualData.h"
+#include <cstring>
 #include "Dependencies/freeglut.h"
 #include <cmath>
 #include <cstddef>
@@ -33,7 +35,10 @@ Renderer::Renderer(int width, int height)
         "uniform vec2 viewport; out vec4 tint; out vec2 texCoord;\n"
         "void main(){gl_Position=vec4(pos.x*2.0/viewport.x-1.0,1.0-pos.y*2.0/viewport.y,0,1);tint=color;texCoord=uv;}";
     const char* fs = "#version 330 core\nin vec4 tint; in vec2 texCoord; uniform sampler2D sprite;\n"
-        "out vec4 frag; void main(){frag=tint;if(texCoord.x>=0.0) frag*=texture(sprite,texCoord);if(frag.a<0.01)discard;}";
+        "uniform bool linearOutput; out vec4 frag;\n"
+        "void main(){frag=tint;if(texCoord.x>=0.0) frag*=texture(sprite,texCoord);if(frag.a<0.01)discard;"
+        "if(linearOutput){vec3 c=max(frag.rgb,vec3(0));"
+        "frag.rgb=mix(c/12.92,pow((c+0.055)/1.055,vec3(2.4)),step(vec3(0.04045),c));}}";
     GLuint v = Compile(GL_VERTEX_SHADER, vs), f = Compile(GL_FRAGMENT_SHADER, fs);
     if (!v || !f) { if (v) glDeleteShader(v); if (f) glDeleteShader(f); return; }
     m_Program = glCreateProgram();
@@ -50,6 +55,7 @@ Renderer::Renderer(int width, int height)
         return;
     }
     m_Viewport = glGetUniformLocation(m_Program, "viewport");
+    m_LinearOutput = glGetUniformLocation(m_Program, "linearOutput");
     glUseProgram(m_Program);
     glUniform1i(glGetUniformLocation(m_Program, "sprite"), 0);
     glUseProgram(0);
@@ -61,11 +67,12 @@ Renderer::Renderer(int width, int height)
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, u)));
     glBindVertexArray(0);
     Resize(width, height);
-    m_Initialized = m_Array != 0 && m_Buffer != 0 && m_Viewport >= 0;
+    m_Initialized = m_Array != 0 && m_Buffer != 0 && m_Viewport >= 0 && m_LinearOutput >= 0;
+    if (m_Initialized) m_Initialized = m_Post.Initialize(m_Width, m_Height);
 }
 Renderer::~Renderer()
 {
-    glDeleteTextures(2, m_CharacterTextures);
+    if (!m_CombatTextures.empty()) glDeleteTextures(static_cast<GLsizei>(m_CombatTextures.size()),m_CombatTextures.data());
     if (m_Buffer) glDeleteBuffers(1, &m_Buffer);
     if (m_Array) glDeleteVertexArrays(1, &m_Array);
     if (m_Program) glDeleteProgram(m_Program);
@@ -74,13 +81,25 @@ void Renderer::Resize(int width, int height)
 {
     m_Width = width > 0 ? width : 1; m_Height = height > 0 ? height : 1;
     glViewport(0, 0, m_Width, m_Height);
+    if (m_Initialized) m_Post.Resize(m_Width, m_Height);
 }
 void Renderer::Begin()
 {
     m_Vertices.clear();
+    m_InLinearScene = m_Post.BeginScene();
+    glViewport(0, 0, m_Width, m_Height);
+    glDisable(GL_FRAMEBUFFER_SRGB); // Composite shader encodes SDR once; UI already uses display colors.
     glDisable(GL_DEPTH_TEST); glDisable(GL_CULL_FACE);
     glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glClearColor(.055f, .068f, .075f, 1.f); glClear(GL_COLOR_BUFFER_BIT);
+    if (m_InLinearScene) glClearColor(.0044f, .0058f, .0066f, 1.f);
+    else glClearColor(.055f, .068f, .075f, 1.f);
+    glClear(GL_COLOR_BUFFER_BIT);
+}
+void Renderer::FinishWorld()
+{
+    Flush();
+    m_Post.Composite();
+    m_InLinearScene = false;
 }
 void Renderer::Triangle(Point a, Point b, Point c, Color t)
 {
@@ -101,6 +120,7 @@ void Renderer::Flush()
 {
     if (!m_Initialized || m_Vertices.empty()) return;
     glUseProgram(m_Program); glUniform2f(m_Viewport, float(m_Width), float(m_Height));
+    glUniform1i(m_LinearOutput, m_InLinearScene ? 1 : 0);
     glActiveTexture(GL_TEXTURE0); glBindTexture(GL_TEXTURE_2D, m_ActiveTexture);
     glBindVertexArray(m_Array); glBindBuffer(GL_ARRAY_BUFFER, m_Buffer);
     glBufferData(GL_ARRAY_BUFFER, m_Vertices.size()*sizeof(Vertex), m_Vertices.data(), GL_STREAM_DRAW);
@@ -111,43 +131,98 @@ void Renderer::Flush()
 
 bool Renderer::LoadCharacterSprites()
 {
-    const wchar_t* files[2] = { L"mage-coarse-preview-v2.png", L"knight-coarse-preview-v2.png" };
-    for (int i=0; i<2; ++i) {
-        if (m_CharacterTextures[i]) continue;
-        SpriteImage image;
-        if (!LoadMercenarySprite(files[i], image)) return false;
-        glGenTextures(1, &m_CharacterTextures[i]);
-        if (!m_CharacterTextures[i]) return false;
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, m_CharacterTextures[i]);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image.width, image.height, 0,
-            GL_RGBA, GL_UNSIGNED_BYTE, image.rgba.data());
-        GLint uploadedWidth = 0;
-        glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &uploadedWidth);
-        glBindTexture(GL_TEXTURE_2D, 0);
-        if (uploadedWidth != image.width) return false;
+    if (m_CombatTextures.empty()) m_CombatTextures.resize(CombatVisuals::assetCount,0);
+    // Preload only the two active mini walk sheets. Attack assets remain lazy and unused.
+    for (const auto& clip : CombatVisuals::clips) {
+        if (std::strcmp(clip.id,"mage-walk")!=0 && std::strcmp(clip.id,"knight-walk")!=0) continue;
+        const int index=clip.body[0].sprite.asset;
+        if (m_CombatTextures[index]) continue;
+        SpriteImage image; const auto& asset=CombatVisuals::assets[index];
+        if (!LoadRawSpriteSheet(asset.path,image) || image.width!=asset.width || image.height!=asset.height) return false;
+        GLuint texture=0;
+        if (!UploadSprite(texture,image.width,image.height,image.rgba.data())) {
+            if(texture)glDeleteTextures(1,&texture);
+            return false;
+        }
+        m_CombatTextures[index]=texture;
     }
     return true;
 }
 
-void Renderer::Character(int profession, float footX, float footY, bool faceLeft, int scale)
+bool Renderer::UploadSprite(GLuint& texture, int width, int height, const unsigned char* rgba)
 {
-    if (profession < 0 || profession >= 2 || !m_CharacterTextures[profession] || scale < 1) return;
-    Flush(); // Preserve world Y ordering across solid geometry and textured sprites.
-    m_ActiveTexture = m_CharacterTextures[profession];
-    const float w = 32.f*scale, h = 52.f*scale;
-    const float x = std::round(footX)-w*.5f, y = std::round(footY)-50.f*scale;
-    float u0 = faceLeft?1.f:0.f, u1 = faceLeft?0.f:1.f;
-    Vertex a = {x,y,1,1,1,1,u0,0}, b = {x+w,y,1,1,1,1,u1,0};
-    Vertex c = {x+w,y+h,1,1,1,1,u1,1}, d = {x,y+h,1,1,1,1,u0,1};
-    m_Vertices.insert(m_Vertices.end(), {a,b,c,a,c,d});
-    Flush();
-    m_ActiveTexture = 0;
+        glGenTextures(1, &texture);
+        if (!texture) return false;
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0,
+            GL_RGBA, GL_UNSIGNED_BYTE, rgba);
+        GLint uploadedWidth = 0;
+        glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &uploadedWidth);
+        glBindTexture(GL_TEXTURE_2D, 0);
+        return uploadedWidth == width;
 }
+
+void Renderer::Character(int profession, float footX, float footY, bool faceLeft, int scale, int direction, int frame)
+{
+    if (profession<0 || profession>=2 || scale<1) return;
+    (void)direction; // Mini sheets contain one eight-frame side-facing cycle.
+    const char* id=profession==0?"mage-walk":"knight-walk";
+    const float worldScale=profession==0?.35f:.32f; // Approximately the previous 50px body height.
+    const int selected=frame>=0 && frame<8?frame:0;
+    for (const auto& clip : CombatVisuals::clips) {
+        if(std::strcmp(clip.id,id)!=0)continue;
+        float ms=0;for(int i=0;i<selected;++i)ms+=clip.body[i].ms;
+        CombatVisual(id,ms,std::round(footX),std::round(footY),faceLeft,worldScale*scale,false);
+        break;
+    }
+}
+bool Renderer::CombatVisual(const char* clipId, float milliseconds, float footX, float footY,
+    bool faceLeft, float scale, bool effects)
+{
+    if (!m_Initialized || !clipId || scale<=0 || !std::isfinite(milliseconds)) return false;
+    const CombatVisuals::Clip* clip=nullptr;
+    for (int i=0;i<CombatVisuals::clipCount;++i)
+        if (std::strcmp(clipId,CombatVisuals::clips[i].id)==0) { clip=&CombatVisuals::clips[i]; break; }
+    if (!clip) return false;
+    CombatVisuals::Sprite commands[2];
+    int count=CombatVisuals::Sample(*clip,milliseconds,commands);
+    if (!count) return false;
+    if (!effects) count=1;
+    if (m_CombatTextures.empty()) m_CombatTextures.resize(CombatVisuals::assetCount,0);
+    // Load before submitting either layer, so a missing effect never leaves a partial draw.
+    for (int i=0;i<count;++i) {
+        const int index=commands[i].asset;
+        if (!m_CombatTextures[index]) {
+            SpriteImage image; const auto& asset=CombatVisuals::assets[index];
+            if (!LoadRawSpriteSheet(asset.path,image) || image.width!=asset.width || image.height!=asset.height) return false;
+            GLuint texture=0;
+            if (!UploadSprite(texture,image.width,image.height,image.rgba.data())) { if(texture)glDeleteTextures(1,&texture); return false; }
+            m_CombatTextures[index]=texture;
+        }
+    }
+    Flush();
+    for(int i=0;i<count;++i) {
+        const auto& s=commands[i]; const auto& asset=CombatVisuals::assets[s.asset];
+        const float w=s.w*s.scale*scale,h=s.h*s.scale*scale;
+        const float x=footX+(faceLeft?-s.dx*scale-w:s.dx*scale),y=footY+s.dy*scale;
+        float u0=float(s.x)/asset.width,u1=float(s.x+s.w)/asset.width;
+        if(faceLeft){float temp=u0;u0=u1;u1=temp;}
+        const float v0=float(s.y)/asset.height,v1=float(s.y+s.h)/asset.height;
+        m_ActiveTexture=m_CombatTextures[s.asset];
+        glBlendFunc(GL_SRC_ALPHA,s.blend==1?GL_ONE:GL_ONE_MINUS_SRC_ALPHA);
+        Vertex a={x,y,1,1,1,1,u0,v0},b={x+w,y,1,1,1,1,u1,v0};
+        Vertex c={x+w,y+h,1,1,1,1,u1,v1},d={x,y+h,1,1,1,1,u0,v1};
+        m_Vertices.insert(m_Vertices.end(),{a,b,c,a,c,d});Flush();
+    }
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);m_ActiveTexture=0;
+    return true;
+}
+
 void Renderer::Text(float x, float y, const std::string& text, Color t)
 {
     Flush(); // Compatibility context is requested explicitly for GLUT bitmap text.

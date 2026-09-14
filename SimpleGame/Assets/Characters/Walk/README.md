@@ -16,10 +16,13 @@
 
 두 파일 모두 1254×1254 RGB 이미지이며 알파 채널이 없다. 체크무늬는 실제 이미지 배경이다.
 생성 요청에는 투명 배경을 명시했으나 결과는 이를 충족하지 않았다.
-원본을 그대로 게임 텍스처로 사용하면 체크무늬도 표시되므로 배경 제거가 필요하다.
-1254는 4로 나누어떨어지지 않으므로 정수 크기 셀로 정리하고 발 기준점과 몸 크기를 맞춰야 한다.
+게임 로더는 각 셀의 외곽과 연결된 밝은 무채색 배경을 제거한다. 원본 PNG는 수정하지 않는다.
+1254를 정수 경계로 분할하고, 전체 시트에 한 배율을 적용해 프레임의 발 기준점을 맞춘다.
+로딩 결과는 128×208 RGBA 아틀라스이며 각 셀은 32×52이다.
 정적 이미지로 방향과 16개 구성을 확인했으며, 장비 좌우 일관성과 걷기 연결의 자연스러움은 정식 프레임 정리 시 추가 조정할 대상이다.
-현재 게임 코드에는 연결하지 않았다. 기존 필드 캐릭터 크기(32×52)는 변경하지 않았다.
+현재 게임 코드에 연결했다. 필드 표시 영역(32×52)은 유지하며 동작과 장비가 셀 안에 들어가도록 축소한다.
+행은 실제 이동 방향으로 선택하고, 20 월드 단위 이동마다 다음 열로 넘어간다.
+정지 시 마지막 방향의 열 1을 사용한다. 원본 생성 시트 자체의 자세 차이는 남아 있다.
 게임 빌드·실행·애니메이션 재생은 수행하지 않았다.
 
 ## 생성 도구와 프롬프트
@@ -33,4 +36,3 @@ Create a production-oriented WALKING SPRITE SHEET based on the attached approved
 ### 마법사
 
 Create a production-oriented WALKING SPRITE SHEET based on the attached approved coarse pixel character. EXACTLY 16 full body sprites in a perfectly regular 4 columns by 4 rows layout. Equal square cells, every character centered horizontally in its cell, feet share the same local baseline, ample padding, no overlap. Row 1 walking SOUTH facing viewer; row 2 walking WEST facing left profile; row 3 walking EAST facing right profile; row 4 walking NORTH facing away, ONLY back of head and cape, no face. Columns in EACH row show a coherent four-phase loop: 1 left foot forward/right arm forward opposite leg, 2 passing with feet close, 3 right foot forward/left arm forward, 4 other passing pose. Alternating feet MUST be visibly different, not four copies. Keep body mass and head size invariant, only legs/arms/cape move slightly. Coarse LOW PIXEL COUNT aesthetic of the reference, approximately 32x48 logical pixel character per cell displayed enlarged with hard square blocks. No finer detail than reference, no smoothing, no texture painting, flat restrained colors. Match brown hair, adult mercenary face, olive cape, brown boots, original proportions. Do not beautify or change to youthful new design. True transparent alpha background, no painted checkerboard, no ground shadows, NO text, NO cell border lines, no labels, no extra characters. Entire square sheet fills canvas evenly. MAGE: same approved dark navy split robe, olive cape, brown belt and boots. NO WEAPONS whatsoever: no sword, shield, staff, wand, book, orb, or carried object. Both empty hands wear brown gloves bearing small cyan RING magic circles drawn directly on the backs of hands, visible only when that side of the hand is visible. Walk naturally with opposite arm/leg swing; not casting spells, no floating effects. Preserve robe split so alternate feet are clearly readable. North row shows cape and back of hair, no face. Exactly 16 sprites. Use a TRUE TRANSPARENT PNG alpha channel, not a baked checkerboard texture. Match reference coarse low-pixel art, do not add detailed shading.
-

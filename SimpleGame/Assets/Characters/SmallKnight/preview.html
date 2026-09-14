@@ -1,0 +1,49 @@
+<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>작은 기사 이동·공격</title>
+<style>:root{font-family:system-ui;color-scheme:dark;background:#171d24;color:#e4edf3}body{max-width:850px;margin:32px auto;padding:0 18px}p{line-height:1.6}button,select{padding:9px;margin:4px;font:inherit}canvas{display:block;max-width:100%;margin:20px auto;image-rendering:pixelated;border:1px solid #789}a{color:#8dd9ee}</style>
+<h1>작은 기사 · 이동과 공격</h1><p><a href="../combat-preview.html">기사·마법사 통합 미리보기 열기</a></p><p>짧은 준비 동작과 큰 공격 효과를 조합한 시안입니다. 배경을 바꿔 투명 영역도 확인할 수 있습니다.</p>
+<label>동작 <select id="mode"><option>이동</option><option>방패 밀치기</option><option>가로 베기</option><option>내려베기</option></select></label>
+<label>속도 <select id="speed"><option value="0.25">0.25배</option><option value="0.5">0.5배</option><option value="1" selected>1배</option></select></label>
+<label>배경 <select id="bg"><option value="#283038">어둡게</option><option value="#e5e7eb">밝게</option><option value="#617d68">초록</option></select></label>
+<label><input id="effects" type="checkbox" checked>공격 효과</label><label><input id="flip" type="checkbox">좌우 반전</label><br>
+<button id="play" disabled>재생</button><button id="prev" disabled>이전</button><button id="next" disabled>다음</button>
+<canvas id="stage" width="640" height="400" aria-label="작은 기사 애니메이션"></canvas><p id="status" role="status">이미지 불러오는 중…</p>
+<p><a href="walk-transparent-v1.png">이동 PNG</a> · <a href="attacks-transparent-v2.png">공격 PNG</a> · <a href="effects-transparent-v2.png">효과 PNG</a></p>
+<p>좌우 반전은 시안 확인용이며 장비 좌우도 뒤집힙니다. 현재 우측을 바라보는 시트이며, 게임의 이동 방식과 방향별 제작 범위는 아직 확정하지 않았습니다. 게임 적용·빌드·실행은 하지 않았습니다.</p>
+<script src="../padded-frames.js"></script><script>
+'use strict';
+const $=id=>document.getElementById(id),ctx=$('stage').getContext('2d');
+const walk=new Image(),attack=new Image(),fx=new Image();
+const walkFrames=new PaddedFrames(walk,4,[0,512,1024]),attackFrames=new PaddedFrames(attack,6,[0,341,650,1024],[[0,256,512,768,1024,1280,1536],[0,256,512,768,1034,1280,1536]]),fxFrames=new PaddedFrames(fx,6,[0,341,650,1024],[[0,256,512,768,1024,1280,1536],[0,256,512,779,1024,1280,1536]]);
+const poses=[0,1,2,3,3,4,4,4,5,0],effects=[-1,-1,0,1,2,3,4,5,-1,-1];
+const durations=[150,130,35,35,45,45,40,40,130,160];
+let mode=0,step=0,elapsed=0,last=null,playing=false,ready=false;
+function length(){return mode===0?8:10;}
+function draw(){if(!ready)return;ctx.fillStyle=$('bg').value;ctx.fillRect(0,0,640,400);ctx.imageSmoothingEnabled=false;ctx.save();
+ if($('flip').checked){ctx.translate(640,0);ctx.scale(-1,1);}
+ if(mode===0){const col=step%4,row=Math.floor(step/4),scale=0.45,baseline=row?388:453;
+  const pivotX=[192,191,177.5,160,195,189,176.5,158][step];
+  walkFrames.draw(ctx,col,row,col*384,row*512,260-pivotX*scale,300-baseline*scale,scale);
+ }else{const row=mode-1,f=poses[step],y=[0,341,650][row],bottom=[341,650,1024][row],scale=0.64;
+  // Include raised sword above nominal third-row boundary.
+  attackFrames.draw(ctx,f,row,f*256,y,260-128*scale,300-([324,628,941][row]-y)*scale,scale);
+  const e=effects[step];if(e>=0&&$('effects').checked){const sy=[0,341,650][row],end=[341,650,1024][row],s=[0.78,0.92,0.8][row];
+   const ax=[341,290,323][row],ay=[247,266,300][row],ox=[128,128,170][row],oy=[190,180,292][row];
+   // Align the visible bottom of each chop effect with the current pose's boots.
+   const effectBottom=[945,945,964,959,952,944];
+   const bootBottom=[939,938,938,945,949,939];
+   const effectY=row===2
+    ?300+(bootBottom[f]-941)*scale-(effectBottom[e]-sy)*s
+    :ay-oy*s;
+   fxFrames.draw(ctx,e,row,e*256,sy,ax-ox*s,effectY,s);
+  }
+ }
+ ctx.restore();ctx.strokeStyle='#82929d';ctx.beginPath();ctx.moveTo(35,301);ctx.lineTo(605,301);ctx.stroke();
+ $('play').textContent=playing?'일시정지':'재생';$('status').textContent=mode===0?`이동 ${step+1}/8`:`공격 단계 ${step+1}/10 · 캐릭터 ${poses[step]+1}/6 · 효과 ${effects[step]<0?'없음':effects[step]+1}`;
+}
+function stopAt(n){playing=false;step=(n+length())%length();elapsed=0;draw();}
+$('mode').onchange=()=>{mode=$('mode').selectedIndex;stopAt(0);};$('bg').onchange=draw;$('effects').onchange=draw;$('flip').onchange=draw;
+$('play').onclick=()=>{playing=!playing;last=null;draw();};$('prev').onclick=()=>stopAt(step-1);$('next').onclick=()=>stopAt(step+1);
+function tick(now){if(last===null)last=now;const dt=Math.min(now-last,100);last=now;if(playing){elapsed+=dt*Number($('speed').value);while(elapsed>=(mode===0?90:durations[step])){elapsed-=mode===0?90:durations[step];step=(step+1)%length();}draw();}requestAnimationFrame(tick);}
+function load(img,src){return new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=()=>reject(new Error(src+' 로드 실패'));img.src=src;});}
+Promise.all([load(walk,'walk-transparent-v1.png'),load(attack,'attacks-transparent-v2.png'),load(fx,'effects-transparent-v2.png')]).then(()=>{ready=true;document.querySelectorAll('button').forEach(b=>b.disabled=false);draw();requestAnimationFrame(tick);}).catch(e=>$('status').textContent=e.message);
+</script></html>

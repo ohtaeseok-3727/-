@@ -7,6 +7,10 @@
 
 namespace {
     const float ChunkSize = 512.f;
+    // Orthographic view: angle between the sight line and the ground plane.
+    const float GroundViewAngle = 60.f * 3.14159265358979323846f / 180.f;
+    const float GroundDepthScale = std::sin(GroundViewAngle);
+    const float ObjectHeightScale = std::cos(GroundViewAngle);
     const char* Classes[] = { "MAGE", "KNIGHT" };
     unsigned Hash(int x, int y, unsigned salt = 0) {
         unsigned h = static_cast<unsigned>(x)*374761393u ^ static_cast<unsigned>(y)*668265263u ^ salt;
@@ -17,7 +21,7 @@ namespace {
 void PrototypeWorld::Reset()
 {
     m_X=m_Y=m_CameraX=m_CameraY=m_Time=m_Walk=0;
-    m_FaceLeft=false;
+    m_FaceLeft=false; m_Moving=false;
     m_Chunks.clear(); Stream();
 }
 void PrototypeWorld::Stream()
@@ -25,7 +29,7 @@ void PrototypeWorld::Stream()
     int cx=static_cast<int>(std::floor(m_X/ChunkSize)), cy=static_cast<int>(std::floor(m_Y/ChunkSize));
     // Include tall props and a prefetch margin even after the window is resized.
     int radiusX=static_cast<int>(std::ceil(m_Width*.5f/ChunkSize))+2;
-    int radiusY=static_cast<int>(std::ceil(m_Height*.6f/.58f/ChunkSize))+2;
+    int radiusY=static_cast<int>(std::ceil(m_Height*.6f/GroundDepthScale/ChunkSize))+2;
     for (auto it=m_Chunks.begin();it!=m_Chunks.end();) {
         if (std::abs(it->first.first-cx)>radiusX || std::abs(it->first.second-cy)>radiusY) it=m_Chunks.erase(it);
         else ++it;
@@ -65,9 +69,9 @@ void PrototypeWorld::Update(float dt,float dx,float dy,bool sprint)
     m_Time+=dt;
     if (m_Chunks.empty()) Stream();
     if (!m_Started || m_Paused) return;
+    m_Moving=false;
     float length=std::sqrt(dx*dx+dy*dy);
     if (length>0) {
-        if (dx != 0) m_FaceLeft=dx<0;
         float oldX=m_X, oldY=m_Y;
         dx/=length; dy/=length;
         float distance=(sprint?240.f:145.f)*dt;
@@ -78,8 +82,14 @@ void PrototypeWorld::Update(float dt,float dx,float dy,bool sprint)
             if (!Blocked(nx,m_Y)) m_X=nx;
             if (!Blocked(m_X,ny)) m_Y=ny;
         }
-        if (m_X!=oldX || m_Y!=oldY) m_Walk+=dt*(sprint?15.f:10.f);
-        else m_Walk=0;
+        float movedX=m_X-oldX, movedY=m_Y-oldY;
+        float traveled=std::sqrt(movedX*movedX+movedY*movedY);
+        if (traveled>0.0001f) {
+            m_Moving=true;
+            if (std::abs(movedX)>0.0001f) m_FaceLeft=movedX<0;
+            // Preserve the 80-world-unit stride with all eight mini walk frames.
+            m_Walk=std::fmod(m_Walk+traveled/10.f,8.f);
+        } else m_Walk=0;
     } else m_Walk=0;
     Stream();
     float follow=1.f-std::exp(-9.f*dt);
@@ -87,31 +97,42 @@ void PrototypeWorld::Update(float dt,float dx,float dy,bool sprint)
 }
 Point PrototypeWorld::Project(float x,float y) const
 {
-    return {m_Width*.5f+(x-m_CameraX),m_Height*.52f+(y-m_CameraY)*.58f};
+    return {m_Width*.5f+(x-m_CameraX),m_Height*.52f+(y-m_CameraY)*GroundDepthScale};
 }
 void PrototypeWorld::DrawObject(Renderer& r,const Object& o)
 {
     Point p=Project(o.x,o.y); float x=p.x,y=p.y,s=o.size;
+    // Solid props share the ground projection; characters/trees remain upright billboards.
+    const auto point=[&](float dx,float depth,float height) {
+        Point q=Project(o.x+dx*s,o.y+depth*s);
+        q.y-=height*ObjectHeightScale*s;
+        return q;
+    };
     if (x < -180 || x > m_Width+180 || y < -80 || y > m_Height+230) return;
     if (o.kind==5) {
-        float bob=std::round(std::abs(std::sin(m_Walk)));
-        r.Character(m_Class,x,y-bob,m_FaceLeft,1);
+        int frame=m_Moving?static_cast<int>(m_Walk):0;
+        r.Character(m_Class,x,y,m_FaceLeft,1,-1,frame);
     } else if (o.kind==0) {
         r.Quad({x-7*s,y},{x+7*s,y},{x+3*s,y-104*s},{x-4*s,y-108*s},Color(.19f,.18f,.16f));
         r.Quad({x,y-52*s},{x-38*s,y-83*s},{x-42*s,y-106*s},{x-30*s,y-83*s},Color(.22f,.21f,.18f));
         r.Quad({x,y-73*s},{x+34*s,y-101*s},{x+39*s,y-129*s},{x+27*s,y-102*s},Color(.23f,.22f,.18f));
         r.Triangle({x-4*s,y-89*s},{x+3*s,y-126*s},{x+7*s,y-74*s},Color(.26f,.25f,.21f));
     } else if (o.kind==1) {
-        r.Quad({x-38*s,y-14*s},{x+25*s,y-14*s},{x+25*s,y-78*s},{x-38*s,y-66*s},Color(.36f,.38f,.35f));
-        r.Quad({x+25*s,y-14*s},{x+40*s,y-28*s},{x+40*s,y-87*s},{x+25*s,y-78*s},Color(.23f,.27f,.27f));
-        r.Quad({x-38*s,y-66*s},{x+25*s,y-78*s},{x+40*s,y-87*s},{x-22*s,y-76*s},Color(.48f,.49f,.42f));
-        for(int i=1;i<4;++i) r.Rect(x-37*s,y-(14+i*13)*s,61*s,2*s,Color(.23f,.26f,.25f));
-        r.Rect(x-7*s,y-62*s,3*s,19*s,Color(.19f,.23f,.22f));
-        r.Rect(x+10*s,y-35*s,3*s,19*s,Color(.19f,.23f,.22f));
-        r.Triangle({x-32*s,y-10*s},{x-49*s,y+2*s},{x-18*s,y+4*s},Color(.38f,.39f,.34f));
+        r.Quad(point(-38,14,0),point(25,14,0),point(25,14,128),point(-38,14,104),Color(.36f,.38f,.35f));
+        r.Quad(point(25,14,0),point(40,-28,0),point(40,-28,128),point(25,14,128),Color(.23f,.27f,.27f));
+        r.Quad(point(-38,14,104),point(25,14,128),point(40,-28,128),point(-22,-28,104),Color(.48f,.49f,.42f));
+        for(int i=1;i<4;++i) {
+            Point seam=point(-37,14,float(i*26));
+            r.Rect(seam.x,seam.y,61*s,2*s,Color(.23f,.26f,.25f));
+        }
+        Point crack=point(-7,14,96);
+        r.Rect(crack.x,crack.y,3*s,19*s,Color(.19f,.23f,.22f));
+        crack=point(10,14,42);
+        r.Rect(crack.x,crack.y,3*s,19*s,Color(.19f,.23f,.22f));
+        r.Triangle(point(-32,18,0),point(-49,28,0),point(-18,30,0),Color(.38f,.39f,.34f));
     } else if (o.kind==2) {
-        r.Quad({x-20*s,y},{x-13*s,y-20*s},{x+11*s,y-26*s},{x+22*s,y-2*s},Color(.30f,.34f,.32f));
-        r.Triangle({x-13*s,y-20*s},{x+11*s,y-26*s},{x+2*s,y-9*s},Color(.43f,.46f,.40f));
+        r.Quad(point(-20,10,0),point(-13,-10,28),point(11,-14,32),point(22,7,0),Color(.30f,.34f,.32f));
+        r.Triangle(point(-13,-10,28),point(11,-14,32),point(2,5,24),Color(.43f,.46f,.40f));
     } else if (o.kind==3) {
         r.Rect(x-2,y-96,4,96,Color(.39f,.33f,.24f));
         float sway=std::sin(m_Time*2)*4;
@@ -120,9 +141,11 @@ void PrototypeWorld::DrawObject(Renderer& r,const Object& o)
     } else {
         r.Rect(x-14,y-5,28,5,Color(.22f,.18f,.13f));
         float flicker=std::sin(m_Time*9)*4;
-        r.Ellipse(x,y-9,38+flicker,19,Color(.94f,.45f,.12f,.09f));
-        r.Triangle({x-10,y-5},{x+11,y-5},{x+flicker,y-37},Color(.91f,.37f,.10f));
-        r.Triangle({x-5,y-6},{x+5,y-6},{x-flicker,y-25},Color(1.f,.76f,.28f));
+        // Draw only the emitter. The post-process bright pass supplies all light bloom.
+        // Gentle intensity variation changes the bloom without drawing a flat halo.
+        float intensity=1.f+.06f*std::sin(m_Time*7.f);
+        r.Triangle({x-10,y-5},{x+11,y-5},{x+flicker,y-37},Color(1.65f*intensity,.65f*intensity,.16f*intensity));
+        r.Triangle({x-5,y-6},{x+5,y-6},{x-flicker,y-25},Color(2.4f*intensity,1.25f*intensity,.38f*intensity));
     }
 }
 void PrototypeWorld::Draw(Renderer& r,int width,int height)
@@ -130,20 +153,22 @@ void PrototypeWorld::Draw(Renderer& r,int width,int height)
     m_Width=width; m_Height=height;
     r.Begin();
     int left=int(std::floor((m_CameraX-width*.5f)/64.f))-1;
-    int top=int(std::floor((m_CameraY-height/.58f*.52f)/64.f))-1;
-    int cols=width/64+4, rows=int(height/(64*.58f))+5;
+    int top=int(std::floor((m_CameraY-height/GroundDepthScale*.52f)/64.f))-1;
+    int cols=width/64+4, rows=int(height/(64*GroundDepthScale))+5;
     for(int y=top;y<top+rows;++y) for(int x=left;x<left+cols;++x) {
         Point p=Project(x*64.f,y*64.f);
         float shade=float(Hash(x,y)%19)/1000.f;
         bool road=Road(x*64.f+32,y*64.f+32);
         Color color=road?Color(.25f+shade,.24f+shade,.20f+shade):Color(.14f+shade,.19f+shade,.17f+shade);
-        r.Rect(p.x,p.y,64.5f,37.7f,color);
+        r.Rect(p.x,p.y,64.5f,64.f*GroundDepthScale+.5f,color);
         if (!road) {
             unsigned h=Hash(x,y,19);
-            float gx=p.x+float(h%53), gy=p.y+float((h>>9)%31);
+            Point grass=Project(x*64.f+float(h%53),y*64.f+float((h>>9)%53));
+            float gx=grass.x, gy=grass.y;
             r.Triangle({gx,gy},{gx+3,gy-5},{gx+5,gy},Color(.25f,.29f,.22f));
         } else {
-            r.Rect(p.x+8,p.y+13,17,2,Color(.31f,.29f,.24f));
+            Point stone=Project(x*64.f+8,y*64.f+22);
+            r.Rect(stone.x,stone.y,17,3.5f*GroundDepthScale,Color(.31f,.29f,.24f));
         }
     }
     std::vector<Object> objects;
@@ -151,22 +176,24 @@ void PrototypeWorld::Draw(Renderer& r,int width,int height)
         objects.push_back(o);
         Point p=Project(o.x,o.y);
         if (p.x>-150 && p.x<width+150 && p.y>-80 && p.y<height+80)
-            r.Ellipse(p.x+8,p.y,30*o.size,11*o.size,Color(.025f,.035f,.035f,.35f));
+            r.Ellipse(p.x+8,p.y,30*o.size,19*GroundDepthScale*o.size,Color(.025f,.035f,.035f,.35f));
     }
     if(m_Started) {
         objects.push_back({m_X,m_Y,5,1});
         Point p=Project(m_X,m_Y);
-        r.Ellipse(p.x,p.y,10,4,Color(.015f,.025f,.03f,.6f));
-        r.Ellipse(p.x,p.y,11,4,Color(.7f,.62f,.37f,.13f));
+        r.Ellipse(p.x,p.y,10,7*GroundDepthScale,Color(.015f,.025f,.03f,.6f));
+        r.Ellipse(p.x,p.y,11,7*GroundDepthScale,Color(.7f,.62f,.37f,.13f));
     }
     std::stable_sort(objects.begin(),objects.end(),[](const Object& a,const Object& b){return a.y<b.y;});
     for(const Object& o:objects) DrawObject(r,o);
+    r.FinishWorld(); // Post-process only the completed world; UI stays sharp and ungraded.
     // Quiet letterbox and readable UI, independent of world coordinates.
     r.Rect(0,0,float(width),78,Color(.025f,.04f,.045f,.94f));
     r.Rect(0,78,float(width),1,Color(.48f,.42f,.27f,.65f));
     r.Rect(0,float(height-46),float(width),46,Color(.025f,.04f,.045f,.94f));
     r.Text(24,28,"THE LONG WAR  /  MERCENARY PROTOTYPE",Color(.82f,.76f,.60f));
     r.Text(24,53,"A country worn down by centuries of war.",Color(.52f,.60f,.59f));
+    r.Text(24,71,r.EffectStatus(),Color(.58f,.63f,.61f));
     if(!m_Started) {
         float x=width*.5f-250, y=height*.5f-165;
         r.Rect(x,y,500,330,Color(.04f,.06f,.065f,.97f));
@@ -179,7 +206,7 @@ void PrototypeWorld::Draw(Renderer& r,int width,int height)
         r.Text(x+65,y+240,"RUNIC GLOVES",Color(.42f,.76f,.80f));
         r.Text(x+305,y+240,"SWORD & SHIELD",Color(.69f,.72f,.69f));
         r.Text(x+28,y+278,"Press 1 or 2 to enter the field.",Color(.57f,.64f,.61f));
-        r.Text(x+28,y+309,"Combat and walk frames are not added yet.",Color(.48f,.54f,.53f));
+        r.Text(x+28,y+309,"4-way walking ready. Combat comes later.",Color(.48f,.54f,.53f));
     } else {
         std::ostringstream status;
         status<<Classes[m_Class]<<"  |  POSITION "<<int(m_X)<<", "<<int(m_Y)<<"  |  SECTORS "<<m_Chunks.size();

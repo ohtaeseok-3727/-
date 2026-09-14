@@ -1,0 +1,17 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<ItemGroup>
+<PreparedCombatAsset Include="$(MSBuildThisFileDirectory)Assets\Characters\SmallKnight\walk-transparent-v1.png"><RelativePath>SmallKnight\walk-transparent-v1.png</RelativePath></PreparedCombatAsset>
+<PreparedCombatAsset Include="$(MSBuildThisFileDirectory)Assets\Characters\SmallKnight\attacks-transparent-v2.png"><RelativePath>SmallKnight\attacks-transparent-v2.png</RelativePath></PreparedCombatAsset>
+<PreparedCombatAsset Include="$(MSBuildThisFileDirectory)Assets\Characters\SmallKnight\effects-transparent-v2.png"><RelativePath>SmallKnight\effects-transparent-v2.png</RelativePath></PreparedCombatAsset>
+<PreparedCombatAsset Include="$(MSBuildThisFileDirectory)Assets\Characters\SmallMage\walk-transparent-v2.png"><RelativePath>SmallMage\walk-transparent-v2.png</RelativePath></PreparedCombatAsset>
+<PreparedCombatAsset Include="$(MSBuildThisFileDirectory)Assets\Characters\SmallMage\left-jab-drawn-v2.png"><RelativePath>SmallMage\left-jab-drawn-v2.png</RelativePath></PreparedCombatAsset>
+<PreparedCombatAsset Include="$(MSBuildThisFileDirectory)Assets\Characters\SmallMage\mana-blade-motion-v1.png"><RelativePath>SmallMage\mana-blade-motion-v1.png</RelativePath></PreparedCombatAsset>
+<PreparedCombatAsset Include="$(MSBuildThisFileDirectory)Assets\Characters\SmallMage\double-palm-motion-v2.png"><RelativePath>SmallMage\double-palm-motion-v2.png</RelativePath></PreparedCombatAsset>
+<PreparedCombatAsset Include="$(MSBuildThisFileDirectory)Assets\Characters\Attack\Mage\mage-melee-effects-v1.png"><RelativePath>Attack\Mage\mage-melee-effects-v1.png</RelativePath></PreparedCombatAsset>
+<PreparedCombatAsset Include="$(MSBuildThisFileDirectory)Assets\Characters\SmallMage\mana-blade-v1.png"><RelativePath>SmallMage\mana-blade-v1.png</RelativePath></PreparedCombatAsset>
+<PreparedCombatAsset Include="$(MSBuildThisFileDirectory)Assets\Characters\Attack\Mage\mage-burst-b-v2.png"><RelativePath>Attack\Mage\mage-burst-b-v2.png</RelativePath></PreparedCombatAsset>
+</ItemGroup>
+<Target Name="CopyPreparedCombatAssets" AfterTargets="Build">
+<Copy SourceFiles="@(PreparedCombatAsset)" DestinationFiles="@(PreparedCombatAsset->'$(TargetDir)Assets\Characters\%(RelativePath)')" SkipUnchangedFiles="true" />
+</Target>
+</Project>

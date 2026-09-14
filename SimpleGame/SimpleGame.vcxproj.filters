@@ -27,9 +27,22 @@
     <ClInclude Include="targetver.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="PrototypeWorld.h"><Filter>헤더 파일</Filter></ClInclude>
-    <ClInclude Include="SpriteImage.h"><Filter>헤더 파일</Filter></ClInclude>
+    <ClInclude Include="PrototypeWorld.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteImage.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PostProcessing.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PostProcessingShaders.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
     <ClInclude Include="Renderer.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CombatVisualData.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -40,8 +53,15 @@
     <ClCompile Include="SimpleGame.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="PrototypeWorld.cpp"><Filter>소스 파일</Filter></ClCompile>
-    <ClCompile Include="SpriteImage.cpp"><Filter>소스 파일</Filter></ClCompile>
+    <ClCompile Include="PrototypeWorld.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteImage.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProcessing.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
     <ClCompile Include="Renderer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -50,8 +70,18 @@
     <None Include="Shaders\SolidRect.fs">
       <Filter>소스 파일\Shaders</Filter>
     </None>
-    <None Include="Assets\Characters\knight-coarse-preview-v2.png"><Filter>리소스 파일</Filter></None>
-    <None Include="Assets\Characters\mage-coarse-preview-v2.png"><Filter>리소스 파일</Filter></None>
+    <None Include="Assets\Characters\knight-coarse-preview-v2.png">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="Assets\Characters\mage-coarse-preview-v2.png">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="Assets\Characters\Walk\mage-walk-sheet-v1.png">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="Assets\Characters\Walk\knight-walk-sheet-v1.png">
+      <Filter>리소스 파일</Filter>
+    </None>
     <None Include="Shaders\SolidRect.vs">
       <Filter>소스 파일\Shaders</Filter>
     </None>

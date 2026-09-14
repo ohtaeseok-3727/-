@@ -105,6 +105,8 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard_C>stdclatest</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -158,6 +160,9 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="PrototypeWorld.h" />
     <ClInclude Include="SpriteImage.h" />
+    <ClInclude Include="CombatVisualData.h" />
+    <ClInclude Include="PostProcessing.h" />
+    <ClInclude Include="PostProcessingShaders.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -165,6 +170,7 @@
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="PrototypeWorld.cpp" />
     <ClCompile Include="SpriteImage.cpp" />
+    <ClCompile Include="PostProcessing.cpp" />
     <ClCompile Include="SimpleGame.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -178,16 +184,23 @@
     <None Include="Shaders\SolidRect.vs" />
     <None Include="Assets\Characters\knight-coarse-preview-v2.png" />
     <None Include="Assets\Characters\mage-coarse-preview-v2.png" />
+    <None Include="Assets\Characters\Walk\mage-walk-sheet-v1.png" />
+    <None Include="Assets\Characters\Walk\knight-walk-sheet-v1.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Target Name="CopyCharacterSprites" AfterTargets="Build">
     <ItemGroup>
       <RuntimeSprite Include="$(ProjectDir)Assets\Characters\knight-coarse-preview-v2.png" />
       <RuntimeSprite Include="$(ProjectDir)Assets\Characters\mage-coarse-preview-v2.png" />
+      <RuntimeWalkSprite Include="$(ProjectDir)Assets\Characters\Walk\mage-walk-sheet-v1.png" />
+      <RuntimeWalkSprite Include="$(ProjectDir)Assets\Characters\Walk\knight-walk-sheet-v1.png" />
     </ItemGroup>
     <MakeDir Directories="$(TargetDir)Assets\Characters" />
     <Copy SourceFiles="@(RuntimeSprite)" DestinationFolder="$(TargetDir)Assets\Characters" SkipUnchangedFiles="true" />
+    <MakeDir Directories="$(TargetDir)Assets\Characters\Walk" />
+    <Copy SourceFiles="@(RuntimeWalkSprite)" DestinationFolder="$(TargetDir)Assets\Characters\Walk" SkipUnchangedFiles="true" />
   </Target>
+  <Import Project="PreparedCombatAssets.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
 </Project>

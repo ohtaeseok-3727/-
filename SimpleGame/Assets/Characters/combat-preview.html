@@ -1,0 +1,18 @@
+<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>기사 · 마법사 통합 공격 미리보기</title>
+<style>:root{color-scheme:dark;font-family:system-ui;background:#171d24;color:#e4edf3}body{max-width:1100px;margin:24px auto;padding:0 18px}h1{font-size:26px}label{display:inline-block;margin:6px 12px 6px 0}button,select{font:inherit;padding:8px}button{margin:5px}canvas{display:block;width:100%;height:auto;image-rendering:pixelated;background:#283038;border-radius:12px;margin:16px 0}input[type=range]{width:min(100%,760px)}p{line-height:1.6;color:#b9c9d5}a{color:#8dd9ee}</style>
+<h1>기사 · 마법사 공격 미리보기</h1>
+<label>직업 <select id="profession"><option value="1">기사</option><option value="0">마법사</option></select></label>
+<label>동작 <select id="clip"></select></label>
+<label>재생 속도 <select id="speed"><option value=".25">0.25배</option><option value=".5">0.5배</option><option value="1" selected>1배</option></select></label>
+<label>확대 <select id="zoom"><option value="1">1배</option><option value="1.5" selected>1.5배</option><option value="2">2배</option></select></label>
+<label>배경 <select id="background"><option value="#283038">어둡게</option><option value="#e5e7eb">밝게</option><option value="#617d68">초록</option></select></label>
+<label><input id="effects" type="checkbox" checked>이펙트</label><label><input id="flip" type="checkbox">좌우 반전</label>
+<canvas id="stage" width="1000" height="640" aria-label="기사와 마법사의 이동 및 공격"></canvas>
+<button id="prev">이전 동작 프레임</button><button id="play">재생</button><button id="next">다음 동작 프레임</button><button id="restart">처음으로</button>
+<p id="status" role="status">에셋 불러오는 중…</p>
+<label for="timeline">시간 이동</label><input id="timeline" type="range" min="0" max="1" step="1" value="0">
+<p id="details"></p>
+<p>게임 적용 준비용 시안입니다. 좌우 반전은 장비 좌우도 반전합니다. 마법사 궤적은 0.8배, B안 폭발은 1.2배 속도를 유지합니다. 게임 적용과 빌드·실행 검증은 아직 하지 않았습니다.</p>
+<p><a href="combat-visuals.json">공통 애니메이션 데이터</a> · <a href="COMBAT_INTEGRATION.md">게임 적용 준비 문서</a></p>
+<script src="combat-visuals.js"></script><script src="combat-preview.js"></script></html>

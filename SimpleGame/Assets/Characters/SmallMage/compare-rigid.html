@@ -1,0 +1,29 @@
+<!doctype html><html lang="ko"><meta charset="utf-8"><title>원본 픽셀 재사용 · 공격 비교</title>
+<style>body{background:#242c34;color:#eaf2f6;font:16px system-ui;max-width:1100px;margin:30px auto;padding:20px}canvas{width:100%;image-rendering:pixelated;background:#34424c}button,select{font:inherit;margin:6px;padding:8px}p{line-height:1.7}a{color:#9edbed}</style>
+<h1>원본 픽셀 재사용 · 공격 비교</h1>
+<p>왼쪽: 선택한 공격 원본 · 가운데: 이동 시트의 부위로 조립한 시안 · 오른쪽: 이동 캐릭터 기준.<br>부위의 확대·축소 없이 회전·이동합니다. 공격 자세의 완전한 동일성은 확보하지 못한 비교용 시안입니다.</p>
+<select id="mode"><option>손바닥 타격</option><option>마력칼날</option><option>양손 방출</option></select>
+<button id="prev" disabled>이전</button><button id="play" disabled>재생</button><button id="next" disabled>다음</button>
+<select id="speed"><option value="1">1배</option><option value="0.5">0.5배</option><option value="0.25">0.25배</option></select>
+<canvas id="stage" width="1050" height="390"></canvas><p id="status">불러오는 중…</p>
+<p><a href="attacks-rigid-parts-v1.png">조립 시트 PNG</a> · <a href="rigid-attack.json">부위·자세 데이터</a> · <a href="preview.html">기존 효과 미리보기</a></p>
+<script src="../padded-frames.js"></script><script>
+const $=id=>document.getElementById(id),ctx=$('stage').getContext('2d');
+const original=new Image(),rig=new Image(),walk=new Image();
+const ref=new PaddedFrames(original,6,[0,341,682,1024],[[0,256,512,757,1024,1293,1536],[0,256,512,768,1024,1302,1536],[0,256,501,756,1024,1286,1536]]);
+const assembled=new PaddedFrames(rig,6,[0,512,1024,1536]);
+const poses=[0,1,2,3,3,3,4,4,4,5,5,0],times=[[150,140,40,40,45,45,55,70,60,100,80,180],[150,130,30,30,40,40,50,65,60,100,80,180],[150,180,65,90,50,65,70,90,65,110,90,180]];
+let row=0,step=0,elapsed=0,last=null,playing=false,ready=false;
+function draw(){if(!ready)return;ctx.clearRect(0,0,1050,390);ctx.imageSmoothingEnabled=false;const f=poses[step],y=[0,341,682][row];
+ref.draw(ctx,f,row,f*256,y,160-128*.64,300-([334,647,961][row]-y)*.64,.64);
+assembled.draw(ctx,f,row,f*512,row*512,510-256*.42,300-448*.42,.42);
+ctx.drawImage(walk,0,0,384,512,860-210*.42,300-456*.42,384*.42,512*.42);
+ctx.fillStyle='#eaf2f6';ctx.font='16px system-ui';ctx.fillText('선택한 공격 원본',85,350);ctx.fillText('원본 부위 재사용 시안',420,350);ctx.fillText('이동 시트 기준',805,350);
+ctx.strokeStyle='#84929c';ctx.beginPath();ctx.moveTo(20,302);ctx.lineTo(1030,302);ctx.stroke();
+$('status').textContent=`단계 ${step+1}/12 · 자세 ${f+1}/6`;$('play').textContent=playing?'일시정지':'재생';}
+function stop(n){playing=false;step=(n+12)%12;elapsed=0;draw();}
+$('mode').onchange=()=>{row=$('mode').selectedIndex;stop(0)};$('prev').onclick=()=>stop(step-1);$('next').onclick=()=>stop(step+1);$('play').onclick=()=>{playing=!playing;last=null;draw()};
+function tick(t){if(last===null)last=t;if(playing){elapsed+=Math.min(t-last,100)*Number($('speed').value);while(elapsed>=times[row][step]){elapsed-=times[row][step];step=(step+1)%12}draw()}last=t;requestAnimationFrame(tick)}
+function load(im,path){return new Promise((ok,bad)=>{im.onload=ok;im.onerror=()=>bad(Error(path));im.src=path})}
+Promise.all([load(original,'attacks-selected-v1.png'),load(rig,'attacks-rigid-parts-v1.png'),load(walk,'walk-transparent-v2.png')]).then(()=>{ready=true;document.querySelectorAll('button').forEach(b=>b.disabled=false);draw();requestAnimationFrame(tick)}).catch(e=>$('status').textContent='이미지 로드 실패: '+e.message);
+</script></html>

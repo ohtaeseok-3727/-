@@ -24,6 +24,7 @@ private:
     float m_Time = 0, m_Walk = 0;
     int m_Width = 1280, m_Height = 720, m_Class = 1;
     bool m_Started = false, m_Paused = false;
-    bool m_FaceLeft = false;
+    bool m_FaceLeft = false; // Vertical movement retains the last horizontal facing.
+    bool m_Moving = false;
     std::map<std::pair<int,int>, Chunk> m_Chunks;
 };
