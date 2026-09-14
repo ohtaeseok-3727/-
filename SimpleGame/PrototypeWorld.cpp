@@ -42,6 +42,27 @@ void PrototypeWorld::ChangeInventoryPage(int direction)
     m_LevelView.ChangePage(direction, static_cast<int>(m_Level.Inventory().Items().size()));
 }
 
+void PrototypeWorld::ToggleMap()
+{
+    if (m_Started)
+    {
+        m_MapView.ToggleOverview();
+    }
+}
+
+void PrototypeWorld::InspectLandmark()
+{
+    if (!m_Started || m_Paused)
+    {
+        return;
+    }
+    const auto* site = m_Map.Layout().NearbyLandmark({m_X, m_Y});
+    if (site)
+    {
+        m_Level.Inspect(*site);
+    }
+}
+
 void PrototypeWorld::Stream()
 {
     int cx = static_cast<int>(std::floor(m_X / ChunkSize)),
@@ -171,9 +192,9 @@ void PrototypeWorld::DrawObject(Renderer& r, const Object& o)
     };
     if (x < -180 || x > m_Width + 180 || y < -80 || y > m_Height + 230)
         return;
-    if (o.kind == 8)
+    if (o.kind == 9)
     {
-        m_LevelView.DrawVillageHouse(r, p);
+        m_MapView.DrawLandmark(r, m_Map.Layout().Landmarks()[o.entity], p);
     }
     else if (o.kind == 6)
     {
@@ -297,7 +318,7 @@ void PrototypeWorld::Draw(Renderer& r, int width, int height)
         for (int x = left; x < left + cols; ++x)
         {
             Point p = Project(x * 64.f, y * 64.f);
-            m_LevelView.DrawTile(r, m_Map, x, y, p);
+            m_MapView.DrawTile(r, m_Map, x, y, p);
         }
     std::vector<Object> objects;
     for (const auto& entry : m_Chunks)
@@ -347,6 +368,12 @@ void PrototypeWorld::Draw(Renderer& r, int width, int height)
     if (m_Started)
     {
         m_LevelView.DrawHud(r, m_Level, m_Map.RegionName(m_X, m_Y), width, height);
+        const auto* site = m_Map.Layout().NearbyLandmark({m_X, m_Y});
+        if (site)
+        {
+            r.Text(20, 134, std::string("[E] ") + site->name, Color(.94f, .83f, .51f));
+        }
+        m_MapView.DrawOverview(r, m_Map, {m_X, m_Y}, width, height);
         if (m_Paused)
         {
             r.Text(width * .5f - 50, height * .5f, "PAUSED [P]", Color(1.f, .85f, .56f));

@@ -12,6 +12,7 @@ struct FieldEnemy
     float windup = 0.f;
     float respawn = 0.f;
     float hitFlash = 0.f;
+    std::size_t encounter = 0;
 };
 
 class EnemySystem
@@ -26,7 +27,7 @@ class EnemySystem
     const std::vector<FieldEnemy>& Enemies() const;
 
   private:
-    void Spawn(FieldEnemy& enemy, WorldPosition player, const LevelMap& map);
+    void Spawn(FieldEnemy& enemy, const LevelMap& map);
     std::mt19937 m_Random{1};
     std::vector<FieldEnemy> m_Enemies;
 };

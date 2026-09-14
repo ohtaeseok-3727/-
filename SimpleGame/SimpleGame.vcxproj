@@ -165,6 +165,8 @@
     <ClInclude Include="LevelOneSession.h" />
     <ClInclude Include="LevelOneView.h" />
     <ClInclude Include="LevelTypes.h" />
+    <ClInclude Include="TutorialLayout.h" />
+    <ClInclude Include="TutorialMapView.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="AttackInput.h" />
     <ClInclude Include="BasicAttack.h" />
@@ -184,6 +186,8 @@
     <ClCompile Include="LootSystem.cpp" />
     <ClCompile Include="LevelOneSession.cpp" />
     <ClCompile Include="LevelOneView.cpp" />
+    <ClCompile Include="TutorialLayout.cpp" />
+    <ClCompile Include="TutorialMapView.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="AttackInput.cpp" />
     <ClCompile Include="BasicAttack.cpp" />

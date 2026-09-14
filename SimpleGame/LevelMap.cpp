@@ -17,14 +17,12 @@ std::uint32_t LevelMap::Hash(int x, int y, unsigned salt) const
 
 bool LevelMap::IsTown(float x, float y) const
 {
-    return std::abs(x) < 230.f && std::abs(y) < 230.f;
+    return m_Layout.RegionAt({x, y}) == TutorialRegion::Village;
 }
 
 bool LevelMap::IsRoad(float x, float y) const
 {
-    // Shared roads cross every chunk boundary, including negative coordinates.
-    return IsTown(x, y) || std::abs(std::remainder(x, 512.f)) < 64.f ||
-           std::abs(std::remainder(y, 512.f)) < 64.f;
+    return IsTown(x, y) || m_Layout.OnRoad({x, y});
 }
 
 bool LevelMap::CellProp(int x, int y, WorldProp& prop) const
@@ -40,14 +38,19 @@ bool LevelMap::CellProp(int x, int y, WorldProp& prop) const
             int((h >> 24) % 3),
             .65f + float((h >> 5) % 11) * .01f};
 
-    // Reserve the full collision footprint around the town and connected roads.
-    if (std::abs(prop.x) < 280.f && std::abs(prop.y) < 280.f)
+    const WorldPosition p{prop.x, prop.y};
+    // Keep roads, clues, encounters, river crossings and room entrances clear.
+    if ((std::abs(prop.x) < 470.f && std::abs(prop.y) < 390.f) || m_Layout.Reserved(p, 44.f) ||
+        m_Layout.River(p, 100.f) || m_Layout.InMineBounds({p.x - 44.f, p.y + 44.f}) ||
+        m_Layout.InMineBounds({p.x + 44.f, p.y - 44.f}))
     {
         return false;
     }
-
-    return std::abs(std::remainder(prop.x, 512.f)) >= 108.f &&
-           std::abs(std::remainder(prop.y, 512.f)) >= 108.f;
+    if (m_Layout.RegionAt(p) == TutorialRegion::Woods)
+    {
+        prop.kind = 0;
+    }
+    return true;
 }
 
 std::vector<WorldProp> LevelMap::ChunkObjects(int x, int y) const
@@ -65,20 +68,15 @@ std::vector<WorldProp> LevelMap::ChunkObjects(int x, int y) const
         }
     }
 
-    if (x == 0 && y == 0)
+    const auto& landmarks = m_Layout.Landmarks();
+    for (std::size_t i = 0; i < landmarks.size(); ++i)
     {
-        // Nonblocking landmarks mark the village, keeping the origin clear.
-        props.push_back({130.f, 120.f, 3, 1.f});
-        props.push_back({170.f, 120.f, 4, 1.f});
-    }
-    if ((x == -1 || x == 0) && y == -1)
-    {
-        props.push_back({x == -1 ? -128.f : 128.f, -128.f, 8, 1.f});
-    }
-    if (x == 0 && y == 1)
-    {
-        props.push_back({70.f, 980.f, 3, 1.f});
-        props.push_back({110.f, 980.f, 4, 1.f});
+        const auto p = landmarks[i].position;
+        if (static_cast<int>(std::floor(p.x / 512.f)) == x &&
+            static_cast<int>(std::floor(p.y / 512.f)) == y)
+        {
+            props.push_back({p.x, p.y, 9, 1.f, static_cast<int>(i)});
+        }
     }
 
     return props;
@@ -86,11 +84,23 @@ std::vector<WorldProp> LevelMap::ChunkObjects(int x, int y) const
 
 bool LevelMap::Blocked(float x, float y) const
 {
-    for (const float houseX : {-128.f, 128.f})
+    const WorldPosition p{x, y};
+    // Bridges have a player-radius inset; river water and mine walls cannot be crossed.
+    if ((m_Layout.River(p, 11.f) && !m_Layout.OnRoad(p, -11.f)) ||
+        (m_Layout.InMineBounds(p) && !m_Layout.MineFloor(p, 11.f)))
     {
-        const float dx = x - houseX;
-        const float dy = y + 128.f;
-        if (dx * dx + dy * dy < 44.f * 44.f)
+        return true;
+    }
+    for (const auto& landmark : m_Layout.Landmarks())
+    {
+        if (landmark.radius <= 0.f)
+        {
+            continue;
+        }
+        const float dx = x - landmark.position.x;
+        const float dy = y - landmark.position.y;
+        const float radius = landmark.radius + 11.f;
+        if (dx * dx + dy * dy < radius * radius)
         {
             return true;
         }
@@ -140,23 +150,12 @@ bool LevelMap::ClearPath(WorldPosition from, WorldPosition to) const
 
 const char* LevelMap::RegionName(float x, float y) const
 {
-    if (IsTown(x, y))
-    {
-        return "MERCENARY VILLAGE";
-    }
-    if (y > 600.f)
-    {
-        return "RIVERSIDE CAMP";
-    }
-    if (x < -250.f || y < -600.f)
-    {
-        return "WAGON ROAD WOODS";
-    }
-    if (x > 1500.f)
-    {
-        return "OLD BATTLEFIELD";
-    }
-    return "OUTER FARMLANDS";
+    return m_Layout.RegionName({x, y});
+}
+
+const TutorialLayout& LevelMap::Layout() const
+{
+    return m_Layout;
 }
 
 std::uint32_t LevelMap::Seed() const

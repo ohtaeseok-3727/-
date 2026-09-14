@@ -25,7 +25,6 @@ enum class LootKind
 // Initial tuning for the first farming area, not final game balance.
 namespace LevelTuning
 {
-    constexpr int EnemyCount = 10;
     constexpr int EnemyHealth = 45;
     constexpr int EnemyDamage = 8;
     constexpr int KillExperience = 25;

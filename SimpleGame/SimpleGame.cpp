@@ -92,6 +92,14 @@ namespace
         {
             world.ToggleInventory();
         }
+        if (key == 'm')
+        {
+            world.ToggleMap();
+        }
+        if (key == 'e')
+        {
+            world.InspectLandmark();
+        }
         if (renderer && key == '[')
         {
             auto& exposure = renderer->Effects().exposure;
@@ -215,8 +223,9 @@ int main(int argc, char** argv)
     world.Reset();
     previous = std::chrono::steady_clock::now();
     glutTimerFunc(0, Timer, 0);
-    std::cout << "Choose 1/2. Move: WASD/arrows. Run: Shift. Attack: Ctrl (tap for 1-2-3). "
-                 "Inventory: I (Page Up/Down). Pause: P. Village: R. Exit: Esc.\n";
+    std::cout
+        << "Choose 1/2. Move: WASD/arrows. Run: Shift. Attack: Ctrl (tap for 1-2-3). "
+           "Inventory: I (Page Up/Down). Map: M. Inspect: E. Pause: P. Village: R. Exit: Esc.\n";
     std::cout << "Post FX: F1 all, F2 bloom, F3 vignette, F4 edge blur, [/] exposure.\n";
     glutMainLoop();
     // Freeglut close callback releases GPU objects before context destruction.

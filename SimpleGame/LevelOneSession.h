@@ -22,6 +22,7 @@ class LevelOneSession
     const EnemySystem& Enemies() const;
     const LootSystem& Loot() const;
     int Kills() const;
+    void Inspect(const TutorialLandmark& site);
 
   private:
     void ShowNotice(const std::string& text);

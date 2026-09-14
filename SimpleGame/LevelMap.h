@@ -1,6 +1,7 @@
 #pragma once
 
 #include "LevelTypes.h"
+#include "TutorialLayout.h"
 #include <vector>
 #include <cstdint>
 
@@ -16,8 +17,10 @@ class LevelMap
     const char* RegionName(float x, float y) const;
     std::uint32_t Seed() const;
     std::uint32_t Hash(int x, int y, unsigned salt = 0) const;
+    const TutorialLayout& Layout() const;
 
   private:
     bool CellProp(int x, int y, WorldProp& prop) const;
     std::uint32_t m_Seed = 1;
+    TutorialLayout m_Layout;
 };

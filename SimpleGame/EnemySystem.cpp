@@ -6,39 +6,39 @@
 void EnemySystem::Reset(unsigned seed, const LevelMap& map)
 {
     m_Random.seed(seed ^ 0x329ac17u);
-    m_Enemies.assign(LevelTuning::EnemyCount, FieldEnemy{});
-    for (auto& enemy : m_Enemies)
+    const auto& centers = map.Layout().EncounterCenters();
+    m_Enemies.assign(centers.size(), FieldEnemy{});
+    for (std::size_t i = 0; i < m_Enemies.size(); ++i)
     {
-        Spawn(enemy, {0.f, 0.f}, map);
+        m_Enemies[i].encounter = i;
+        Spawn(m_Enemies[i], map);
     }
-    // A visible first target on the village's east road teaches the farming loop.
-    m_Enemies.front().position = {340.f, 0.f};
+    m_Enemies.front().position = centers.front();
 }
 
-void EnemySystem::Spawn(FieldEnemy& enemy, WorldPosition player, const LevelMap& map)
+void EnemySystem::Spawn(FieldEnemy& enemy, const LevelMap& map)
 {
+    const auto encounter = enemy.encounter;
+    const auto center = map.Layout().EncounterCenters()[encounter];
     std::uniform_real_distribution<float> angle(0.f, 6.2831853f);
-    std::uniform_real_distribution<float> radius(320.f, 780.f);
+    std::uniform_real_distribution<float> radius(20.f, 75.f);
     for (int attempt = 0; attempt < 40; ++attempt)
     {
         const float a = angle(m_Random);
         const float r = radius(m_Random);
-        WorldPosition p{player.x + std::cos(a) * r, player.y + std::sin(a) * r};
+        WorldPosition p{center.x + std::cos(a) * r, center.y + std::sin(a) * r};
         if (!map.IsTown(p.x, p.y) && !map.Blocked(p.x, p.y))
         {
             enemy = FieldEnemy{};
+            enemy.encounter = encounter;
             enemy.position = p;
             return;
         }
     }
-    // The shared road lattice is always clear, so retries never leave an invalid spawn.
+    // Every authored encounter center is a reserved, walkable clearing.
     enemy = FieldEnemy{};
-    enemy.position = {std::round(player.x / 512.f) * 512.f + 512.f,
-                      std::round(player.y / 512.f) * 512.f};
-    if (map.IsTown(enemy.position.x, enemy.position.y))
-    {
-        enemy.position.x += 512.f;
-    }
+    enemy.encounter = encounter;
+    enemy.position = center;
 }
 
 int EnemySystem::Update(float dt, WorldPosition player, const LevelMap& map)
@@ -52,7 +52,15 @@ int EnemySystem::Update(float dt, WorldPosition player, const LevelMap& map)
             enemy.respawn -= dt;
             if (enemy.respawn <= 0.f)
             {
-                Spawn(enemy, player, map);
+                const float dx = player.x - enemy.position.x;
+                const float dy = player.y - enemy.position.y;
+                const auto center = map.Layout().EncounterCenters()[enemy.encounter];
+                const float cx = player.x - center.x;
+                const float cy = player.y - center.y;
+                if (dx * dx + dy * dy > 220.f * 220.f && cx * cx + cy * cy > 320.f * 320.f)
+                {
+                    Spawn(enemy, map);
+                }
             }
             continue;
         }
@@ -62,7 +70,6 @@ int EnemySystem::Update(float dt, WorldPosition player, const LevelMap& map)
         const float distance = std::sqrt(dx * dx + dy * dy);
         if (distance > 1500.f)
         {
-            Spawn(enemy, player, map);
             continue;
         }
         enemy.cooldown = (std::max)(0.f, enemy.cooldown - dt);
@@ -89,7 +96,7 @@ int EnemySystem::Update(float dt, WorldPosition player, const LevelMap& map)
         {
             enemy.windup = .6f;
         }
-        else if (distance > 38.f && distance < 360.f)
+        else if (distance > 38.f && distance < 280.f)
         {
             dx /= distance;
             dy /= distance;

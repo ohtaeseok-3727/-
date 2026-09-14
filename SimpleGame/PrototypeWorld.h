@@ -4,6 +4,7 @@
 #include "LevelMap.h"
 #include "LevelOneSession.h"
 #include "LevelOneView.h"
+#include "TutorialMapView.h"
 #include <map>
 #include <utility>
 #include <vector>
@@ -27,6 +28,8 @@ class PrototypeWorld
     void Reset();
     void ToggleInventory();
     void ChangeInventoryPage(int direction);
+    void ToggleMap();
+    void InspectLandmark();
 
     void SetPaused(bool value)
     {
@@ -66,5 +69,6 @@ class PrototypeWorld
     LevelMap m_Map;
     LevelOneSession m_Level;
     LevelOneView m_LevelView;
+    TutorialMapView m_MapView;
     bool m_MapGenerated = false;
 };

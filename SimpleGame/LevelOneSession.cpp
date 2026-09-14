@@ -12,7 +12,8 @@ void LevelOneSession::Reset(int profession, unsigned seed, const LevelMap& map)
     m_Inventory.Reset();
     m_Enemies.Reset(seed, map);
     m_Loot.Reset(seed);
-    ShowNotice("Follow the east road to the farmlands. Tap CTRL near a creature.");
+    ShowNotice(
+        "Read the village board [E], then follow the NORTH road. Press M for the route map.");
 }
 
 void LevelOneSession::Strike(int step, WorldPosition player, bool faceLeft, const LevelMap& map)
@@ -75,7 +76,8 @@ void LevelOneSession::Update(float dt, WorldPosition player, const LevelMap& map
     if (!m_CompletionAnnounced && Complete())
     {
         m_CompletionAnnounced = true;
-        ShowNotice("LEVEL 1 COMPLETE! Farming learned. Keep exploring and growing.");
+        ShowNotice(
+            "FARMING BASICS COMPLETE. Inspect the abandoned farm, then return to the veteran.");
     }
 }
 
@@ -100,7 +102,7 @@ const char* LevelOneSession::Objective() const
 {
     if (m_Kills == 0)
     {
-        return "1. Follow the EAST road. Face a creature and tap CTRL to attack.";
+        return "Read the board [E], then take the NORTH road to the first farming contract. [M] Map";
     }
     if (m_Progress.Level() < 2)
     {
@@ -114,7 +116,13 @@ const char* LevelOneSession::Objective() const
     {
         return "4. Reach character level 3. Red drops restore HP; orange enemies are attacking.";
     }
-    return "LEVEL 1 COMPLETE - Continue farming, or explore the connected roads.";
+    return "Follow the farm tracks; return to town; investigate river / woods / battlefield. [M] Map";
+}
+
+void LevelOneSession::Inspect(const TutorialLandmark& site)
+{
+    ShowNotice(site.description);
+    m_NoticeTime = 9.f;
 }
 
 void LevelOneSession::ShowNotice(const std::string& text)

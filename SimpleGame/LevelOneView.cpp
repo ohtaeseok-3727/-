@@ -4,61 +4,6 @@
 #include <cmath>
 #include <sstream>
 
-void LevelOneView::DrawTile(Renderer& r, const LevelMap& map, int x, int y, Point p) const
-{
-    const float worldX = x * 64.f + 32.f;
-    const float worldY = y * 64.f + 32.f;
-    const float tileHeight = 64.f * .8660254f;
-    const float shade = float(map.Hash(x, y) % 19) / 1000.f;
-    const bool road = map.IsRoad(worldX, worldY);
-    const bool town = map.IsTown(worldX, worldY);
-    const bool farmland = worldX > 230.f && worldX < 1500.f && std::abs(worldY) < 600.f;
-    const bool river = worldY >= 768.f && worldY < 896.f;
-    Color color(.14f + shade, .19f + shade, .17f + shade);
-    if (worldX > 1500.f)
-    {
-        color = Color(.18f + shade, .17f + shade, .15f + shade);
-    }
-    if (farmland)
-    {
-        color = Color(.24f + shade, .23f + shade, .15f + shade);
-    }
-    if (river)
-    {
-        color = Color(.12f + shade, .27f + shade, .31f + shade);
-    }
-    if (road)
-    {
-        color = town ? Color(.29f + shade, .28f + shade, .24f + shade)
-                     : Color(.27f + shade, .24f + shade, .18f + shade);
-    }
-    r.Rect(p.x, p.y, 64.5f, tileHeight + .5f, color);
-    if (farmland && !road)
-    {
-        for (int row = 0; row < 4; ++row)
-        {
-            r.Rect(p.x + 4, p.y + row * 13.f + 4, 55, 3, Color(.15f, .18f, .10f));
-            r.Rect(p.x + 9, p.y + row * 13.f + 3, 6, 4, Color(.35f, .39f, .16f));
-        }
-    }
-    else if (river && road)
-    {
-        for (int row = 0; row < 5; ++row)
-        {
-            r.Rect(p.x + 2, p.y + row * 11.f, 60, 3, Color(.40f, .33f, .22f));
-        }
-    }
-    else if (river)
-    {
-        r.Rect(p.x + 10, p.y + 20, 24, 2, Color(.24f, .43f, .44f));
-    }
-    else if (!road)
-    {
-        const float gx = p.x + float(map.Hash(x, y, 19) % 53);
-        r.Triangle({gx, p.y + 20}, {gx + 3, p.y + 15}, {gx + 5, p.y + 20}, Color(.25f, .29f, .22f));
-    }
-}
-
 void LevelOneView::DrawEnemy(Renderer& r, const FieldEnemy& enemy, Point p) const
 {
     // Temporary geometric creature; no new sprite sheet or character art is substituted.
@@ -79,16 +24,6 @@ void LevelOneView::DrawEnemy(Renderer& r, const FieldEnemy& enemy, Point p) cons
     {
         r.Text(p.x - 4, p.y - 48, "!", Color(1.f, .66f, .25f));
     }
-}
-
-void LevelOneView::DrawVillageHouse(Renderer& r, Point p) const
-{
-    r.Rect(p.x - 28, p.y - 54, 56, 64, Color(.36f, .32f, .25f));
-    r.Triangle(
-        {p.x - 36, p.y - 50}, {p.x, p.y - 85}, {p.x + 36, p.y - 50}, Color(.32f, .17f, .14f));
-    r.Rect(p.x - 8, p.y - 15, 16, 25, Color(.14f, .12f, .10f));
-    r.Rect(p.x - 21, p.y - 38, 11, 13, Color(.88f, .65f, .31f));
-    r.Rect(p.x + 10, p.y - 38, 11, 13, Color(.88f, .65f, .31f));
 }
 
 void LevelOneView::DrawDrop(Renderer& r, const LootDrop& drop, Point p) const
@@ -143,7 +78,7 @@ void LevelOneView::DrawHud(
     r.Text(20, 85, session.Objective(), Color(.84f, .80f, .64f));
     r.Text(20,
            105,
-           "WASD / ARROWS MOVE   SHIFT RUN   CTRL COMBO   I INVENTORY   P PAUSE   R VILLAGE",
+           "WASD MOVE   SHIFT RUN   CTRL COMBO   E INSPECT   M MAP   I BAG   P PAUSE   R VILLAGE",
            Color(.57f, .65f, .61f));
     r.Rect(0, float(height - 42), float(width), 42, Color(.025f, .04f, .045f, .95f));
     r.Text(20, float(height - 17), session.Notice(), Color(.95f, .84f, .57f));

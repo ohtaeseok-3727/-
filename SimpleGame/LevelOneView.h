@@ -6,10 +6,8 @@
 class LevelOneView
 {
   public:
-    void DrawTile(Renderer& renderer, const LevelMap& map, int x, int y, Point screen) const;
     void DrawEnemy(Renderer& renderer, const FieldEnemy& enemy, Point screen) const;
     void DrawDrop(Renderer& renderer, const LootDrop& drop, Point screen) const;
-    void DrawVillageHouse(Renderer& renderer, Point screen) const;
     void DrawHud(Renderer& renderer,
                  const LevelOneSession& session,
                  const char* region,
