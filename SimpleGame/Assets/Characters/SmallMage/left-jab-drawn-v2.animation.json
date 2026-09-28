@@ -1,0 +1,10 @@
+{
+  "image": "left-jab-drawn-v2.png",
+  "frameWidth": 384,
+  "frameHeight": 480,
+  "columns": 4,
+  "frameIndices": [0, 1, 2, 3, 5, 6, 7],
+  "durationsMs": [140, 130, 45, 40, 45, 75, 150],
+  "anchor": [210, 456],
+  "note": "Zero-based indices. Original fifth frame excluded; source PNG unchanged. Timing is a preview assumption."
+}

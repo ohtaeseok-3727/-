@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>다중 마력검 · 발사 미리보기</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0d151d;color:#e3edef;font:16px/1.6 system-ui,sans-serif}main{max-width:1000px;margin:auto;padding:28px 20px}h1{margin:0;font-size:28px}p{color:#a9c2c9}.controls{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin:20px 0}button{padding:9px 18px;border:1px solid #52818a;border-radius:8px;background:#164a54;color:#eefafa;font:inherit;cursor:pointer}button:disabled{opacity:.5}input{vertical-align:middle}canvas{display:block;width:100%;border:1px solid #38515e;border-radius:12px;background:#13232f}#design{margin:20px 0 12px}label{display:flex;gap:8px;align-items:center}.note{font-size:14px}output{font-variant-numeric:tabular-nums}a{color:#71d9db}
+</style>
+<main>
+<h1>다중 마력검</h1>
+<p>마력검 5개 생성 · 정면 발사 · 검마다 500px 이동 · 적 관통</p>
+<canvas id="design" width="900" height="190" role="img" aria-label="마력검 본체와 별도 돌진 효과 이미지 비교"></canvas>
+<div class="controls">
+<button id="play" disabled>생성 → 발사</button><button id="pause" disabled>일시정지</button>
+<label>발사 간격 <input id="delay" type="range" min="0" max="180" step="20" value="80"><output id="delayValue">80ms</output></label>
+<label><input id="effect" type="checkbox" checked>돌진 효과</label>
+</div>
+<canvas id="stage" width="900" height="360" role="img" aria-label="검 다섯 개가 독립적으로 생성되어 표적을 관통하고 500픽셀 이동한 뒤 사라지는 미리보기"></canvas>
+<div class="controls"><label>재생 위치 <input id="time" type="range" min="0" max="2200" step="1" value="780"><output id="timeValue">0.78초</output></label><span id="status" aria-live="polite">효과 이미지 준비 중</span></div>
+<p class="note">기존 마력칼날 모션을 그대로 사용하며 0.34초부터 검이 발사됩니다. 검 본체는 개별 도형 객체, 돌진 효과는 스프라이트입니다. 불규칙한 배치·1200px/s·80ms 발사 간격은 시안 값입니다. 간격 0으로 일제 발사를 비교할 수 있습니다.</p>
+<p class="note" id="assetNote">게임에 적용하지 않은 시안입니다. 효과의 실제 투명도는 확인했으며, 기준 이동 시트와 색상·도트의 정확한 일치는 미완료입니다.</p>
+</main>
+<script src="player-motion.js"></script>
+<script src="preview.js"></script>
+</html>

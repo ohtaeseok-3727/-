@@ -1,0 +1,5 @@
+# v3 수정 기록
+
+내장 image_gen 사용. mage-melee-v2.png를 편집하여 mage-melee-v3.png로 저장했다.
+
+Edit ONLY TOP ROW FIFTH sprite of this exact sheet. Surgical removal of the erroneous brown floating rear fist at approximately x1116,y199 (on screen LEFT edge of fifth character's chest/back). ERASE that entire brown rear fist and replace it with continuous NAVY TUNIC and olive cape where appropriate. No hand or brown blob anywhere on back or left torso. The RIGHT nonattacking hand is completely OCCLUDED behind chest; DO NOT DRAW IT AT ALL. Fifth frame should have exactly ONE visible hand: the extended LEFT open palm at far screen RIGHT approximately x1234,y170 connected to the long horizontal navy sleeve across chest. Use top row FOURTH character as the anatomical guide: its torso has no visible rear hand. Maintain fifth pose forward arm and open palm, legs head cape and cyan glove mark. All other17sprites and1536x1024 sheet layout unchanged. Do not add new hands fingers elbows or accessories. Preserve coarse pixel art. This is removal of an erroneous visible rear hand, not movement of that hand to another place.

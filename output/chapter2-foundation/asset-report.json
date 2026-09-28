@@ -1,0 +1,455 @@
+{
+  "schema": 1,
+  "checks": "file existence, PNG CRC/header, declared frame alpha",
+  "not_checked": [
+    "visual style",
+    "exact palette",
+    "anatomy",
+    "animation",
+    "game execution"
+  ],
+  "assets": [
+    {
+      "id": "ENEMY-ORC-01",
+      "path": "SimpleGame/Assets/Monsters/Orc/Common/walk-v1.png",
+      "exists": true,
+      "declared_readiness": "REVIEW_ONLY",
+      "width": 1536,
+      "height": 1024,
+      "bit_depth": 8,
+      "color_type": 6,
+      "sha256": "0f9f0fcafacc7f13c9c5827e7a0f3cb7a49f052e41e44597f2871745829971f8",
+      "cell_width": 384,
+      "cell_height": 512,
+      "frames": [
+        {
+          "transparent": 104085,
+          "partial_alpha": 92523,
+          "opaque": 0,
+          "bounds_alpha128": [
+            41,
+            102,
+            346,
+            500
+          ]
+        },
+        {
+          "transparent": 105846,
+          "partial_alpha": 90762,
+          "opaque": 0,
+          "bounds_alpha128": [
+            50,
+            103,
+            346,
+            500
+          ]
+        },
+        {
+          "transparent": 105357,
+          "partial_alpha": 91251,
+          "opaque": 0,
+          "bounds_alpha128": [
+            48,
+            101,
+            352,
+            500
+          ]
+        },
+        {
+          "transparent": 107211,
+          "partial_alpha": 89397,
+          "opaque": 0,
+          "bounds_alpha128": [
+            49,
+            101,
+            335,
+            500
+          ]
+        },
+        {
+          "transparent": 105833,
+          "partial_alpha": 90775,
+          "opaque": 0,
+          "bounds_alpha128": [
+            50,
+            53,
+            346,
+            447
+          ]
+        },
+        {
+          "transparent": 108967,
+          "partial_alpha": 87641,
+          "opaque": 0,
+          "bounds_alpha128": [
+            51,
+            53,
+            339,
+            447
+          ]
+        },
+        {
+          "transparent": 113549,
+          "partial_alpha": 83059,
+          "opaque": 0,
+          "bounds_alpha128": [
+            52,
+            53,
+            345,
+            447
+          ]
+        },
+        {
+          "transparent": 107162,
+          "partial_alpha": 89446,
+          "opaque": 0,
+          "bounds_alpha128": [
+            49,
+            53,
+            339,
+            447
+          ]
+        }
+      ],
+      "all_frames_have_transparency": true,
+      "all_frames_have_content": true,
+      "style_palette_anatomy_approved": false
+    },
+    {
+      "id": "ENEMY-ORC-04",
+      "path": "SimpleGame/Assets/Monsters/Orc/Elite/walk-v1.png",
+      "exists": true,
+      "declared_readiness": "REVIEW_ONLY",
+      "width": 1536,
+      "height": 1024,
+      "bit_depth": 8,
+      "color_type": 6,
+      "sha256": "d7af708a86d818f3ee80938ffc9f4393fd88ec31cfd497458b8061ccafb3e710",
+      "cell_width": 384,
+      "cell_height": 512,
+      "frames": [
+        {
+          "transparent": 97242,
+          "partial_alpha": 99366,
+          "opaque": 0,
+          "bounds_alpha128": [
+            42,
+            99,
+            346,
+            512
+          ]
+        },
+        {
+          "transparent": 95519,
+          "partial_alpha": 101089,
+          "opaque": 0,
+          "bounds_alpha128": [
+            33,
+            99,
+            346,
+            512
+          ]
+        },
+        {
+          "transparent": 95801,
+          "partial_alpha": 100807,
+          "opaque": 0,
+          "bounds_alpha128": [
+            34,
+            99,
+            354,
+            512
+          ]
+        },
+        {
+          "transparent": 98771,
+          "partial_alpha": 97837,
+          "opaque": 0,
+          "bounds_alpha128": [
+            45,
+            99,
+            347,
+            512
+          ]
+        },
+        {
+          "transparent": 98327,
+          "partial_alpha": 98281,
+          "opaque": 0,
+          "bounds_alpha128": [
+            43,
+            0,
+            346,
+            458
+          ]
+        },
+        {
+          "transparent": 100689,
+          "partial_alpha": 95919,
+          "opaque": 0,
+          "bounds_alpha128": [
+            49,
+            0,
+            345,
+            458
+          ]
+        },
+        {
+          "transparent": 107100,
+          "partial_alpha": 89508,
+          "opaque": 0,
+          "bounds_alpha128": [
+            46,
+            0,
+            346,
+            458
+          ]
+        },
+        {
+          "transparent": 99224,
+          "partial_alpha": 97384,
+          "opaque": 0,
+          "bounds_alpha128": [
+            44,
+            0,
+            346,
+            458
+          ]
+        }
+      ],
+      "all_frames_have_transparency": true,
+      "all_frames_have_content": true,
+      "style_palette_anatomy_approved": false
+    },
+    {
+      "id": "BOSS-002",
+      "path": "SimpleGame/Assets/Monsters/Orc/Barkan/walk-v1.png",
+      "exists": true,
+      "declared_readiness": "REVIEW_ONLY",
+      "width": 1536,
+      "height": 1024,
+      "bit_depth": 8,
+      "color_type": 6,
+      "sha256": "11817fe43225e6335f95a3cd61baa3497992c2138a8bcd2cbc2521d7a79dad06",
+      "cell_width": 384,
+      "cell_height": 512,
+      "frames": [
+        {
+          "transparent": 79270,
+          "partial_alpha": 117338,
+          "opaque": 0,
+          "bounds_alpha128": [
+            24,
+            63,
+            378,
+            481
+          ]
+        },
+        {
+          "transparent": 82338,
+          "partial_alpha": 114270,
+          "opaque": 0,
+          "bounds_alpha128": [
+            28,
+            63,
+            374,
+            481
+          ]
+        },
+        {
+          "transparent": 81547,
+          "partial_alpha": 115061,
+          "opaque": 0,
+          "bounds_alpha128": [
+            24,
+            63,
+            369,
+            481
+          ]
+        },
+        {
+          "transparent": 83668,
+          "partial_alpha": 112940,
+          "opaque": 0,
+          "bounds_alpha128": [
+            32,
+            63,
+            368,
+            481
+          ]
+        },
+        {
+          "transparent": 81169,
+          "partial_alpha": 115439,
+          "opaque": 0,
+          "bounds_alpha128": [
+            24,
+            31,
+            369,
+            449
+          ]
+        },
+        {
+          "transparent": 81424,
+          "partial_alpha": 115184,
+          "opaque": 0,
+          "bounds_alpha128": [
+            22,
+            31,
+            377,
+            449
+          ]
+        },
+        {
+          "transparent": 84832,
+          "partial_alpha": 111776,
+          "opaque": 0,
+          "bounds_alpha128": [
+            32,
+            31,
+            377,
+            449
+          ]
+        },
+        {
+          "transparent": 78669,
+          "partial_alpha": 117939,
+          "opaque": 0,
+          "bounds_alpha128": [
+            18,
+            31,
+            377,
+            449
+          ]
+        }
+      ],
+      "all_frames_have_transparency": true,
+      "all_frames_have_content": true,
+      "style_palette_anatomy_approved": false
+    },
+    {
+      "id": "NPC-HERO-01",
+      "path": "SimpleGame/Assets/Characters/NPC/Hero/hero-v1.png",
+      "exists": true,
+      "declared_readiness": "REUSE_PENDING_QA",
+      "width": 1122,
+      "height": 1402,
+      "bit_depth": 8,
+      "color_type": 6,
+      "sha256": "9009eabd0e0e976b9f8bb65cd0da3368eb2dc392d4e65bff3266f3fa169d898b"
+    },
+    {
+      "id": "NPC-GEN-01",
+      "path": "SimpleGame/Assets/Characters/NPC/Villager/villager-v1.png",
+      "exists": true,
+      "declared_readiness": "REUSE_PENDING_QA",
+      "width": 1254,
+      "height": 1254,
+      "bit_depth": 8,
+      "color_type": 6,
+      "sha256": "b4b2fe72592bef2ffd90d1712eb88d211aae70157aa03af49a4de37149e1f862"
+    },
+    {
+      "id": "UNIT-MERC-01",
+      "path": "SimpleGame/Assets/Characters/NPC/VeteranMercenary/idle-transparent-aligned-v2.png",
+      "exists": true,
+      "declared_readiness": "REUSE_PENDING_QA",
+      "width": 2172,
+      "height": 724,
+      "bit_depth": 8,
+      "color_type": 6,
+      "sha256": "c4d761883b0579fff93353b6239b60030a0c6ab8ce0698dac962c59e27bf24f0"
+    },
+    {
+      "id": "OBJ-016",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/tactical-map-v1.png",
+      "exists": false,
+      "declared_readiness": "MISSING"
+    },
+    {
+      "id": "OBJ-017",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/watchpost-debris-v1.png",
+      "exists": false,
+      "declared_readiness": "MISSING"
+    },
+    {
+      "id": "OBJ-018",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/tracks-v1.png",
+      "exists": false,
+      "declared_readiness": "MISSING"
+    },
+    {
+      "id": "OBJ-019",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/schedule-v1.png",
+      "exists": false,
+      "declared_readiness": "MISSING"
+    },
+    {
+      "id": "OBJ-020",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/beacon-v1.png",
+      "exists": false,
+      "declared_readiness": "MISSING"
+    },
+    {
+      "id": "OBJ-021",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/explosives-v1.png",
+      "exists": false,
+      "declared_readiness": "MISSING"
+    },
+    {
+      "id": "OBJ-022",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/bridge-support-v1.png",
+      "exists": false,
+      "declared_readiness": "MISSING"
+    },
+    {
+      "id": "OBJ-023",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/restraints-v1.png",
+      "exists": false,
+      "declared_readiness": "MISSING"
+    },
+    {
+      "id": "OBJ-024",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/erased-mural-v1.png",
+      "exists": false,
+      "declared_readiness": "MISSING"
+    },
+    {
+      "id": "OBJ-025",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/mural-rubbing-v1.png",
+      "exists": false,
+      "declared_readiness": "MISSING"
+    },
+    {
+      "id": "OBJ-026",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/demolition-line-v1.png",
+      "exists": false,
+      "declared_readiness": "MISSING"
+    },
+    {
+      "id": "OBJ-027",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/bypass-control-v1.png",
+      "exists": false,
+      "declared_readiness": "MISSING"
+    },
+    {
+      "id": "OBJ-028",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/retreat-chain-v1.png",
+      "exists": false,
+      "declared_readiness": "MISSING"
+    },
+    {
+      "id": "OBJ-029",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/command-target-v1.png",
+      "exists": false,
+      "declared_readiness": "MISSING"
+    },
+    {
+      "id": "OBJ-030",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/relief-wagon-v1.png",
+      "exists": false,
+      "declared_readiness": "MISSING"
+    }
+  ],
+  "errors": []
+}

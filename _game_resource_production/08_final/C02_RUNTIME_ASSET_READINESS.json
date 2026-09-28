@@ -1,0 +1,237 @@
+{
+  "schema": 1,
+  "date": "2026-09-24",
+  "authority": "GAME_DESIGN.md and latest CHAPTER_02_FINAL.md",
+  "purpose": "Readiness audit and future integration contract; not loaded by the game",
+  "runtime_combat_assets": [
+    "SimpleGame/Assets/Monsters/Orc/Common/common-combat-v2.png",
+    "SimpleGame/Assets/Monsters/Orc/Elite/elite-combat-v2.png",
+    "SimpleGame/Assets/Monsters/Orc/Barkan/barkan-attacks-v2.png",
+    "SimpleGame/Assets/Monsters/Orc/Barkan/barkan-support-v2.png"
+  ],
+  "new_character_scope": [
+    "ENEMY-ORC-01",
+    "ENEMY-ORC-04",
+    "BOSS-002"
+  ],
+  "deferred_character_visuals": [
+    "ENEMY-ORC-02",
+    "ENEMY-ORC-03"
+  ],
+  "deferred_note": "Signaler/engineer remain gameplay roles; dedicated sprite generation is outside the latest three-character scope.",
+  "fixed_visual_references": [
+    "SimpleGame/Assets/Characters/SmallKnight/walk-transparent-v1.png",
+    "SimpleGame/Assets/Characters/SmallMage/walk-transparent-v2.png"
+  ],
+  "missing_environment_kits": [
+    "KIT-FORTRESS-01",
+    "KIT-CANYON-01",
+    "KIT-RUINS-01"
+  ],
+  "qa_required": [
+    "actual alpha",
+    "same fixed-reference body proportions/pixel size/palette subject to explicit larger-orc instruction",
+    "all-frame anatomy and foot anchors",
+    "no translucent halo",
+    "newly drawn attack frames without source-pixel reuse",
+    "approved runtime scale"
+  ],
+  "assets": [
+    {
+      "id": "ENEMY-ORC-01",
+      "path": "SimpleGame/Assets/Monsters/Orc/Common/walk-v1.png",
+      "readiness": "REVIEW_ONLY",
+      "grid": [
+        4,
+        2
+      ],
+      "expected_size": [
+        1536,
+        1024
+      ],
+      "available_actions": [
+        "walk"
+      ],
+      "missing_actions": [
+        "idle",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "production_approved": false
+    },
+    {
+      "id": "ENEMY-ORC-04",
+      "path": "SimpleGame/Assets/Monsters/Orc/Elite/walk-v1.png",
+      "readiness": "REVIEW_ONLY",
+      "grid": [
+        4,
+        2
+      ],
+      "expected_size": [
+        1536,
+        1024
+      ],
+      "available_actions": [
+        "walk"
+      ],
+      "missing_actions": [
+        "idle",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "production_approved": false
+    },
+    {
+      "id": "BOSS-002",
+      "path": "SimpleGame/Assets/Monsters/Orc/Barkan/walk-v1.png",
+      "readiness": "REVIEW_ONLY",
+      "grid": [
+        4,
+        2
+      ],
+      "expected_size": [
+        1536,
+        1024
+      ],
+      "available_actions": [
+        "walk"
+      ],
+      "missing_actions": [
+        "idle",
+        "attack",
+        "hit",
+        "death",
+        "command",
+        "armor_break",
+        "retreat",
+        "joint_finisher"
+      ],
+      "production_approved": false
+    },
+    {
+      "id": "NPC-HERO-01",
+      "path": "SimpleGame/Assets/Characters/NPC/Hero/hero-v1.png",
+      "readiness": "REUSE_PENDING_QA",
+      "production_approved": false
+    },
+    {
+      "id": "NPC-GEN-01",
+      "path": "SimpleGame/Assets/Characters/NPC/Villager/villager-v1.png",
+      "readiness": "REUSE_PENDING_QA",
+      "production_approved": false
+    },
+    {
+      "id": "UNIT-MERC-01",
+      "path": "SimpleGame/Assets/Characters/NPC/VeteranMercenary/idle-transparent-aligned-v2.png",
+      "readiness": "REUSE_PENDING_QA",
+      "production_approved": false
+    },
+    {
+      "id": "OBJ-016",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/tactical-map-v1.png",
+      "readiness": "MISSING",
+      "path_is_provisional": true,
+      "production_approved": false
+    },
+    {
+      "id": "OBJ-017",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/watchpost-debris-v1.png",
+      "readiness": "MISSING",
+      "path_is_provisional": true,
+      "production_approved": false
+    },
+    {
+      "id": "OBJ-018",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/tracks-v1.png",
+      "readiness": "MISSING",
+      "path_is_provisional": true,
+      "production_approved": false
+    },
+    {
+      "id": "OBJ-019",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/schedule-v1.png",
+      "readiness": "MISSING",
+      "path_is_provisional": true,
+      "production_approved": false
+    },
+    {
+      "id": "OBJ-020",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/beacon-v1.png",
+      "readiness": "MISSING",
+      "path_is_provisional": true,
+      "production_approved": false
+    },
+    {
+      "id": "OBJ-021",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/explosives-v1.png",
+      "readiness": "MISSING",
+      "path_is_provisional": true,
+      "production_approved": false
+    },
+    {
+      "id": "OBJ-022",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/bridge-support-v1.png",
+      "readiness": "MISSING",
+      "path_is_provisional": true,
+      "production_approved": false
+    },
+    {
+      "id": "OBJ-023",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/restraints-v1.png",
+      "readiness": "MISSING",
+      "path_is_provisional": true,
+      "production_approved": false
+    },
+    {
+      "id": "OBJ-024",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/erased-mural-v1.png",
+      "readiness": "MISSING",
+      "path_is_provisional": true,
+      "production_approved": false
+    },
+    {
+      "id": "OBJ-025",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/mural-rubbing-v1.png",
+      "readiness": "MISSING",
+      "path_is_provisional": true,
+      "production_approved": false
+    },
+    {
+      "id": "OBJ-026",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/demolition-line-v1.png",
+      "readiness": "MISSING",
+      "path_is_provisional": true,
+      "production_approved": false
+    },
+    {
+      "id": "OBJ-027",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/bypass-control-v1.png",
+      "readiness": "MISSING",
+      "path_is_provisional": true,
+      "production_approved": false
+    },
+    {
+      "id": "OBJ-028",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/retreat-chain-v1.png",
+      "readiness": "MISSING",
+      "path_is_provisional": true,
+      "production_approved": false
+    },
+    {
+      "id": "OBJ-029",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/command-target-v1.png",
+      "readiness": "MISSING",
+      "path_is_provisional": true,
+      "production_approved": false
+    },
+    {
+      "id": "OBJ-030",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/relief-wagon-v1.png",
+      "readiness": "MISSING",
+      "path_is_provisional": true,
+      "production_approved": false
+    }
+  ]
+}

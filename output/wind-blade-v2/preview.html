@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>바람 칼날 · 순차 발사 미리보기</title>
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; background: #0d141b; color: #e1edef; font: 16px/1.6 system-ui, sans-serif; }
+main { max-width: 1080px; padding: 32px 20px; margin: auto; }
+h1 { margin: 0; font-size: 28px; }
+p { color: #a7bdc5; }
+.gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 24px 0; }
+figure { margin: 0; border: 1px solid #34434b; border-radius: 12px; overflow: hidden; background: #1a2731; }
+figure img { width: 100%; height: 200px; object-fit: contain; image-rendering: pixelated; }
+figcaption { padding: 8px 16px; border-top: 1px solid #34434b; }
+.controls { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin: 20px 0; }
+button, select { font: inherit; background: #203441; border: 1px solid #5b7b89; color: #e1edef; border-radius: 7px; padding: 8px 12px; }
+button { cursor: pointer; }
+button:disabled { opacity: .5; }
+button.primary { background: #14555c; }
+input { vertical-align: middle; }
+#stage { position: relative; height: 300px; overflow: hidden; border: 1px solid #344b58; border-radius: 12px; background: repeating-linear-gradient(0deg, transparent 0 39px, #22343e 39px 40px), repeating-linear-gradient(90deg, #14212b 0 39px, #22343e 39px 40px); }
+#stage::before { content: ''; position: absolute; left: 11%; top: 30px; bottom: 30px; border-left: 1px dashed #739298; }
+.origin { position: absolute; left: 3%; bottom: 16px; color: #a7bdc5; }
+.projectile { position: absolute; width: 140px; height: 140px; top: 80px; will-change: transform; }
+.projectile img { width: 100%; height: 100%; image-rendering: pixelated; }
+.projectile span { position: absolute; bottom: -10px; left: 65px; font-size: 13px; }
+.foot { font-size: 14px; }
+@media(max-width: 580px) { main { padding: 20px 12px; } figure img { height: 120px; } figcaption { padding: 8px; font-size: 14px; } }
+</style>
+</head>
+<body>
+<main>
+<h1>바람 칼날</h1>
+<p>같은 칼날 · 기울기만 다르게 · 차례대로 생성하고 발사</p>
+<div class="gallery">
+<figure><img src="wind-blade-01.png" alt="첫 번째 칼날 기본 각도"><figcaption>01 · 0°</figcaption></figure>
+<figure><img src="wind-blade-01.png" style="transform: rotate(-25deg)" alt="같은 칼날을 반시계 방향으로 기울인 모습"><figcaption>02 · −25°</figcaption></figure>
+<figure><img src="wind-blade-01.png" style="transform: rotate(25deg)" alt="같은 칼날을 시계 방향으로 기울인 모습"><figcaption>03 · +25°</figcaption></figure>
+</div>
+<div class="controls">
+<label>성장 단계 <select id="level"><option value="1">습득 레벨 · 1개</option><option value="2">습득 +1레벨 · 2개</option><option value="3" selected>습득 +2레벨 이상 · 3개</option></select></label>
+<label>발사 간격 <output id="delayValue">120ms</output> <input id="delay" type="range" min="80" max="240" step="10" value="120"></label>
+<button class="primary" id="play" disabled>발사</button>
+<button id="pause" disabled>일시정지</button>
+</div>
+<div id="stage" role="img" aria-label="각 칼날이 같은 위치에서 순차 생성되어 오른쪽으로 날아가는 미리보기"><span class="origin">생성 위치 →</span></div>
+<div class="controls"><label>재생 위치 <input id="time" type="range" min="0" max="2300" step="1" value="500"> <output id="timeValue">0.50초</output></label><span id="status" aria-live="polite">이미지 불러오는 중</span></div>
+<p class="foot">각도(0°, −25°, +25°)·발사 간격·속도·크기는 임시값입니다. 이 시안은 이동 방향을 유지하고 칼날 자체의 기울기만 바꿉니다. 원본은 투명 배경이며, 기준 이동 시트와 색상·도트가 정확히 일치하지 않아 게임에 적용하지 않았습니다.</p>
+</main>
+<script src="preview.js"></script>
+</body>
+</html>

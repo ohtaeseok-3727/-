@@ -1,0 +1,131 @@
+{
+  "schema": 1,
+  "mode": "built-in imagegen; reference-guided new drawings and targeted background edits",
+  "runtime_integrated": false,
+  "assets": [
+    {
+      "width": 1254,
+      "height": 1254,
+      "bit_depth": 8,
+      "color_type": 6,
+      "sha256": "80075b5209df8d2f76e06a392cef5e2ae60d29745244fb7e4297148c9ba05bf1",
+      "cell_width": 1254,
+      "cell_height": 1254,
+      "all_frames_have_transparency": true,
+      "all_frames_have_content": true,
+      "style_palette_anatomy_approved": false,
+      "path": "output/chapter2-orc-combat-sprites/common-combat-v1.png",
+      "source": "exec-e7d90e93-ec50-4e27-9e88-a84a87ef55c4.png",
+      "intended_grid": [
+        4,
+        4
+      ],
+      "whole_image_alpha": {
+        "transparent": 849794,
+        "partial_alpha": 720730,
+        "opaque": 1992,
+        "bounds_alpha128": [
+          28,
+          39,
+          1240,
+          1223
+        ]
+      },
+      "readiness": "REVIEW_ONLY",
+      "uniform_integer_cells": false
+    },
+    {
+      "width": 1254,
+      "height": 1254,
+      "bit_depth": 8,
+      "color_type": 6,
+      "sha256": "a92a86ea141118c525c719f010d3c8530c81e29a469a027d178e031340e84e96",
+      "cell_width": 1254,
+      "cell_height": 1254,
+      "all_frames_have_transparency": true,
+      "all_frames_have_content": true,
+      "style_palette_anatomy_approved": false,
+      "path": "output/chapter2-orc-combat-sprites/elite-combat-v1.png",
+      "source": "exec-766bdec2-e4e6-4c00-bc0e-52407fc5564e.png",
+      "intended_grid": [
+        4,
+        4
+      ],
+      "whole_image_alpha": {
+        "transparent": 794306,
+        "partial_alpha": 775591,
+        "opaque": 2619,
+        "bounds_alpha128": [
+          32,
+          50,
+          1245,
+          1232
+        ]
+      },
+      "readiness": "REVIEW_ONLY",
+      "uniform_integer_cells": false
+    },
+    {
+      "width": 1448,
+      "height": 1086,
+      "bit_depth": 8,
+      "color_type": 6,
+      "sha256": "5e1919a6f7939cd7ebee5c9fd15bf5254f0137e1ba2ac74d59048a28dab00448",
+      "cell_width": 1448,
+      "cell_height": 1086,
+      "all_frames_have_transparency": true,
+      "all_frames_have_content": true,
+      "style_palette_anatomy_approved": false,
+      "path": "output/chapter2-orc-combat-sprites/barkan-attacks-v1.png",
+      "source": "exec-27933be3-6301-43e7-b31e-fae35e9e2715.png",
+      "intended_grid": [
+        4,
+        3
+      ],
+      "whole_image_alpha": {
+        "transparent": 943466,
+        "partial_alpha": 627062,
+        "opaque": 2000,
+        "bounds_alpha128": [
+          48,
+          28,
+          1408,
+          1004
+        ]
+      },
+      "readiness": "REVIEW_ONLY",
+      "uniform_integer_cells": true
+    },
+    {
+      "width": 1536,
+      "height": 1024,
+      "bit_depth": 8,
+      "color_type": 6,
+      "sha256": "ac9e16c5509278224122d90c54ff51f3e225021241ee372628706c8ad3a66102",
+      "cell_width": 1536,
+      "cell_height": 1024,
+      "all_frames_have_transparency": true,
+      "all_frames_have_content": true,
+      "style_palette_anatomy_approved": false,
+      "path": "output/chapter2-orc-combat-sprites/barkan-support-v1.png",
+      "source": "exec-1124b6d6-2a45-43fc-809a-74b45f2987ac.png",
+      "intended_grid": [
+        4,
+        3
+      ],
+      "whole_image_alpha": {
+        "transparent": 807210,
+        "partial_alpha": 765654,
+        "opaque": 0,
+        "bounds_alpha128": [
+          44,
+          57,
+          1506,
+          997
+        ]
+      },
+      "readiness": "REVIEW_ONLY",
+      "uniform_integer_cells": false
+    }
+  ]
+}

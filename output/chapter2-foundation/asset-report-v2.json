@@ -1,0 +1,1159 @@
+{
+  "schema": 1,
+  "checks": "file existence, PNG CRC/header, declared frame alpha",
+  "not_checked": [
+    "visual style",
+    "exact palette",
+    "anatomy",
+    "animation",
+    "game execution"
+  ],
+  "assets": [
+    {
+      "id": "ENEMY-ORC-01",
+      "path": "SimpleGame/Assets/Monsters/Orc/Common/walk-v1.png",
+      "exists": true,
+      "declared_readiness": "REVIEW_ONLY",
+      "width": 1536,
+      "height": 1024,
+      "bit_depth": 8,
+      "color_type": 6,
+      "sha256": "0f9f0fcafacc7f13c9c5827e7a0f3cb7a49f052e41e44597f2871745829971f8",
+      "cell_width": 384,
+      "cell_height": 512,
+      "frames": [
+        {
+          "transparent": 104085,
+          "partial_alpha": 92523,
+          "opaque": 0,
+          "bounds_alpha128": [
+            41,
+            102,
+            346,
+            500
+          ]
+        },
+        {
+          "transparent": 105846,
+          "partial_alpha": 90762,
+          "opaque": 0,
+          "bounds_alpha128": [
+            50,
+            103,
+            346,
+            500
+          ]
+        },
+        {
+          "transparent": 105357,
+          "partial_alpha": 91251,
+          "opaque": 0,
+          "bounds_alpha128": [
+            48,
+            101,
+            352,
+            500
+          ]
+        },
+        {
+          "transparent": 107211,
+          "partial_alpha": 89397,
+          "opaque": 0,
+          "bounds_alpha128": [
+            49,
+            101,
+            335,
+            500
+          ]
+        },
+        {
+          "transparent": 105833,
+          "partial_alpha": 90775,
+          "opaque": 0,
+          "bounds_alpha128": [
+            50,
+            53,
+            346,
+            447
+          ]
+        },
+        {
+          "transparent": 108967,
+          "partial_alpha": 87641,
+          "opaque": 0,
+          "bounds_alpha128": [
+            51,
+            53,
+            339,
+            447
+          ]
+        },
+        {
+          "transparent": 113549,
+          "partial_alpha": 83059,
+          "opaque": 0,
+          "bounds_alpha128": [
+            52,
+            53,
+            345,
+            447
+          ]
+        },
+        {
+          "transparent": 107162,
+          "partial_alpha": 89446,
+          "opaque": 0,
+          "bounds_alpha128": [
+            49,
+            53,
+            339,
+            447
+          ]
+        }
+      ],
+      "all_frames_have_transparency": true,
+      "all_frames_have_content": true,
+      "style_palette_anatomy_approved": false
+    },
+    {
+      "id": "ENEMY-ORC-04",
+      "path": "SimpleGame/Assets/Monsters/Orc/Elite/walk-v1.png",
+      "exists": true,
+      "declared_readiness": "REVIEW_ONLY",
+      "width": 1536,
+      "height": 1024,
+      "bit_depth": 8,
+      "color_type": 6,
+      "sha256": "d7af708a86d818f3ee80938ffc9f4393fd88ec31cfd497458b8061ccafb3e710",
+      "cell_width": 384,
+      "cell_height": 512,
+      "frames": [
+        {
+          "transparent": 97242,
+          "partial_alpha": 99366,
+          "opaque": 0,
+          "bounds_alpha128": [
+            42,
+            99,
+            346,
+            512
+          ]
+        },
+        {
+          "transparent": 95519,
+          "partial_alpha": 101089,
+          "opaque": 0,
+          "bounds_alpha128": [
+            33,
+            99,
+            346,
+            512
+          ]
+        },
+        {
+          "transparent": 95801,
+          "partial_alpha": 100807,
+          "opaque": 0,
+          "bounds_alpha128": [
+            34,
+            99,
+            354,
+            512
+          ]
+        },
+        {
+          "transparent": 98771,
+          "partial_alpha": 97837,
+          "opaque": 0,
+          "bounds_alpha128": [
+            45,
+            99,
+            347,
+            512
+          ]
+        },
+        {
+          "transparent": 98327,
+          "partial_alpha": 98281,
+          "opaque": 0,
+          "bounds_alpha128": [
+            43,
+            0,
+            346,
+            458
+          ]
+        },
+        {
+          "transparent": 100689,
+          "partial_alpha": 95919,
+          "opaque": 0,
+          "bounds_alpha128": [
+            49,
+            0,
+            345,
+            458
+          ]
+        },
+        {
+          "transparent": 107100,
+          "partial_alpha": 89508,
+          "opaque": 0,
+          "bounds_alpha128": [
+            46,
+            0,
+            346,
+            458
+          ]
+        },
+        {
+          "transparent": 99224,
+          "partial_alpha": 97384,
+          "opaque": 0,
+          "bounds_alpha128": [
+            44,
+            0,
+            346,
+            458
+          ]
+        }
+      ],
+      "all_frames_have_transparency": true,
+      "all_frames_have_content": true,
+      "style_palette_anatomy_approved": false
+    },
+    {
+      "id": "BOSS-002",
+      "path": "SimpleGame/Assets/Monsters/Orc/Barkan/walk-v1.png",
+      "exists": true,
+      "declared_readiness": "REVIEW_ONLY",
+      "width": 1536,
+      "height": 1024,
+      "bit_depth": 8,
+      "color_type": 6,
+      "sha256": "11817fe43225e6335f95a3cd61baa3497992c2138a8bcd2cbc2521d7a79dad06",
+      "cell_width": 384,
+      "cell_height": 512,
+      "frames": [
+        {
+          "transparent": 79270,
+          "partial_alpha": 117338,
+          "opaque": 0,
+          "bounds_alpha128": [
+            24,
+            63,
+            378,
+            481
+          ]
+        },
+        {
+          "transparent": 82338,
+          "partial_alpha": 114270,
+          "opaque": 0,
+          "bounds_alpha128": [
+            28,
+            63,
+            374,
+            481
+          ]
+        },
+        {
+          "transparent": 81547,
+          "partial_alpha": 115061,
+          "opaque": 0,
+          "bounds_alpha128": [
+            24,
+            63,
+            369,
+            481
+          ]
+        },
+        {
+          "transparent": 83668,
+          "partial_alpha": 112940,
+          "opaque": 0,
+          "bounds_alpha128": [
+            32,
+            63,
+            368,
+            481
+          ]
+        },
+        {
+          "transparent": 81169,
+          "partial_alpha": 115439,
+          "opaque": 0,
+          "bounds_alpha128": [
+            24,
+            31,
+            369,
+            449
+          ]
+        },
+        {
+          "transparent": 81424,
+          "partial_alpha": 115184,
+          "opaque": 0,
+          "bounds_alpha128": [
+            22,
+            31,
+            377,
+            449
+          ]
+        },
+        {
+          "transparent": 84832,
+          "partial_alpha": 111776,
+          "opaque": 0,
+          "bounds_alpha128": [
+            32,
+            31,
+            377,
+            449
+          ]
+        },
+        {
+          "transparent": 78669,
+          "partial_alpha": 117939,
+          "opaque": 0,
+          "bounds_alpha128": [
+            18,
+            31,
+            377,
+            449
+          ]
+        }
+      ],
+      "all_frames_have_transparency": true,
+      "all_frames_have_content": true,
+      "style_palette_anatomy_approved": false
+    },
+    {
+      "id": "NPC-HERO-01",
+      "path": "SimpleGame/Assets/Characters/NPC/Hero/hero-v1.png",
+      "exists": true,
+      "declared_readiness": "REUSE_PENDING_QA",
+      "width": 1122,
+      "height": 1402,
+      "bit_depth": 8,
+      "color_type": 6,
+      "sha256": "9009eabd0e0e976b9f8bb65cd0da3368eb2dc392d4e65bff3266f3fa169d898b"
+    },
+    {
+      "id": "NPC-GEN-01",
+      "path": "SimpleGame/Assets/Characters/NPC/Villager/villager-v1.png",
+      "exists": true,
+      "declared_readiness": "REUSE_PENDING_QA",
+      "width": 1254,
+      "height": 1254,
+      "bit_depth": 8,
+      "color_type": 6,
+      "sha256": "b4b2fe72592bef2ffd90d1712eb88d211aae70157aa03af49a4de37149e1f862"
+    },
+    {
+      "id": "UNIT-MERC-01",
+      "path": "SimpleGame/Assets/Characters/NPC/VeteranMercenary/idle-transparent-aligned-v2.png",
+      "exists": true,
+      "declared_readiness": "REUSE_PENDING_QA",
+      "width": 2172,
+      "height": 724,
+      "bit_depth": 8,
+      "color_type": 6,
+      "sha256": "c4d761883b0579fff93353b6239b60030a0c6ab8ce0698dac962c59e27bf24f0"
+    },
+    {
+      "id": "OBJ-016",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/tactical-map-v1.png",
+      "exists": false,
+      "declared_readiness": "MISSING"
+    },
+    {
+      "id": "OBJ-017",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/watchpost-debris-v1.png",
+      "exists": false,
+      "declared_readiness": "MISSING"
+    },
+    {
+      "id": "OBJ-018",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/tracks-v1.png",
+      "exists": false,
+      "declared_readiness": "MISSING"
+    },
+    {
+      "id": "OBJ-019",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/schedule-v1.png",
+      "exists": false,
+      "declared_readiness": "MISSING"
+    },
+    {
+      "id": "OBJ-020",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/beacon-v1.png",
+      "exists": false,
+      "declared_readiness": "MISSING"
+    },
+    {
+      "id": "OBJ-021",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/explosives-v1.png",
+      "exists": false,
+      "declared_readiness": "MISSING"
+    },
+    {
+      "id": "OBJ-022",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/bridge-support-v1.png",
+      "exists": false,
+      "declared_readiness": "MISSING"
+    },
+    {
+      "id": "OBJ-023",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/restraints-v1.png",
+      "exists": false,
+      "declared_readiness": "MISSING"
+    },
+    {
+      "id": "OBJ-024",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/erased-mural-v1.png",
+      "exists": false,
+      "declared_readiness": "MISSING"
+    },
+    {
+      "id": "OBJ-025",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/mural-rubbing-v1.png",
+      "exists": false,
+      "declared_readiness": "MISSING"
+    },
+    {
+      "id": "OBJ-026",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/demolition-line-v1.png",
+      "exists": false,
+      "declared_readiness": "MISSING"
+    },
+    {
+      "id": "OBJ-027",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/bypass-control-v1.png",
+      "exists": false,
+      "declared_readiness": "MISSING"
+    },
+    {
+      "id": "OBJ-028",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/retreat-chain-v1.png",
+      "exists": false,
+      "declared_readiness": "MISSING"
+    },
+    {
+      "id": "OBJ-029",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/command-target-v1.png",
+      "exists": false,
+      "declared_readiness": "MISSING"
+    },
+    {
+      "id": "OBJ-030",
+      "path": "SimpleGame/Assets/Environment/Props/Chapter02/relief-wagon-v1.png",
+      "exists": false,
+      "declared_readiness": "MISSING"
+    },
+    {
+      "id": "RUNTIME-COMBAT-common-combat-v2",
+      "path": "SimpleGame/Assets/Monsters/Orc/Common/common-combat-v2.png",
+      "exists": true,
+      "declared_readiness": "RUNTIME_CONNECTED",
+      "grid": [
+        4,
+        4
+      ],
+      "width": 2560,
+      "height": 2560,
+      "bit_depth": 8,
+      "color_type": 6,
+      "sha256": "1a31e29c904564584b7957b6950a0d158dde6ecd80fc552ea21926b773ebc4ad",
+      "cell_width": 640,
+      "cell_height": 640,
+      "frames": [
+        {
+          "transparent": 369607,
+          "partial_alpha": 0,
+          "opaque": 39993,
+          "bounds_alpha128": [
+            208,
+            247,
+            426,
+            512
+          ]
+        },
+        {
+          "transparent": 369537,
+          "partial_alpha": 0,
+          "opaque": 40063,
+          "bounds_alpha128": [
+            211,
+            242,
+            425,
+            512
+          ]
+        },
+        {
+          "transparent": 369776,
+          "partial_alpha": 0,
+          "opaque": 39824,
+          "bounds_alpha128": [
+            210,
+            251,
+            426,
+            512
+          ]
+        },
+        {
+          "transparent": 369868,
+          "partial_alpha": 0,
+          "opaque": 39732,
+          "bounds_alpha128": [
+            212,
+            247,
+            427,
+            512
+          ]
+        },
+        {
+          "transparent": 369779,
+          "partial_alpha": 0,
+          "opaque": 39821,
+          "bounds_alpha128": [
+            192,
+            261,
+            470,
+            512
+          ]
+        },
+        {
+          "transparent": 369688,
+          "partial_alpha": 0,
+          "opaque": 39912,
+          "bounds_alpha128": [
+            212,
+            216,
+            458,
+            512
+          ]
+        },
+        {
+          "transparent": 373909,
+          "partial_alpha": 0,
+          "opaque": 35691,
+          "bounds_alpha128": [
+            199,
+            276,
+            447,
+            512
+          ]
+        },
+        {
+          "transparent": 371247,
+          "partial_alpha": 0,
+          "opaque": 38353,
+          "bounds_alpha128": [
+            221,
+            255,
+            435,
+            512
+          ]
+        },
+        {
+          "transparent": 369304,
+          "partial_alpha": 0,
+          "opaque": 40296,
+          "bounds_alpha128": [
+            208,
+            250,
+            463,
+            512
+          ]
+        },
+        {
+          "transparent": 374402,
+          "partial_alpha": 0,
+          "opaque": 35198,
+          "bounds_alpha128": [
+            219,
+            265,
+            429,
+            512
+          ]
+        },
+        {
+          "transparent": 372618,
+          "partial_alpha": 0,
+          "opaque": 36982,
+          "bounds_alpha128": [
+            206,
+            271,
+            431,
+            512
+          ]
+        },
+        {
+          "transparent": 369106,
+          "partial_alpha": 0,
+          "opaque": 40494,
+          "bounds_alpha128": [
+            212,
+            246,
+            431,
+            512
+          ]
+        },
+        {
+          "transparent": 374615,
+          "partial_alpha": 0,
+          "opaque": 34985,
+          "bounds_alpha128": [
+            216,
+            283,
+            430,
+            512
+          ]
+        },
+        {
+          "transparent": 378861,
+          "partial_alpha": 0,
+          "opaque": 30739,
+          "bounds_alpha128": [
+            204,
+            306,
+            427,
+            512
+          ]
+        },
+        {
+          "transparent": 377954,
+          "partial_alpha": 0,
+          "opaque": 31646,
+          "bounds_alpha128": [
+            180,
+            338,
+            457,
+            512
+          ]
+        },
+        {
+          "transparent": 383103,
+          "partial_alpha": 0,
+          "opaque": 26497,
+          "bounds_alpha128": [
+            157,
+            385,
+            462,
+            512
+          ]
+        }
+      ],
+      "all_frames_have_transparency": true,
+      "all_frames_have_content": true,
+      "style_palette_anatomy_approved": false
+    },
+    {
+      "id": "RUNTIME-COMBAT-elite-combat-v2",
+      "path": "SimpleGame/Assets/Monsters/Orc/Elite/elite-combat-v2.png",
+      "exists": true,
+      "declared_readiness": "RUNTIME_CONNECTED",
+      "grid": [
+        4,
+        4
+      ],
+      "width": 2560,
+      "height": 2560,
+      "bit_depth": 8,
+      "color_type": 6,
+      "sha256": "121775d2295c938d15146e2a55dc2cbf7cee547af45991d3349d0abce4d102f2",
+      "cell_width": 640,
+      "cell_height": 640,
+      "frames": [
+        {
+          "transparent": 362218,
+          "partial_alpha": 0,
+          "opaque": 47382,
+          "bounds_alpha128": [
+            210,
+            221,
+            436,
+            512
+          ]
+        },
+        {
+          "transparent": 362443,
+          "partial_alpha": 0,
+          "opaque": 47157,
+          "bounds_alpha128": [
+            211,
+            221,
+            439,
+            512
+          ]
+        },
+        {
+          "transparent": 362796,
+          "partial_alpha": 0,
+          "opaque": 46804,
+          "bounds_alpha128": [
+            210,
+            221,
+            437,
+            512
+          ]
+        },
+        {
+          "transparent": 362648,
+          "partial_alpha": 0,
+          "opaque": 46952,
+          "bounds_alpha128": [
+            209,
+            221,
+            438,
+            512
+          ]
+        },
+        {
+          "transparent": 367336,
+          "partial_alpha": 0,
+          "opaque": 42264,
+          "bounds_alpha128": [
+            204,
+            269,
+            461,
+            512
+          ]
+        },
+        {
+          "transparent": 364687,
+          "partial_alpha": 0,
+          "opaque": 44913,
+          "bounds_alpha128": [
+            205,
+            202,
+            447,
+            512
+          ]
+        },
+        {
+          "transparent": 371581,
+          "partial_alpha": 0,
+          "opaque": 38019,
+          "bounds_alpha128": [
+            198,
+            267,
+            466,
+            512
+          ]
+        },
+        {
+          "transparent": 374111,
+          "partial_alpha": 0,
+          "opaque": 35489,
+          "bounds_alpha128": [
+            198,
+            255,
+            438,
+            512
+          ]
+        },
+        {
+          "transparent": 366845,
+          "partial_alpha": 0,
+          "opaque": 42755,
+          "bounds_alpha128": [
+            196,
+            238,
+            452,
+            512
+          ]
+        },
+        {
+          "transparent": 369566,
+          "partial_alpha": 0,
+          "opaque": 40034,
+          "bounds_alpha128": [
+            194,
+            241,
+            448,
+            512
+          ]
+        },
+        {
+          "transparent": 369162,
+          "partial_alpha": 0,
+          "opaque": 40438,
+          "bounds_alpha128": [
+            226,
+            262,
+            435,
+            512
+          ]
+        },
+        {
+          "transparent": 366086,
+          "partial_alpha": 0,
+          "opaque": 43514,
+          "bounds_alpha128": [
+            217,
+            238,
+            438,
+            512
+          ]
+        },
+        {
+          "transparent": 372592,
+          "partial_alpha": 0,
+          "opaque": 37008,
+          "bounds_alpha128": [
+            227,
+            276,
+            447,
+            512
+          ]
+        },
+        {
+          "transparent": 375550,
+          "partial_alpha": 0,
+          "opaque": 34050,
+          "bounds_alpha128": [
+            185,
+            301,
+            447,
+            512
+          ]
+        },
+        {
+          "transparent": 375699,
+          "partial_alpha": 0,
+          "opaque": 33901,
+          "bounds_alpha128": [
+            164,
+            340,
+            451,
+            512
+          ]
+        },
+        {
+          "transparent": 381666,
+          "partial_alpha": 0,
+          "opaque": 27934,
+          "bounds_alpha128": [
+            155,
+            382,
+            468,
+            512
+          ]
+        }
+      ],
+      "all_frames_have_transparency": true,
+      "all_frames_have_content": true,
+      "style_palette_anatomy_approved": false
+    },
+    {
+      "id": "RUNTIME-COMBAT-barkan-attacks-v2",
+      "path": "SimpleGame/Assets/Monsters/Orc/Barkan/barkan-attacks-v2.png",
+      "exists": true,
+      "declared_readiness": "RUNTIME_CONNECTED",
+      "grid": [
+        4,
+        3
+      ],
+      "width": 2560,
+      "height": 1920,
+      "bit_depth": 8,
+      "color_type": 6,
+      "sha256": "aadebce4b4490252263599ce4a7f969b4e16dfab3548a810b896e636ff60b53e",
+      "cell_width": 640,
+      "cell_height": 640,
+      "frames": [
+        {
+          "transparent": 360664,
+          "partial_alpha": 0,
+          "opaque": 48936,
+          "bounds_alpha128": [
+            188,
+            253,
+            461,
+            512
+          ]
+        },
+        {
+          "transparent": 357860,
+          "partial_alpha": 0,
+          "opaque": 51740,
+          "bounds_alpha128": [
+            169,
+            187,
+            462,
+            512
+          ]
+        },
+        {
+          "transparent": 368049,
+          "partial_alpha": 0,
+          "opaque": 41551,
+          "bounds_alpha128": [
+            174,
+            271,
+            452,
+            512
+          ]
+        },
+        {
+          "transparent": 361364,
+          "partial_alpha": 0,
+          "opaque": 48236,
+          "bounds_alpha128": [
+            181,
+            253,
+            450,
+            512
+          ]
+        },
+        {
+          "transparent": 373283,
+          "partial_alpha": 0,
+          "opaque": 36317,
+          "bounds_alpha128": [
+            193,
+            318,
+            451,
+            512
+          ]
+        },
+        {
+          "transparent": 371536,
+          "partial_alpha": 0,
+          "opaque": 38064,
+          "bounds_alpha128": [
+            195,
+            206,
+            455,
+            478
+          ]
+        },
+        {
+          "transparent": 374311,
+          "partial_alpha": 0,
+          "opaque": 35289,
+          "bounds_alpha128": [
+            215,
+            220,
+            452,
+            512
+          ]
+        },
+        {
+          "transparent": 374881,
+          "partial_alpha": 0,
+          "opaque": 34719,
+          "bounds_alpha128": [
+            174,
+            322,
+            440,
+            512
+          ]
+        },
+        {
+          "transparent": 368999,
+          "partial_alpha": 0,
+          "opaque": 40601,
+          "bounds_alpha128": [
+            194,
+            294,
+            453,
+            512
+          ]
+        },
+        {
+          "transparent": 361571,
+          "partial_alpha": 0,
+          "opaque": 48029,
+          "bounds_alpha128": [
+            142,
+            251,
+            463,
+            512
+          ]
+        },
+        {
+          "transparent": 360702,
+          "partial_alpha": 0,
+          "opaque": 48898,
+          "bounds_alpha128": [
+            132,
+            252,
+            488,
+            512
+          ]
+        },
+        {
+          "transparent": 362715,
+          "partial_alpha": 0,
+          "opaque": 46885,
+          "bounds_alpha128": [
+            197,
+            255,
+            460,
+            512
+          ]
+        }
+      ],
+      "all_frames_have_transparency": true,
+      "all_frames_have_content": true,
+      "style_palette_anatomy_approved": false
+    },
+    {
+      "id": "RUNTIME-COMBAT-barkan-support-v2",
+      "path": "SimpleGame/Assets/Monsters/Orc/Barkan/barkan-support-v2.png",
+      "exists": true,
+      "declared_readiness": "RUNTIME_CONNECTED",
+      "grid": [
+        4,
+        3
+      ],
+      "width": 2560,
+      "height": 1920,
+      "bit_depth": 8,
+      "color_type": 6,
+      "sha256": "6cea0bb1a530fdab64800e97f8300fc1a3ef6282cf35afcd450989cd9e329fed",
+      "cell_width": 640,
+      "cell_height": 640,
+      "frames": [
+        {
+          "transparent": 342281,
+          "partial_alpha": 0,
+          "opaque": 67319,
+          "bounds_alpha128": [
+            173,
+            189,
+            463,
+            512
+          ]
+        },
+        {
+          "transparent": 342282,
+          "partial_alpha": 0,
+          "opaque": 67318,
+          "bounds_alpha128": [
+            167,
+            189,
+            456,
+            512
+          ]
+        },
+        {
+          "transparent": 342109,
+          "partial_alpha": 0,
+          "opaque": 67491,
+          "bounds_alpha128": [
+            164,
+            189,
+            454,
+            512
+          ]
+        },
+        {
+          "transparent": 342535,
+          "partial_alpha": 0,
+          "opaque": 67065,
+          "bounds_alpha128": [
+            157,
+            192,
+            449,
+            512
+          ]
+        },
+        {
+          "transparent": 350581,
+          "partial_alpha": 0,
+          "opaque": 59019,
+          "bounds_alpha128": [
+            173,
+            213,
+            446,
+            512
+          ]
+        },
+        {
+          "transparent": 349942,
+          "partial_alpha": 0,
+          "opaque": 59658,
+          "bounds_alpha128": [
+            136,
+            220,
+            502,
+            512
+          ]
+        },
+        {
+          "transparent": 354849,
+          "partial_alpha": 0,
+          "opaque": 54751,
+          "bounds_alpha128": [
+            167,
+            247,
+            445,
+            512
+          ]
+        },
+        {
+          "transparent": 349407,
+          "partial_alpha": 0,
+          "opaque": 60193,
+          "bounds_alpha128": [
+            176,
+            212,
+            452,
+            512
+          ]
+        },
+        {
+          "transparent": 359948,
+          "partial_alpha": 0,
+          "opaque": 49652,
+          "bounds_alpha128": [
+            195,
+            241,
+            442,
+            512
+          ]
+        },
+        {
+          "transparent": 363763,
+          "partial_alpha": 0,
+          "opaque": 45837,
+          "bounds_alpha128": [
+            171,
+            278,
+            442,
+            512
+          ]
+        },
+        {
+          "transparent": 367103,
+          "partial_alpha": 0,
+          "opaque": 42497,
+          "bounds_alpha128": [
+            129,
+            316,
+            470,
+            512
+          ]
+        },
+        {
+          "transparent": 372560,
+          "partial_alpha": 0,
+          "opaque": 37040,
+          "bounds_alpha128": [
+            113,
+            361,
+            481,
+            512
+          ]
+        }
+      ],
+      "all_frames_have_transparency": true,
+      "all_frames_have_content": true,
+      "style_palette_anatomy_approved": false
+    }
+  ],
+  "errors": []
+}

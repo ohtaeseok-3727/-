@@ -1,0 +1,49 @@
+<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>미니 마법사 이동·공격</title>
+<style>:root{font-family:system-ui;color-scheme:dark;background:#171d24;color:#e4edf3}body{max-width:850px;margin:32px auto;padding:0 18px}p{line-height:1.6}button,select{padding:9px;margin:4px;font:inherit}canvas{display:block;max-width:100%;margin:20px auto;image-rendering:pixelated;border:1px solid #789}a{color:#8dd9ee}</style>
+<h1>미니 마법사 · 이동과 공격</h1><p>무기 없이 장갑 마법진으로 공격합니다. 기존 마력칼날 궤적은 0.8배, B안 폭발 효과는 1.2배 속도로 연결했습니다.</p>
+<label>동작 <select id="mode"><option>이동</option><option>손바닥 타격</option><option>마력칼날</option><option>마법진 폭발 · B안</option></select></label>
+<label>속도 <select id="speed"><option value="0.25">0.25배</option><option value="0.5">0.5배</option><option value="1" selected>1배</option></select></label>
+<label>배경 <select id="bg"><option value="#283038">어둡게</option><option value="#d9dde1">밝게</option><option value="#617d68">초록</option></select></label><br>
+<label><input id="effects" type="checkbox" checked>효과 표시</label><label><input id="flip" type="checkbox">좌우 반전</label>
+<button id="play" disabled>재생</button><button id="prev" disabled>이전</button><button id="next" disabled>다음</button>
+<canvas id="stage" width="640" height="400" aria-label="미니 마법사 미리보기"></canvas><p id="status" role="status">이미지 불러오는 중…</p>
+<p><a href="walk-transparent-v2.png">이동 PNG</a> · <a href="attacks-selected-v1.png">공격 PNG</a> · <a href="mana-blade-v1.png">새 마력칼날 PNG</a></p><p>우측 시점의 시안이며 반대 방향은 미리보기에서 반전합니다. 게임 적용 및 빌드·실행 검증은 하지 않았습니다. 기존 효과 PNG는 검정 배경 가산 합성으로 사용합니다.</p>
+<script src="../padded-frames.js"></script><script>
+'use strict';
+const $=id=>document.getElementById(id),ctx=$('stage').getContext('2d'),walk=new Image(),attack=new Image(),fx=new Image(),burst=new Image(),blade=new Image();
+const walkFrames=new PaddedFrames(walk,4,[0,512,1024]),attackFrames=new PaddedFrames(attack,6,[0,341,682,1024],[[0,256,512,757,1024,1293,1536],[0,256,512,768,1024,1302,1536],[0,256,501,756,1024,1286,1536]]),fxFrames=new PaddedFrames(fx,6,[0,341,682,1024]),burstFrames=new PaddedFrames(burst,4,[0,512,1024]);
+const bladeFrames=new PaddedFrames(blade,3,[0,512,1024]);
+const poses=[0,1,2,3,3,3,4,4,4,5,5,0];
+const times=[[150,140,40,40,45,45,55,70,60,100,80,180],[150,130,30,30,40,40,50,65,60,100,80,180],[150,180,65,90,50,65,70,90,65,110,90,180]];
+let mode=0,step=0,elapsed=0,last=null,playing=false,ready=false;
+function count(){return mode===0?8:12;}
+function frameAt(t,durations){if(t<0)return -1;for(let f=0;f<durations.length;f++){if(t<durations[f])return f;t-=durations[f];}return -1;}
+function effectFrame(){const d=times[mode-1],now=d.slice(0,step).reduce((a,b)=>a+b,0)+elapsed,start=d[0]+d[1];return mode===3?frameAt((now-start)*1.2,[80,75,45,65,85,90,85,80]):frameAt((now-start)*(mode===2?0.8:1),d.slice(2,8));}
+function draw(){if(!ready)return;ctx.fillStyle=$('bg').value;ctx.fillRect(0,0,640,400);ctx.imageSmoothingEnabled=false;ctx.save();if($('flip').checked){ctx.translate(640,0);ctx.scale(-1,1);}
+ let e=-1;
+ if(mode===0){const col=step%4,row=Math.floor(step/4),s=0.42,base=row?424:456;walkFrames.draw(ctx,col,row,col*384,row*512,260-192*s,300-base*s,s);}
+ else {const row=mode-1,f=poses[step],sy=[0,341,682][row],end=[341,682,1024][row],s=0.64;attackFrames.draw(ctx,f,row,f*256,sy,260-128*s,300-([334,647,961][row]-sy)*s,s);
+  e=effectFrame();if(e>=0&&$('effects').checked){ctx.save();ctx.globalCompositeOperation='lighter';
+   if(mode===3){const col=e%4,r=Math.floor(e/4),bs=0.65,ox=[98,94,96,70,88,76,86,74][e],oy=r?232:262;burstFrames.draw(ctx,col,r,col*384,r*512,316-ox*bs,222-oy*bs,bs);}
+   else if(mode===2){
+    const bc=e%3,br=Math.floor(e/3),bs=0.55;
+    // Source-space palm tips. Keep the fading trail at the last strike pose during recovery.
+    const palmPose=Math.min(f,4),palmX=[177,60,46,227,256][palmPose],palmY=[561,535,543,509,518][palmPose];
+    const handX=260+(palmX-128)*s,handY=300+(palmY-647)*s;
+    // Attach the leading-in stroke, rather than the sheet-cell centre, to the palm.
+    const rootX=[196,150,105,104,95,112][e],rootY=[262,260,260,256,255,264][e];
+    ctx.globalCompositeOperation='source-over';
+    bladeFrames.draw(ctx,bc,br,bc*512,br*512,handX-rootX*bs,handY-rootY*bs,bs);
+   }
+   else {const fy=Math.floor(row*fx.height/3),fe=Math.floor((row+1)*fx.height/3),fs=mode===1?0.55:0.9,ax=mode===1?342:296,ay=mode===1?206:226,oy=mode===1?200:175;fxFrames.draw(ctx,e,row,e*256,fy,ax-128*fs,ay-oy*fs,fs);}
+   ctx.restore();
+  }
+ }
+ ctx.restore();ctx.strokeStyle='#82929d';ctx.beginPath();ctx.moveTo(35,301);ctx.lineTo(605,301);ctx.stroke();$('play').textContent=playing?'일시정지':'재생';$('status').textContent=mode===0?`이동 ${step+1}/8`:`단계 ${step+1}/12 · 캐릭터 ${poses[step]+1}/6 · 효과 ${e<0?'없음':e+1}`;
+}
+function stopAt(n){playing=false;step=(n+count())%count();elapsed=0;draw();}
+$('mode').onchange=()=>{mode=$('mode').selectedIndex;stopAt(0);};$('bg').onchange=draw;$('effects').onchange=draw;$('flip').onchange=draw;$('prev').onclick=()=>stopAt(step-1);$('next').onclick=()=>stopAt(step+1);$('play').onclick=()=>{playing=!playing;last=null;draw();};
+function tick(now){if(last===null)last=now;const dt=Math.min(now-last,100);last=now;if(playing){elapsed+=dt*Number($('speed').value);while(elapsed>=(mode===0?90:times[mode-1][step])){elapsed-=mode===0?90:times[mode-1][step];step=(step+1)%count();}draw();}requestAnimationFrame(tick);}
+function load(img,src){return new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=()=>reject(new Error(src+' 로드 실패'));img.src=src;});}
+Promise.all([load(blade,'mana-blade-v1.png'),load(walk,'walk-transparent-v2.png'),load(attack,'attacks-selected-v1.png'),load(fx,'../Attack/Mage/mage-melee-effects-v1.png'),load(burst,'../Attack/Mage/mage-burst-b-v2.png')]).then(()=>{ready=true;document.querySelectorAll('button').forEach(b=>b.disabled=false);draw();requestAnimationFrame(tick);}).catch(e=>$('status').textContent=e.message);
+</script></html>

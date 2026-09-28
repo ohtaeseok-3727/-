@@ -1,0 +1,571 @@
+{
+  "schema": 1,
+  "source": "output/chapter2-orc-combat-sprites/elite-combat-v1.png",
+  "image": "elite-combat-v2.png",
+  "source_sha256": "a92a86ea141118c525c719f010d3c8530c81e29a469a027d178e031340e84e96",
+  "size": [
+    2560,
+    2560
+  ],
+  "grid": [
+    4,
+    4
+  ],
+  "cell": [
+    640,
+    640
+  ],
+  "alpha_threshold": 240,
+  "partial_alpha_pixels": 0,
+  "resized": false,
+  "rgb_preserved": true,
+  "minimum_margin_pixels": 128,
+  "runtime_integrated": false,
+  "anatomy_and_animation_approved": false,
+  "frames": [
+    {
+      "index": 0,
+      "action": "idle",
+      "rect": [
+        0,
+        0,
+        640,
+        640
+      ],
+      "pivot": [
+        320,
+        512
+      ],
+      "source_bounds": [
+        47,
+        51,
+        273,
+        342
+      ],
+      "content_bounds": [
+        210,
+        221,
+        436,
+        512
+      ],
+      "margins_left_top_right_bottom": [
+        210,
+        221,
+        204,
+        128
+      ],
+      "jump_lift_pixels": 0,
+      "opaque_pixels": 47382
+    },
+    {
+      "index": 1,
+      "action": "idle",
+      "rect": [
+        640,
+        0,
+        640,
+        640
+      ],
+      "pivot": [
+        320,
+        512
+      ],
+      "source_bounds": [
+        361,
+        51,
+        589,
+        342
+      ],
+      "content_bounds": [
+        211,
+        221,
+        439,
+        512
+      ],
+      "margins_left_top_right_bottom": [
+        211,
+        221,
+        201,
+        128
+      ],
+      "jump_lift_pixels": 0,
+      "opaque_pixels": 47157
+    },
+    {
+      "index": 2,
+      "action": "idle",
+      "rect": [
+        1280,
+        0,
+        640,
+        640
+      ],
+      "pivot": [
+        320,
+        512
+      ],
+      "source_bounds": [
+        674,
+        51,
+        901,
+        342
+      ],
+      "content_bounds": [
+        210,
+        221,
+        437,
+        512
+      ],
+      "margins_left_top_right_bottom": [
+        210,
+        221,
+        203,
+        128
+      ],
+      "jump_lift_pixels": 0,
+      "opaque_pixels": 46804
+    },
+    {
+      "index": 3,
+      "action": "idle",
+      "rect": [
+        1920,
+        0,
+        640,
+        640
+      ],
+      "pivot": [
+        320,
+        512
+      ],
+      "source_bounds": [
+        986,
+        51,
+        1215,
+        342
+      ],
+      "content_bounds": [
+        209,
+        221,
+        438,
+        512
+      ],
+      "margins_left_top_right_bottom": [
+        209,
+        221,
+        202,
+        128
+      ],
+      "jump_lift_pixels": 0,
+      "opaque_pixels": 46952
+    },
+    {
+      "index": 4,
+      "action": "swing",
+      "rect": [
+        0,
+        640,
+        640,
+        640
+      ],
+      "pivot": [
+        320,
+        512
+      ],
+      "source_bounds": [
+        41,
+        414,
+        298,
+        657
+      ],
+      "content_bounds": [
+        204,
+        269,
+        461,
+        512
+      ],
+      "margins_left_top_right_bottom": [
+        204,
+        269,
+        179,
+        128
+      ],
+      "jump_lift_pixels": 0,
+      "opaque_pixels": 42264
+    },
+    {
+      "index": 5,
+      "action": "swing",
+      "rect": [
+        640,
+        640,
+        640,
+        640
+      ],
+      "pivot": [
+        320,
+        512
+      ],
+      "source_bounds": [
+        355,
+        347,
+        597,
+        657
+      ],
+      "content_bounds": [
+        205,
+        202,
+        447,
+        512
+      ],
+      "margins_left_top_right_bottom": [
+        205,
+        202,
+        193,
+        128
+      ],
+      "jump_lift_pixels": 0,
+      "opaque_pixels": 44913
+    },
+    {
+      "index": 6,
+      "action": "swing",
+      "rect": [
+        1280,
+        640,
+        640,
+        640
+      ],
+      "pivot": [
+        320,
+        512
+      ],
+      "source_bounds": [
+        662,
+        415,
+        930,
+        660
+      ],
+      "content_bounds": [
+        198,
+        267,
+        466,
+        512
+      ],
+      "margins_left_top_right_bottom": [
+        198,
+        267,
+        174,
+        128
+      ],
+      "jump_lift_pixels": 0,
+      "opaque_pixels": 38019
+    },
+    {
+      "index": 7,
+      "action": "swing",
+      "rect": [
+        1920,
+        640,
+        640,
+        640
+      ],
+      "pivot": [
+        320,
+        512
+      ],
+      "source_bounds": [
+        975,
+        414,
+        1215,
+        671
+      ],
+      "content_bounds": [
+        198,
+        255,
+        438,
+        512
+      ],
+      "margins_left_top_right_bottom": [
+        198,
+        255,
+        202,
+        128
+      ],
+      "jump_lift_pixels": 0,
+      "opaque_pixels": 35489
+    },
+    {
+      "index": 8,
+      "action": "hit",
+      "rect": [
+        0,
+        1280,
+        640,
+        640
+      ],
+      "pivot": [
+        320,
+        512
+      ],
+      "source_bounds": [
+        33,
+        687,
+        289,
+        961
+      ],
+      "content_bounds": [
+        196,
+        238,
+        452,
+        512
+      ],
+      "margins_left_top_right_bottom": [
+        196,
+        238,
+        188,
+        128
+      ],
+      "jump_lift_pixels": 0,
+      "opaque_pixels": 42755
+    },
+    {
+      "index": 9,
+      "action": "hit",
+      "rect": [
+        640,
+        1280,
+        640,
+        640
+      ],
+      "pivot": [
+        320,
+        512
+      ],
+      "source_bounds": [
+        344,
+        690,
+        598,
+        961
+      ],
+      "content_bounds": [
+        194,
+        241,
+        448,
+        512
+      ],
+      "margins_left_top_right_bottom": [
+        194,
+        241,
+        192,
+        128
+      ],
+      "jump_lift_pixels": 0,
+      "opaque_pixels": 40034
+    },
+    {
+      "index": 10,
+      "action": "hit",
+      "rect": [
+        1280,
+        1280,
+        640,
+        640
+      ],
+      "pivot": [
+        320,
+        512
+      ],
+      "source_bounds": [
+        690,
+        711,
+        899,
+        961
+      ],
+      "content_bounds": [
+        226,
+        262,
+        435,
+        512
+      ],
+      "margins_left_top_right_bottom": [
+        226,
+        262,
+        205,
+        128
+      ],
+      "jump_lift_pixels": 0,
+      "opaque_pixels": 40438
+    },
+    {
+      "index": 11,
+      "action": "hit",
+      "rect": [
+        1920,
+        1280,
+        640,
+        640
+      ],
+      "pivot": [
+        320,
+        512
+      ],
+      "source_bounds": [
+        994,
+        687,
+        1215,
+        961
+      ],
+      "content_bounds": [
+        217,
+        238,
+        438,
+        512
+      ],
+      "margins_left_top_right_bottom": [
+        217,
+        238,
+        202,
+        128
+      ],
+      "jump_lift_pixels": 0,
+      "opaque_pixels": 43514
+    },
+    {
+      "index": 12,
+      "action": "death",
+      "rect": [
+        0,
+        1920,
+        640,
+        640
+      ],
+      "pivot": [
+        320,
+        512
+      ],
+      "source_bounds": [
+        64,
+        983,
+        284,
+        1219
+      ],
+      "content_bounds": [
+        227,
+        276,
+        447,
+        512
+      ],
+      "margins_left_top_right_bottom": [
+        227,
+        276,
+        193,
+        128
+      ],
+      "jump_lift_pixels": 0,
+      "opaque_pixels": 37008
+    },
+    {
+      "index": 13,
+      "action": "death",
+      "rect": [
+        640,
+        1920,
+        640,
+        640
+      ],
+      "pivot": [
+        320,
+        512
+      ],
+      "source_bounds": [
+        335,
+        1009,
+        597,
+        1220
+      ],
+      "content_bounds": [
+        185,
+        301,
+        447,
+        512
+      ],
+      "margins_left_top_right_bottom": [
+        185,
+        301,
+        193,
+        128
+      ],
+      "jump_lift_pixels": 0,
+      "opaque_pixels": 34050
+    },
+    {
+      "index": 14,
+      "action": "death",
+      "rect": [
+        1280,
+        1920,
+        640,
+        640
+      ],
+      "pivot": [
+        320,
+        512
+      ],
+      "source_bounds": [
+        628,
+        1059,
+        915,
+        1231
+      ],
+      "content_bounds": [
+        164,
+        340,
+        451,
+        512
+      ],
+      "margins_left_top_right_bottom": [
+        164,
+        340,
+        189,
+        128
+      ],
+      "jump_lift_pixels": 0,
+      "opaque_pixels": 33901
+    },
+    {
+      "index": 15,
+      "action": "death",
+      "rect": [
+        1920,
+        1920,
+        640,
+        640
+      ],
+      "pivot": [
+        320,
+        512
+      ],
+      "source_bounds": [
+        932,
+        1101,
+        1245,
+        1231
+      ],
+      "content_bounds": [
+        155,
+        382,
+        468,
+        512
+      ],
+      "margins_left_top_right_bottom": [
+        155,
+        382,
+        172,
+        128
+      ],
+      "jump_lift_pixels": 0,
+      "opaque_pixels": 27934
+    }
+  ]
+}

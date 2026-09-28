@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>기사 · 스킬 미리보기</title>
+<link rel="stylesheet" href="preview.css">
+<main>
+<p class="eyebrow">KNIGHT / SKILL STUDIES</p><h1>기사 스킬 미리보기</h1>
+<p class="intro">이전 기사 모션과 새 찌르기 효과를 조합했습니다. 각 스킬을 따로 재생하거나 느리게 살펴볼 수 있습니다.</p>
+<div class="toolbar"><button id="playAll">모두 재생</button><button id="pauseAll">모두 정지</button>
+<label>재생 속도 <select id="speed"><option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1" selected>1×</option></select></label>
+<label>배경 <select id="background"><option value="#27383d">회청색</option><option value="#e7e3d9">밝은색</option><option value="#12171b">어두운색</option></select></label>
+<label><input type="checkbox" id="flip">좌우 반전</label><label><input type="checkbox" id="guides">연결점 표시</label></div>
+<div id="cards"></div>
+<p class="note">시간·크기·위치 값은 미리보기용이며 게임 밸런스 수치가 아닙니다. 기존 검기 발산 캐릭터 시트는 횡베기 표현이 약한 시안이라는 한계가 있습니다. 좌우 반전은 캐릭터와 장비 전체를 반전합니다.</p>
+<p><a href="../knight-thrust-effect-v1/thrust-effect-v1.png">찌르기 이펙트 PNG</a> · <a href="README-preview.md">미리보기 설명</a></p>
+</main>
+<script src="preview-data.js"></script><script src="preview.js"></script>
+</html>

@@ -1,0 +1,388 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="소스 파일\Shaders">
+      <UniqueIdentifier>{aa86e47f-445f-4440-9a76-173363b46c4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{2007913E-A743-5669-B50B-F5FA8345C8ED}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\app">
+      <UniqueIdentifier>{A2D6B157-E018-5607-9F99-04FAB2A02CEC}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\chapters">
+      <UniqueIdentifier>{E8C11EB2-FC15-5F1E-9609-B87815E71402}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\combat">
+      <UniqueIdentifier>{FA7CBAE4-9C59-5518-B8A1-25FF3ADEB0F9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\core">
+      <UniqueIdentifier>{0664B58E-E11F-5711-BC66-FA243DBFA682}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\generated">
+      <UniqueIdentifier>{7FA52EC3-3BBE-58F2-8234-24C511482536}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\player">
+      <UniqueIdentifier>{819352F8-72F4-5C96-A325-450A2FAEBA29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\profiling">
+      <UniqueIdentifier>{8F15A594-7F6F-5810-B750-CD1A9E0D863C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\rendering">
+      <UniqueIdentifier>{270B637A-F47E-5BEA-ACE4-05DF8237CF03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ui">
+      <UniqueIdentifier>{F383B2B6-8E57-528D-B8F3-AA8FE6B668AE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\verification">
+      <UniqueIdentifier>{4CE8EAF5-816F-5048-A01C-BD56B80FF2D9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\world">
+      <UniqueIdentifier>{C6BCDA37-BD61-5631-B97F-53691843814D}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\core\stdafx.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\combat\AttackInput.h">
+      <Filter>src\combat</Filter>
+    </ClInclude>
+    <ClInclude Include="src\combat\BasicAttack.h">
+      <Filter>src\combat</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\targetver.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\PrototypeWorld.h">
+      <Filter>src\app</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rendering\SpriteImage.h">
+      <Filter>src\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rendering\PostProcessing.h">
+      <Filter>src\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rendering\PostProcessingShaders.h">
+      <Filter>src\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\LevelMap.h">
+      <Filter>src\world</Filter>
+    </ClInclude>
+    <ClInclude Include="src\player\PlayerProgression.h">
+      <Filter>src\player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\player\PlayerInventory.h">
+      <Filter>src\player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\InventoryView.h">
+      <Filter>src\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\InteractionBubbleView.h">
+      <Filter>src\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\player\SkillCatalog.h">
+      <Filter>src\player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\combat\MageProjectiles.h">
+      <Filter>src\combat</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\MageProjectileView.h">
+      <Filter>src\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\player\SkillSystem.h">
+      <Filter>src\player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\player\PlayerSkills.h">
+      <Filter>src\player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\player\SkillQuickSlots.h">
+      <Filter>src\player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\player\SkillDragController.h">
+      <Filter>src\player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\SkillView.h">
+      <Filter>src\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\player\SkillLayout.h">
+      <Filter>src\player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\combat\EnemySystem.h">
+      <Filter>src\combat</Filter>
+    </ClInclude>
+    <ClInclude Include="src\combat\LootSystem.h">
+      <Filter>src\combat</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app\GameSession.h">
+      <Filter>src\app</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\GameView.h">
+      <Filter>src\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\LevelTypes.h">
+      <Filter>src\world</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\MapLayout.h">
+      <Filter>src\world</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ui\MapView.h">
+      <Filter>src\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rendering\Renderer.h">
+      <Filter>src\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rendering\GeometryCache.h">
+      <Filter>src\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\profiling\FrameProfiler.h">
+      <Filter>src\profiling</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rendering\WindowsTextRenderer.h">
+      <Filter>src\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\generated\CombatVisualData.h">
+      <Filter>src\generated</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\core\stdafx.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\combat\AttackInput.cpp">
+      <Filter>src\combat</Filter>
+    </ClCompile>
+    <ClCompile Include="src\verification\Chapter1Verification.cpp">
+      <Filter>src\verification</Filter>
+    </ClCompile>
+    <ClCompile Include="src\combat\BasicAttack.cpp">
+      <Filter>src\combat</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\SimpleGame.cpp">
+      <Filter>src\app</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\PrototypeWorld.cpp">
+      <Filter>src\app</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\SpriteImage.cpp">
+      <Filter>src\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\PostProcessing.cpp">
+      <Filter>src\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\world\LevelMap.cpp">
+      <Filter>src\world</Filter>
+    </ClCompile>
+    <ClCompile Include="src\player\PlayerProgression.cpp">
+      <Filter>src\player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\player\PlayerInventory.cpp">
+      <Filter>src\player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\InventoryView.cpp">
+      <Filter>src\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\InteractionBubbleView.cpp">
+      <Filter>src\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\player\SkillCatalog.cpp">
+      <Filter>src\player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\combat\MageProjectiles.cpp">
+      <Filter>src\combat</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\MageProjectileView.cpp">
+      <Filter>src\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\player\SkillSystem.cpp">
+      <Filter>src\player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\player\PlayerSkills.cpp">
+      <Filter>src\player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\player\SkillQuickSlots.cpp">
+      <Filter>src\player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\player\SkillDragController.cpp">
+      <Filter>src\player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\SkillView.cpp">
+      <Filter>src\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\combat\EnemySystem.cpp">
+      <Filter>src\combat</Filter>
+    </ClCompile>
+    <ClCompile Include="src\combat\LootSystem.cpp">
+      <Filter>src\combat</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\GameSession.cpp">
+      <Filter>src\app</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\GameView.cpp">
+      <Filter>src\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\world\MapLayout.cpp">
+      <Filter>src\world</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ui\MapView.cpp">
+      <Filter>src\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\Renderer.cpp">
+      <Filter>src\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\profiling\FrameProfiler.cpp">
+      <Filter>src\profiling</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\WindowsTextRenderer.cpp">
+      <Filter>src\rendering</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\SolidRect.fs">
+      <Filter>소스 파일\Shaders</Filter>
+    </None>
+    <None Include="Assets\Characters\knight-coarse-preview-v2.png">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="Assets\Characters\mage-coarse-preview-v2.png">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="Assets\Characters\Walk\mage-walk-sheet-v1.png">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="Assets\Characters\Walk\knight-walk-sheet-v1.png">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="Shaders\SolidRect.vs">
+      <Filter>소스 파일\Shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\rendering\Actor.h">
+      <Filter>src\rendering</Filter>
+    </ClInclude>
+    <ClCompile Include="src\rendering\Actor.cpp">
+      <Filter>src\rendering</Filter>
+    </ClCompile>
+    <ClInclude Include="src\rendering\SceneCamera.h">
+      <Filter>src\rendering</Filter>
+    </ClInclude>
+    <ClCompile Include="src\rendering\SceneCamera.cpp">
+      <Filter>src\rendering</Filter>
+    </ClCompile>
+    <ClInclude Include="src\rendering\SceneGraph.h">
+      <Filter>src\rendering</Filter>
+    </ClInclude>
+    <ClCompile Include="src\rendering\SceneGraph.cpp">
+      <Filter>src\rendering</Filter>
+    </ClCompile>
+    <ClInclude Include="src\rendering\SceneRenderer.h">
+      <Filter>src\rendering</Filter>
+    </ClInclude>
+    <ClCompile Include="src\rendering\SceneRenderer.cpp">
+      <Filter>src\rendering</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\chapters\Chapter1Sprites.h">
+      <Filter>src\chapters</Filter>
+    </ClInclude>
+    <ClCompile Include="src\chapters\Chapter1Sprites.cpp">
+      <Filter>src\chapters</Filter>
+    </ClCompile>
+    <ClCompile Include="src\chapters\Chapter1View.cpp">
+      <Filter>src\chapters</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\combat\EnemyAIState.h">
+      <Filter>src\combat</Filter>
+    </ClInclude>
+    <ClInclude Include="src\combat\EnemyStateMachine.h">
+      <Filter>src\combat</Filter>
+    </ClInclude>
+    <ClCompile Include="src\combat\EnemyStateMachine.cpp">
+      <Filter>src\combat</Filter>
+    </ClCompile>
+    <ClInclude Include="src\combat\EnemyPathfinder.h">
+      <Filter>src\combat</Filter>
+    </ClInclude>
+    <ClCompile Include="src\combat\EnemyPathfinder.cpp">
+      <Filter>src\combat</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\chapters\Chapter.h">
+      <Filter>src\chapters</Filter>
+    </ClInclude>
+    <ClCompile Include="src\chapters\Chapter.cpp">
+      <Filter>src\chapters</Filter>
+    </ClCompile>
+    <ClInclude Include="src\chapters\ChapterCatalog.h">
+      <Filter>src\chapters</Filter>
+    </ClInclude>
+    <ClCompile Include="src\chapters\ChapterCatalog.cpp">
+      <Filter>src\chapters</Filter>
+    </ClCompile>
+    <ClInclude Include="src\chapters\Chapter1.h">
+      <Filter>src\chapters</Filter>
+    </ClInclude>
+    <ClCompile Include="src\chapters\Chapter1.cpp">
+      <Filter>src\chapters</Filter>
+    </ClCompile>
+    <ClCompile Include="src\chapters\Chapter1Map.cpp">
+      <Filter>src\chapters</Filter>
+    </ClCompile>
+    <ClCompile Include="src\verification\GameSessionVerification.cpp">
+      <Filter>src\verification</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\chapters\Chapter2.h">
+      <Filter>src\chapters</Filter>
+    </ClInclude>
+    <ClCompile Include="src\chapters\Chapter2.cpp">
+      <Filter>src\chapters</Filter>
+    </ClCompile>
+    <ClCompile Include="src\chapters\Chapter2Combat.cpp">
+      <Filter>src\chapters</Filter>
+    </ClCompile>
+    <ClCompile Include="src\chapters\Chapter2Map.cpp">
+      <Filter>src\chapters</Filter>
+    </ClCompile>
+    <ClCompile Include="src\chapters\Chapter2View.cpp">
+      <Filter>src\chapters</Filter>
+    </ClCompile>
+    <ClInclude Include="src\chapters\Chapter2Sprites.h">
+      <Filter>src\chapters</Filter>
+    </ClInclude>
+    <ClCompile Include="src\chapters\Chapter2Sprites.cpp">
+      <Filter>src\chapters</Filter>
+    </ClCompile>
+    <ClInclude Include="src\verification\Chapter2Verification.h">
+      <Filter>src\verification</Filter>
+    </ClInclude>
+    <ClCompile Include="src\verification\Chapter2Verification.cpp">
+      <Filter>src\verification</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\verification\Chapter1Verification.h">
+      <Filter>src\verification</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

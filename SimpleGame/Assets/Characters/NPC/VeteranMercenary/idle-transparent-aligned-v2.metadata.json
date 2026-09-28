@@ -1,0 +1,126 @@
+{
+  "source": "idle-draft-v1.png",
+  "output": "idle-transparent-aligned-v2.png",
+  "format": "RGBA PNG",
+  "sheet_dimensions": {
+    "width": 2172,
+    "height": 724
+  },
+  "frame_count": 4,
+  "frame_dimensions": {
+    "width": 543,
+    "height": 724
+  },
+  "alignment_reference": "median foreground horizontal center and bottom opaque row",
+  "background_removal": "4-connected exterior flood fill of light neutral pixels, blocked by a 5px morphological closing of dark/colored sprite structure and tight per-frame shoulder protection; enclosed neutral pixels are retained",
+  "static_validation": {
+    "corner_alpha": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "retained_pixel_rgb_checks": 645931,
+    "retained_pixel_rgb_mismatches": 0,
+    "all_frame_bottom_opaque_rows": [
+      651,
+      651,
+      651,
+      651
+    ]
+  },
+  "frames": [
+    {
+      "frame": 1,
+      "cell": {
+        "x": 0,
+        "y": 0,
+        "width": 543,
+        "height": 724
+      },
+      "alignment_offset": {
+        "x": 0,
+        "y": 0
+      },
+      "foreground_bbox_in_cell": {
+        "left": 96,
+        "top": 73,
+        "right_exclusive": 442,
+        "bottom_exclusive": 652
+      },
+      "pivot_in_cell": {
+        "x": 268.5,
+        "y": 651
+      }
+    },
+    {
+      "frame": 2,
+      "cell": {
+        "x": 543,
+        "y": 0,
+        "width": 543,
+        "height": 724
+      },
+      "alignment_offset": {
+        "x": 0,
+        "y": 0
+      },
+      "foreground_bbox_in_cell": {
+        "left": 97,
+        "top": 66,
+        "right_exclusive": 441,
+        "bottom_exclusive": 652
+      },
+      "pivot_in_cell": {
+        "x": 268.5,
+        "y": 651
+      }
+    },
+    {
+      "frame": 3,
+      "cell": {
+        "x": 1086,
+        "y": 0,
+        "width": 543,
+        "height": 724
+      },
+      "alignment_offset": {
+        "x": 1,
+        "y": 0
+      },
+      "foreground_bbox_in_cell": {
+        "left": 96,
+        "top": 66,
+        "right_exclusive": 442,
+        "bottom_exclusive": 652
+      },
+      "pivot_in_cell": {
+        "x": 268.5,
+        "y": 651
+      }
+    },
+    {
+      "frame": 4,
+      "cell": {
+        "x": 1629,
+        "y": 0,
+        "width": 543,
+        "height": 724
+      },
+      "alignment_offset": {
+        "x": 0,
+        "y": 0
+      },
+      "foreground_bbox_in_cell": {
+        "left": 97,
+        "top": 73,
+        "right_exclusive": 440,
+        "bottom_exclusive": 652
+      },
+      "pivot_in_cell": {
+        "x": 268.5,
+        "y": 651
+      }
+    }
+  ]
+}

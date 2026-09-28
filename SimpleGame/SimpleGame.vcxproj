@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{25179D6C-FA85-4619-8EDB-AC241382F6CA}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>SimpleGame</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <AdditionalIncludeDirectories>src\app;src\chapters;src\combat;src\core;src\generated;src\player;src\profiling;src\rendering;src\ui;src\verification;src\world;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalOptions>/utf-8 /FS %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>.\Dependencies;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);opengl32.lib;freeglut.lib;glew32.lib;</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <AdditionalIncludeDirectories>src\app;src\chapters;src\combat;src\core;src\generated;src\player;src\profiling;src\rendering;src\ui;src\verification;src\world;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <LanguageStandard_C>stdclatest</LanguageStandard_C>
+      <AdditionalOptions>/utf-8 /FS %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>.\Dependencies\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);freeglut.lib;glew32.lib;</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <AdditionalIncludeDirectories>src\app;src\chapters;src\combat;src\core;src\generated;src\player;src\profiling;src\rendering;src\ui;src\verification;src\world;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalOptions>/utf-8 /FS %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>.\Dependencies;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);freeglut.lib;glew32.lib;</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <AdditionalIncludeDirectories>src\app;src\chapters;src\combat;src\core;src\generated;src\player;src\profiling;src\rendering;src\ui;src\verification;src\world;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalOptions>/utf-8 /FS %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);freeglut.lib;glew32.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>.\Dependencies\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\world\LevelMap.h" />
+    <ClInclude Include="src\player\PlayerProgression.h" />
+    <ClInclude Include="src\player\PlayerInventory.h" />
+    <ClInclude Include="src\ui\InventoryView.h" />
+    <ClInclude Include="src\ui\InteractionBubbleView.h" />
+    <ClInclude Include="src\player\SkillCatalog.h" />
+    <ClInclude Include="src\combat\MageProjectiles.h" />
+    <ClInclude Include="src\ui\MageProjectileView.h" />
+    <ClInclude Include="src\player\SkillSystem.h" />
+    <ClInclude Include="src\player\PlayerSkills.h" />
+    <ClInclude Include="src\player\SkillQuickSlots.h" />
+    <ClInclude Include="src\player\SkillDragController.h" />
+    <ClInclude Include="src\ui\SkillView.h" />
+    <ClInclude Include="src\player\SkillLayout.h" />
+    <ClInclude Include="src\combat\EnemySystem.h" />
+    <ClInclude Include="src\combat\LootSystem.h" />
+    <ClInclude Include="src\app\GameSession.h" />
+    <ClInclude Include="src\ui\GameView.h" />
+    <ClInclude Include="src\world\LevelTypes.h" />
+    <ClInclude Include="src\world\MapLayout.h" />
+    <ClInclude Include="src\ui\MapView.h" />
+    <ClInclude Include="src\rendering\Renderer.h" />
+    <ClInclude Include="src\rendering\GeometryCache.h" />
+    <ClInclude Include="src\profiling\FrameProfiler.h" />
+    <ClInclude Include="src\rendering\WindowsTextRenderer.h" />
+    <ClInclude Include="src\combat\AttackInput.h" />
+    <ClInclude Include="src\combat\BasicAttack.h" />
+    <ClInclude Include="src\app\PrototypeWorld.h" />
+    <ClInclude Include="src\rendering\SpriteImage.h" />
+    <ClInclude Include="src\generated\CombatVisualData.h" />
+    <ClInclude Include="src\rendering\PostProcessing.h" />
+    <ClInclude Include="src\rendering\PostProcessingShaders.h" />
+    <ClInclude Include="src\core\stdafx.h" />
+    <ClInclude Include="src\core\targetver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\world\LevelMap.cpp" />
+    <ClCompile Include="src\player\PlayerProgression.cpp" />
+    <ClCompile Include="src\player\PlayerInventory.cpp" />
+    <ClCompile Include="src\ui\InventoryView.cpp" />
+    <ClCompile Include="src\ui\InteractionBubbleView.cpp" />
+    <ClCompile Include="src\player\SkillCatalog.cpp" />
+    <ClCompile Include="src\combat\MageProjectiles.cpp" />
+    <ClCompile Include="src\ui\MageProjectileView.cpp" />
+    <ClCompile Include="src\player\SkillSystem.cpp" />
+    <ClCompile Include="src\player\PlayerSkills.cpp" />
+    <ClCompile Include="src\player\SkillQuickSlots.cpp" />
+    <ClCompile Include="src\player\SkillDragController.cpp" />
+    <ClCompile Include="src\ui\SkillView.cpp" />
+    <ClCompile Include="src\combat\EnemySystem.cpp" />
+    <ClCompile Include="src\combat\LootSystem.cpp" />
+    <ClCompile Include="src\app\GameSession.cpp" />
+    <ClCompile Include="src\ui\GameView.cpp" />
+    <ClCompile Include="src\world\MapLayout.cpp" />
+    <ClCompile Include="src\ui\MapView.cpp" />
+    <ClCompile Include="src\rendering\Renderer.cpp" />
+    <ClCompile Include="src\profiling\FrameProfiler.cpp" />
+    <ClCompile Include="src\rendering\WindowsTextRenderer.cpp" />
+    <ClCompile Include="src\combat\AttackInput.cpp" />
+    <ClCompile Include="src\combat\BasicAttack.cpp" />
+    <ClCompile Include="src\verification\Chapter1Verification.cpp" />
+    <ClCompile Include="src\app\PrototypeWorld.cpp" />
+    <ClCompile Include="src\rendering\SpriteImage.cpp" />
+    <ClCompile Include="src\rendering\PostProcessing.cpp" />
+    <ClCompile Include="src\app\SimpleGame.cpp" />
+    <ClCompile Include="src\core\stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\SolidRect.fs" />
+    <None Include="Shaders\SolidRect.vs" />
+    <None Include="Assets\Characters\knight-coarse-preview-v2.png" />
+    <None Include="Assets\Characters\mage-coarse-preview-v2.png" />
+    <None Include="Assets\Characters\Walk\mage-walk-sheet-v1.png" />
+    <None Include="Assets\Characters\Walk\knight-walk-sheet-v1.png" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <Target Name="CopyCharacterSprites" AfterTargets="Build">
+    <ItemGroup>
+      <RuntimeSprite Include="$(ProjectDir)Assets\Characters\knight-coarse-preview-v2.png" />
+      <RuntimeSprite Include="$(ProjectDir)Assets\Characters\mage-coarse-preview-v2.png" />
+      <RuntimeWalkSprite Include="$(ProjectDir)Assets\Characters\Walk\mage-walk-sheet-v1.png" />
+      <RuntimeWalkSprite Include="$(ProjectDir)Assets\Characters\Walk\knight-walk-sheet-v1.png" />
+      <RuntimeNpcSprite Include="$(ProjectDir)Assets\Characters\NPC\VeteranMercenary\idle-transparent-aligned-v2.png" />
+    </ItemGroup>
+    <MakeDir Directories="$(TargetDir)Assets\Characters" />
+    <Copy SourceFiles="@(RuntimeSprite)" DestinationFolder="$(TargetDir)Assets\Characters" SkipUnchangedFiles="true" />
+    <MakeDir Directories="$(TargetDir)Assets\Characters\Walk" />
+    <Copy SourceFiles="@(RuntimeWalkSprite)" DestinationFolder="$(TargetDir)Assets\Characters\Walk" SkipUnchangedFiles="true" />
+    <MakeDir Directories="$(TargetDir)Assets\Characters\NPC\VeteranMercenary" />
+    <Copy SourceFiles="@(RuntimeNpcSprite)" DestinationFolder="$(TargetDir)Assets\Characters\NPC\VeteranMercenary" SkipUnchangedFiles="true" />
+  </Target>
+  <Import Project="PreparedCombatAssets.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ItemGroup>
+    <ClInclude Include="src\rendering\Actor.h" />
+    <ClCompile Include="src\rendering\Actor.cpp" />
+    <ClInclude Include="src\rendering\SceneCamera.h" />
+    <ClCompile Include="src\rendering\SceneCamera.cpp" />
+    <ClInclude Include="src\rendering\SceneGraph.h" />
+    <ClCompile Include="src\rendering\SceneGraph.cpp" />
+    <ClInclude Include="src\rendering\SceneRenderer.h" />
+    <ClCompile Include="src\rendering\SceneRenderer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\chapters\Chapter1Sprites.h" />
+    <ClCompile Include="src\chapters\Chapter1Sprites.cpp" />
+    <ClCompile Include="src\chapters\Chapter1View.cpp" />
+  </ItemGroup>
+  <Target Name="CopyChapterAssets" AfterTargets="Build">
+    <ItemGroup>
+      <ChapterAsset Include="$(ProjectDir)Assets\**\*.png" />
+      <ChapterDll Include="$(ProjectDir)Dependencies\x64\*.dll" Condition="'$(Platform)'=='x64'" />
+    </ItemGroup>
+    <Copy SourceFiles="@(ChapterAsset)" DestinationFiles="@(ChapterAsset->'$(TargetDir)Assets\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(ChapterDll)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
+  </Target>
+  <ItemGroup>
+    <ClInclude Include="src\combat\EnemyAIState.h" />
+    <ClInclude Include="src\combat\EnemyStateMachine.h" />
+    <ClCompile Include="src\combat\EnemyStateMachine.cpp" />
+    <ClInclude Include="src\combat\EnemyPathfinder.h" />
+    <ClCompile Include="src\combat\EnemyPathfinder.cpp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ClInclude Include="src\chapters\Chapter.h" />
+    <ClCompile Include="src\chapters\Chapter.cpp" />
+    <ClInclude Include="src\chapters\ChapterCatalog.h" />
+    <ClCompile Include="src\chapters\ChapterCatalog.cpp" />
+    <ClInclude Include="src\chapters\Chapter1.h" />
+    <ClCompile Include="src\chapters\Chapter1.cpp" />
+    <ClCompile Include="src\chapters\Chapter1Map.cpp" />
+    <ClCompile Include="src\verification\GameSessionVerification.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\chapters\Chapter2.h" />
+    <ClCompile Include="src\chapters\Chapter2.cpp" />
+    <ClCompile Include="src\chapters\Chapter2Combat.cpp" />
+    <ClCompile Include="src\chapters\Chapter2Map.cpp" />
+    <ClCompile Include="src\chapters\Chapter2View.cpp" />
+    <ClInclude Include="src\chapters\Chapter2Sprites.h" />
+    <ClCompile Include="src\chapters\Chapter2Sprites.cpp" />
+    <ClInclude Include="src\verification\Chapter2Verification.h" />
+    <ClCompile Include="src\verification\Chapter2Verification.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\verification\Chapter1Verification.h" />
+  </ItemGroup>
+</Project>
