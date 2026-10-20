@@ -17,6 +17,8 @@ class SettingsMenu
         Quit,
         SkipChapter1,
         SkipChapter2,
+        SkipChapter2Story,
+        SkipChapter3,
         PostProcessing,
         Bloom,
         Vignette,
@@ -40,9 +42,16 @@ class SettingsMenu
                        int height,
                        PostSettings& settings,
                        bool skipChapter1,
-                       bool skipChapter2);
-    void Draw(
-        Renderer& renderer, int width, int height, bool skipChapter1, bool skipChapter2) const;
+                       bool skipChapter2,
+                       bool skipChapter2Story,
+                       bool skipChapter3);
+    void Draw(Renderer& renderer,
+              int width,
+              int height,
+              bool skipChapter1,
+              bool skipChapter2,
+              bool skipChapter2Story,
+              bool skipChapter3) const;
 
   private:
     enum class Page
@@ -65,7 +74,9 @@ class SettingsMenu
                                 int height,
                                 const PostSettings& settings,
                                 bool skipChapter1,
-                                bool skipChapter2) const;
+                                bool skipChapter2,
+                                bool skipChapter2Story,
+                                bool skipChapter3) const;
     Action Activate(Action action, PostSettings& settings);
     bool m_Open = false;
     Page m_Page = Page::Main;

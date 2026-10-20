@@ -118,6 +118,7 @@ class Chapter3 final : public Chapter
     MapId InitialMap() const override;
     MapDefinition BuildMap(MapId map) const override;
     void Reset() override;
+    bool SkipStory();
     void EnterMap(MapId map) noexcept override;
     void ImportPrevious(const ChapterFlags& flags) override;
     void Update(float dt,

@@ -221,3 +221,11 @@ Python·JavaScript 구문, 프로젝트 XML·필터·파일 참조, 화면 ID �
 | [Chapter3Verification.cpp](../../SimpleGame/src/verification/Chapter3Verification.cpp) | `RunChapter3Verification` | --verify-chapter3 수동 실행용 진행 순서·중복 보상·생존 보호·재도전·분산 보존·최종 상태·세계 등록 검사를 제공한다. 이번 작업에서는 실행하지 않았다. |
 
 C++17 std::array는 고정 경로/시계, std::bitset은 조사 완료/중복 방지, std::optional은 미선택 보관처/목표를 나타낸다. [구현·조작·한계](../../docs/implementation/CHAPTER_03_IMPLEMENTATION.md)를 참고한다. 게임 빌드·실행·회귀 실행은 하지 않으며 정적 검토만 수행한다.
+
+## 챕터 3까지 스토리 스킵 — 2026-10-20
+
+- `GameSession::CanSkipChapter2`, `CanSkipChapter3` ([GameSessionSkipping.cpp](../../SimpleGame/src/app/GameSessionSkipping.cpp)): 오픈월드·선행 챕터 완료·미리보기 시작·대상 미완료 조건으로 전체 스킵 가능 여부를 판단한다.
+- `GameSession::SkipChapter2`, `SkipChapter3`, `SkipStory`: `StorySkip`으로 요청을 구분하고 목적지 검증, 챕터 상태 변경, 스토리 전투만 퇴장, 지역 활성화와 이전 결과 전달, 체크포인트 및 체력·마나 회복을 연결한다.
+- `Chapter2::SkipStory`, `Chapter3::SkipStory` ([ChapterSkipping.cpp](../../SimpleGame/src/chapters/ChapterSkipping.cpp)): 기존 선택을 보존하며 전체 완료 플래그와 임시 전투·조작 상태를 정리한다. 챕터 3 미수령 보급은 지급 없이 처리한다.
+- `SettingsMenu::Buttons`, `Activate`, `Draw`: 챕터 2 전체·챕터 3 스킵 버튼과 확인 문구를 제공한다. `PrototypeWorld`가 명령을 세션에 전달하고 위치·카메라·공격·발사체를 정리한다.
+- `VerifySkipping` ([Chapter3Verification.cpp](../../SimpleGame/src/verification/Chapter3Verification.cpp)): 순차 진행·선택 보존·무보상·반복 차단·미리보기 경로의 회귀 검사 소스. 실행하지 않았다.

@@ -521,8 +521,13 @@ void PrototypeWorld::Draw(Renderer& r, int width, int height)
                    pauseText,
                    Color(1.f, .85f, .56f));
         }
-        m_SettingsMenu.Draw(
-            r, width, height, m_Level.CanSkipChapter1(), m_Level.CanSkipChapter2FieldStory());
+        m_SettingsMenu.Draw(r,
+                            width,
+                            height,
+                            m_Level.CanSkipChapter1(),
+                            m_Level.CanSkipChapter2FieldStory(),
+                            m_Level.CanSkipChapter2(),
+                            m_Level.CanSkipChapter3());
         r.Flush();
         return;
     }
@@ -620,18 +625,25 @@ bool PrototypeWorld::SystemMenuMouseButton(
                                                    height,
                                                    settings,
                                                    m_Level.CanSkipChapter1(),
-                                                   m_Level.CanSkipChapter2FieldStory());
+                                                   m_Level.CanSkipChapter2FieldStory(),
+                                                   m_Level.CanSkipChapter2(),
+                                                   m_Level.CanSkipChapter3());
     if (action == SettingsMenu::Action::Quit)
     {
         return true;
     }
     if (action == SettingsMenu::Action::SkipChapter1 ||
-        action == SettingsMenu::Action::SkipChapter2)
+        action == SettingsMenu::Action::SkipChapter2 ||
+        action == SettingsMenu::Action::SkipChapter2Story ||
+        action == SettingsMenu::Action::SkipChapter3)
     {
         WorldPosition destination;
-        const bool skipped = action == SettingsMenu::Action::SkipChapter1
-                                 ? m_Level.SkipChapter1(destination)
-                                 : m_Level.SkipChapter2FieldStory(destination);
+        const bool skipped =
+            action == SettingsMenu::Action::SkipChapter1 ? m_Level.SkipChapter1(destination)
+            : action == SettingsMenu::Action::SkipChapter2
+                ? m_Level.SkipChapter2FieldStory(destination)
+            : action == SettingsMenu::Action::SkipChapter2Story ? m_Level.SkipChapter2(destination)
+                                                                : m_Level.SkipChapter3(destination);
         if (skipped)
         {
             m_X = m_CameraX = destination.x;

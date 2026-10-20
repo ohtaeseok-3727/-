@@ -33,8 +33,12 @@ class GameSession
     const Chapter& StoryChapter() const;
     bool CanSkipChapter1() const;
     bool CanSkipChapter2FieldStory() const;
+    bool CanSkipChapter2() const;
+    bool CanSkipChapter3() const;
     bool SkipChapter1(WorldPosition& destination);
     bool SkipChapter2FieldStory(WorldPosition& destination);
+    bool SkipChapter2(WorldPosition& destination);
+    bool SkipChapter3(WorldPosition& destination);
     bool DrawWorldLandmark(Renderer& renderer, const MapLandmark& site, Point p, float time) const;
     void AddWorldActors(SceneGraph& scene, WorldPosition player) const;
     void DrawWorldEnemy(Renderer& renderer, int region, int enemy, Point p) const;
@@ -82,7 +86,14 @@ class GameSession
     void ActivateRegion(std::size_t region);
     void SynchronizeChapterHistory();
     bool StoryReady() const;
-    bool SkipStory(bool chapter1, WorldPosition& destination);
+    enum class StorySkip
+    {
+        Chapter1,
+        Chapter2Field,
+        Chapter2,
+        Chapter3
+    };
+    bool SkipStory(StorySkip target, WorldPosition& destination);
 
     struct RegionRuntime
     {

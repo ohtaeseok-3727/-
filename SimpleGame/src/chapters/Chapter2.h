@@ -201,6 +201,7 @@ class Chapter2 final : public Chapter
     void Reset() override;
     bool CanSkipFieldStory() const;
     bool SkipFieldStory();
+    bool SkipStory();
     void EnterMap(MapId map) noexcept override;
     void VisitMap(MapId map) override;
     void PlayerArrived(WorldPosition player, const LevelMap& map) override;

@@ -68,8 +68,13 @@ bool SettingsMenu::Button::Contains(int px, int py) const
     return px >= x && px < x + width && py >= y && py < y + height;
 }
 
-std::vector<SettingsMenu::Button> SettingsMenu::Buttons(
-    int width, int height, const PostSettings& settings, bool skipChapter1, bool skipChapter2) const
+std::vector<SettingsMenu::Button> SettingsMenu::Buttons(int width,
+                                                        int height,
+                                                        const PostSettings& settings,
+                                                        bool skipChapter1,
+                                                        bool skipChapter2,
+                                                        bool skipChapter2Story,
+                                                        bool skipChapter3) const
 {
     const auto panel = Layout(width, height);
     const float row = (panel.height - 150.f) / 7.f;
@@ -93,7 +98,9 @@ std::vector<SettingsMenu::Button> SettingsMenu::Buttons(
         add(Action::Settings, "게임 설정", 0);
         add(Action::SkipChapter1, "챕터 1 스킵  →  회색벽 입구", 1, skipChapter1);
         add(Action::SkipChapter2, "챕터 2 필드 스토리 스킵  →  성채 입구", 2, skipChapter2);
-        add(Action::Quit, "게임 종료", 4);
+        add(Action::SkipChapter2Story, "챕터 2 전체 스킵  →  기록관 기념홀", 3, skipChapter2Story);
+        add(Action::SkipChapter3, "챕터 3 전체 스킵  →  아르겐 귀환", 4, skipChapter3);
+        add(Action::Quit, "게임 종료", 5);
         add(Action::Resume, "게임으로 돌아가기", 6);
     }
     else if (m_Page == Page::Graphics)
@@ -126,7 +133,9 @@ SettingsMenu::Action SettingsMenu::MouseButton(bool down,
                                                int height,
                                                PostSettings& settings,
                                                bool skipChapter1,
-                                               bool skipChapter2)
+                                               bool skipChapter2,
+                                               bool skipChapter2Story,
+                                               bool skipChapter3)
 {
     MouseMove(x, y);
     if (!m_Open)
@@ -134,7 +143,8 @@ SettingsMenu::Action SettingsMenu::MouseButton(bool down,
         return Action::None;
     }
     std::optional<Action> hit;
-    for (const auto& button : Buttons(width, height, settings, skipChapter1, skipChapter2))
+    for (const auto& button : Buttons(
+             width, height, settings, skipChapter1, skipChapter2, skipChapter2Story, skipChapter3))
     {
         if (button.enabled && button.Contains(x, y))
         {
@@ -169,6 +179,8 @@ SettingsMenu::Action SettingsMenu::Activate(Action action, PostSettings& setting
     case Action::Quit:
     case Action::SkipChapter1:
     case Action::SkipChapter2:
+    case Action::SkipChapter2Story:
+    case Action::SkipChapter3:
         m_Pending = action;
         m_Page = Page::Confirmation;
         break;
@@ -204,8 +216,13 @@ SettingsMenu::Action SettingsMenu::Activate(Action action, PostSettings& setting
     return Action::None;
 }
 
-void SettingsMenu::Draw(
-    Renderer& r, int width, int height, bool skipChapter1, bool skipChapter2) const
+void SettingsMenu::Draw(Renderer& r,
+                        int width,
+                        int height,
+                        bool skipChapter1,
+                        bool skipChapter2,
+                        bool skipChapter2Story,
+                        bool skipChapter3) const
 {
     if (!m_Open)
     {
@@ -245,6 +262,21 @@ void SettingsMenu::Draw(
                      "레벨과 장비는 유지되며 체력·마나를 회복합니다.",
                      "건너뛴 전투의 경험치·전리품은 지급되지 않습니다."};
         }
+        else if (m_Pending == Action::SkipChapter2Story)
+        {
+            lines = {"성채·보스전까지 완료하고 기록관 기념홀로 이동합니다.",
+                     "기존 선택 유지 · 남은 필드 목표는 기존 스킵 순서 적용.",
+                     "미선택 진입로는 수로로 처리합니다.",
+                     "레벨·장비 유지, 체력·마나 회복. 스킵 보상은 없습니다."};
+        }
+        else if (m_Pending == Action::SkipChapter3)
+        {
+            lines = {"챕터 3을 완료하고 아르겐 입구로 돌아갑니다.",
+                     "조사·비살상 저지·분산 보관·왕실 심의를 완료합니다.",
+                     "미선택 추가 사본은 성직자 공동체에 보관합니다.",
+                     "레벨·장비 유지, 체력·마나 회복. 스킵 보상은 없습니다.",
+                     "챕터 4는 아직 구현되지 않았습니다."};
+        }
         else
         {
             lines = {"회색벽·협곡을 완료하고 성채 입구로 이동합니다.",
@@ -260,7 +292,13 @@ void SettingsMenu::Draw(
                    Color(.79f, .84f, .87f));
         }
     }
-    for (const auto& button : Buttons(width, height, r.Effects(), skipChapter1, skipChapter2))
+    for (const auto& button : Buttons(width,
+                                      height,
+                                      r.Effects(),
+                                      skipChapter1,
+                                      skipChapter2,
+                                      skipChapter2Story,
+                                      skipChapter3))
     {
         const bool hover = button.enabled && button.Contains(m_MouseX, m_MouseY);
         const bool pressed = hover && m_Pressed == button.action;

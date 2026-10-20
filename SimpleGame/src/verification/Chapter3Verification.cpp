@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Chapter3Verification.h"
 #include "Chapter3.h"
+#include "Chapter2.h"
 #include "GameSession.h"
 #include <algorithm>
 #include <iostream>
@@ -204,6 +205,77 @@ namespace
                 "Final political state or epistemic limits changed");
     }
 
+    void VerifySkipping()
+    {
+        GameSession session;
+        LevelMap map;
+        map.Generate(743);
+        session.Reset(0, 743, map);
+        session.OpenWorld(map);
+        WorldPosition destination{123.f, 456.f};
+        Require(!session.CanSkipChapter2() && !session.CanSkipChapter3() &&
+                    !session.SkipChapter3(destination) && destination.x == 123.f &&
+                    destination.y == 456.f,
+                "Skip bypassed predecessor requirements or moved on failure");
+        Require(session.SkipChapter1(destination) && session.CanSkipChapter2(),
+                "Chapter 1 skip did not unlock Chapter 2 skip");
+        Require(session.SkipChapter2FieldStory(destination), "Field skip regressed");
+        auto& second = dynamic_cast<Chapter2&>(session.CurrentChapter());
+        Require(second.SelectRoute(Chapter2Route::Breach), "Could not select an existing route");
+        const auto priorities = second.State().priority;
+        const int refugeeLoss = second.State().outcome.refugeeLoss;
+        const int gold = session.Inventory().Gold();
+        const auto equipment = session.Inventory().Items().size();
+        const int level = session.Progress().Level();
+        const int experience = session.Progress().Experience();
+        const int kills = session.Kills();
+        session.Progress().Damage(10);
+        Require(session.SkipChapter2(destination) && second.Complete() &&
+                    second.State().priority == priorities &&
+                    second.State().route == Chapter2Route::Breach &&
+                    second.State().outcome.refugeeLoss == refugeeLoss &&
+                    session.ActiveChapterId() == "chapter3" && session.CanSkipChapter3(),
+                "Full Chapter 2 skip lost choices or failed to unlock Chapter 3");
+        Require(session.SkipChapter3(destination), "Chapter 3 skip failed");
+        const auto flags = session.FindChapter("chapter3")->ExportFlags();
+        const auto city = session.Atlas().Find("chapter3", Chapter3Maps::Argen);
+        Require(city && session.Atlas().RegionAt(destination) == *city &&
+                    session.Checkpoint().x == destination.x &&
+                    session.Checkpoint().y == destination.y && flags.at("C03_COMPLETE") == 1 &&
+                    flags.at("C03_SERAD_SURVIVED") == 1 &&
+                    flags.at("C03_DISTRIBUTED_COPIES") == 3 && flags.at("C03_WANTED") == 0 &&
+                    flags.at("C03_WAR_ORIGIN_CONFIRMED") == 0,
+                "Chapter 3 skip destination or ending flags are inconsistent");
+        Require(session.Inventory().Gold() == gold &&
+                    session.Inventory().Items().size() == equipment &&
+                    session.Progress().Level() == level &&
+                    session.Progress().Experience() == experience && session.Kills() == kills &&
+                    session.Progress().Health() == session.Progress().MaxHealth() &&
+                    session.Progress().Mana() == session.Progress().MaxMana(),
+                "Skip awarded rewards, altered equipment, or failed to restore resources");
+        Require(!session.CanSkipChapter2() && !session.CanSkipChapter3() &&
+                    !session.SkipChapter3(destination),
+                "Completed chapter skip can be repeated");
+        for (const auto& site : map.Layout().Landmarks())
+        {
+            if (city && site.worldRegion == static_cast<int>(*city) &&
+                site.object == Chapter3Objects::SupplyDesk)
+            {
+                session.Inspect(site, map);
+            }
+        }
+        Require(session.Inventory().Gold() == gold, "Skipped support could be claimed afterward");
+        session.Reset(0, 743, map);
+        session.OpenWorld(map, "chapter2");
+        Require(session.CanSkipChapter2() && session.SkipChapter2(destination),
+                "Chapter 2 preview cannot skip the full story");
+        session.Reset(0, 743, map);
+        session.OpenWorld(map, "chapter3");
+        Require(!session.CanSkipChapter2() && session.CanSkipChapter3() &&
+                    session.SkipChapter3(destination),
+                "Chapter 3 preview skip did not use its predecessor fixture");
+    }
+
     void VerifyWorld()
     {
         GameSession session;
@@ -265,6 +337,7 @@ int RunChapter3Verification()
     {
         VerifyFlow();
         VerifyWorld();
+        VerifySkipping();
         std::cout << "PASS 챕터 3 선행 조건·조사·비살상·재시도·분산 보존·정치 상태·월드 연결\n";
         return 0;
     }
