@@ -121,6 +121,7 @@ void ExpeditionView::DrawMap(Renderer& r,
                y + 66 + float(i) * rowHeight,
                HudTextLayout::Fit(r,
                                   std::to_string(i + 1) + ". " + region.local.title +
+                                      (region.local.portalInterior ? " [포탈 실내]" : "") +
                                       (region.discovered ? " ✓" : ""),
                                   310.f),
                color);
@@ -137,7 +138,7 @@ void ExpeditionView::DrawMap(Renderer& r,
     const auto p = project(player);
     r.Ellipse(p.x, p.y, 4, 4, Color(1.f, 1.f, 1.f));
     r.Text(x + 22, y + h - 62, "흰 점: 현재 위치 / 금빛: 목표 / 파랑: 복귀 야영지", Text);
-    r.Text(x + 22, y + h - 37, "길 밖도 탐험 가능 · 지역 간 도보 이동 · [J] 여정 기록", Text);
+    r.Text(x + 22, y + h - 37, "야외는 도보 이동 · 기록관 실내는 [Space] 포탈 · [J] 기록", Text);
     r.Text(x + 22, y + h - 15, "먼 지역의 전투는 대기하며, 재방문하면 이어집니다.", Text);
 }
 

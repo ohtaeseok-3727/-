@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Chapter3.h"
+#include "Chapter3Architecture.h"
 #include <stdexcept>
 
 namespace
@@ -24,6 +25,8 @@ MapDefinition Chapter3::BuildMap(MapId map) const
         return CityMap();
     case Chapter3Maps::Archive:
         return ArchiveMap();
+    case Chapter3Maps::ReadingRoom:
+        return ReadingRoomMap();
     default:
         throw std::invalid_argument("챕터 3에 등록되지 않은 지역입니다.");
     }
@@ -59,6 +62,8 @@ MapDefinition Chapter3::MemorialMap()
              "아르겐으로",
              "오래된 원본을 찾아 기록도시로 이동합니다.",
              LandmarkKind::Sign)};
+    map.portals.push_back({CityExit, Chapter3Maps::Argen, {-700, 400}});
+    Chapter3Architecture::EncloseRoom(map, {{0, -350}, 600, 800});
     return map;
 }
 
@@ -241,6 +246,7 @@ MapDefinition Chapter3::CityMap()
             "원정 좌표와 제한 조사 승인서",
             "왕실 심의 아래 추가 증거를 확보한다. 야수족 영역에서 인간 기록과 독립 현장 증거를 대조하자.",
             LandmarkKind::Sign)};
+    Chapter3Architecture::DressCity(map);
     return map;
 }
 
@@ -304,5 +310,49 @@ MapDefinition Chapter3::ArchiveMap()
              "아르겐 귀환로",
              "서쪽 통로를 따라 아르겐 시민 회랑으로 돌아갑니다.",
              LandmarkKind::Sign)};
+    map.landmarks.push_back(Site(ArchiveReturn,
+                                 {0, 280},
+                                 "기록관 포탈 · 거리로 돌아가기",
+                                 "아르겐 봉인동 앞마당으로 돌아갑니다.",
+                                 LandmarkKind::MineGate));
+    map.portals = {{ArchiveReturn, Chapter3Maps::Argen, {0, -2820}},
+                   {CityReturn, Chapter3Maps::Argen, {0, -2050}}};
+    Chapter3Architecture::EncloseRoom(map, {{0, -1000}, 1050, 1500});
+    return map;
+}
+
+MapDefinition Chapter3::ReadingRoomMap()
+{
+    using namespace Chapter3Objects;
+    MapDefinition map;
+    map.id = Chapter3Maps::ReadingRoom;
+    map.title = "왕립 대서고 · 공개 열람실";
+    map.entry = {0, 180};
+    map.areas = {{MapRegion::Village, "열람실과 중앙 회랑", {0, -650}, 850, 1050}};
+    map.roads = {{{0, 260}, {0, -1400}, 130}, {{-400, -450}, {400, -450}, 100}};
+    map.landmarks = {
+        Site(ManuscriptEarly,
+             {-300, -450},
+             "초판 · 일곱 이름",
+             "초판: 일곱 인물의 이름과 숫자 '일곱'이 함께 남아 있다."),
+        Site(ManuscriptMiddle,
+             {300, -450},
+             "중기 개정본 · 지운 이름",
+             "중기 개정본: 숫자 일곱은 남고 한 이름이 사라졌다."),
+        Site(ManuscriptLate,
+             {0, -850},
+             "후대 재필사본 · 재점화 방지",
+             "같은 삭제가 반복된다. 결재 문구 '재점화 방지'는 확인되지만 최종 목적은 미확인이다."),
+        Site(Censure,
+             {0, -1200},
+             "중앙 회랑 · 세라드의 회수 통보",
+             "세 조사 결과를 등록한 뒤 기록수호대장의 통보를 확인합니다."),
+        Site(ReadingReturn,
+             {0, 280},
+             "기록관 포탈 · 기록 거리로",
+             "공개 열람실을 나가 아르겐 기록 거리로 돌아갑니다.",
+             LandmarkKind::MineGate)};
+    map.portals = {{ReadingReturn, Chapter3Maps::Argen, {-750, -590}}};
+    Chapter3Architecture::DressReadingRoom(map);
     return map;
 }

@@ -119,6 +119,13 @@ void Chapter3::Update(float dt,
             }
         }
     }
+    if (m_State.phase == Phase::Research && m_State.manuscripts == 3 && m_State.stoneLedger &&
+        m_State.monastery == 3)
+    {
+        Advance(
+            Phase::Censure,
+            "교차 검증 완료: 실존·반복 삭제·사상 변화. 왕립 대서고 중앙 회랑에서 세라드의 통보를 확인하세요.");
+    }
     if (m_State.map == Chapter3Maps::Archive)
     {
         if (m_State.phase == Phase::Infiltration)
@@ -158,16 +165,10 @@ void Chapter3::UpdateResearch(float dt, WorldPosition player, bool held, const L
     if (m_State.monastery < 3 && Distance(player, rooms[m_State.monastery]) < 75.f)
     {
         constexpr std::array<const char*, 3> messages = {
-            "초기 필체·인장 확인: 이종족 피난민 수용. 장례 명부가 있는 다음 방으로 이동하세요.",
-            "같은 필체·인장 확인: 인간은 인간의 힘으로 지켜야 한다. 마지막 설교실로 이어집니다.",
+            "초기 필체·인장 확인: 이종족 피난민 수용. 외벽의 장례 명부 기록으로 이동하세요.",
+            "같은 필체·인장 확인: 인간은 인간의 힘으로 지켜야 한다. 외벽의 마지막 설교실 배치로 이어집니다.",
             "후기 설교 확인: 공존은 인간을 파멸시킨다. 같은 사람의 변화가 드러났다. 원정 목적까지 단정하지 않는다."};
         m_Message = messages[m_State.monastery++];
-    }
-    if (m_State.manuscripts == 3 && m_State.stoneLedger && m_State.monastery == 3)
-    {
-        Advance(
-            Chapter3Phase::Censure,
-            "교차 검증 완료: 실존·반복 삭제·사상 변화. 조사 등록 직후 기록수호대가 중앙 회랑을 통제합니다. 세라드의 통보를 확인하세요.");
     }
 }
 
@@ -397,7 +398,7 @@ std::optional<ChapterGoal> Chapter3::Goal() const
     case Phase::Research:
         if (m_State.manuscripts < 3)
         {
-            return goal(Chapter3Maps::Argen,
+            return goal(Chapter3Maps::ReadingRoom,
                         ManuscriptEarly + m_State.manuscripts,
                         "[Space] 오래된 사본부터 시간축 정렬");
         }
@@ -410,9 +411,9 @@ std::optional<ChapterGoal> Chapter3::Goal() const
         }
         return goal(Chapter3Maps::Argen,
                     !m_State.stoneLedger ? WorkshopLedger : RefugeRoom + m_State.monastery,
-                    "장부 [Space] · 수도원은 필체·인장을 따라 방에 접근");
+                    "장부 [Space] · 수도원 외벽의 필체·방 배치 조사");
     case Phase::Censure:
-        return goal(Chapter3Maps::Argen, Censure);
+        return goal(Chapter3Maps::ReadingRoom, Censure);
     case Phase::Edric:
         return goal(Chapter3Maps::Argen, m_State.edricHeard ? TransferSeal : Edric);
     case Phase::Infiltration:

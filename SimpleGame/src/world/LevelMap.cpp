@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "LevelMap.h"
+#include <algorithm>
 #include <cmath>
 #include <utility>
 
@@ -85,6 +86,10 @@ bool LevelMap::GenerateCellProp(int x, int y, WorldProp& prop) const
             .65f + float((h >> 5) % 11) * .01f};
 
     const WorldPosition p{prop.x, prop.y};
+    if (m_Layout.DistrictAt(p))
+    {
+        return false; // Authored city blocks and archive rooms own all their decoration.
+    }
     // Keep roads, clues, encounters, river crossings and room entrances clear.
     if (!m_Layout.Walkable(p, 44.f) || m_Layout.Reserved(p, 44.f) || m_Layout.Water(p, 100.f))
     {
@@ -123,6 +128,21 @@ std::vector<WorldProp> LevelMap::ChunkObjects(int x, int y) const
         }
     }
 
+    const auto& buildings = m_Layout.Definition().buildings;
+    for (std::size_t i = 0; i < buildings.size(); ++i)
+    {
+        const auto& bounds = buildings[i].footprint;
+        const WorldPosition anchor{bounds.center.x, bounds.center.y + bounds.halfHeight};
+        if (static_cast<int>(std::floor(anchor.x / 512.f)) == x &&
+            static_cast<int>(std::floor(anchor.y / 512.f)) == y)
+        {
+            props.push_back({anchor.x,
+                             anchor.y,
+                             13,
+                             (std::max)(bounds.halfWidth, bounds.halfHeight + buildings[i].height),
+                             static_cast<int>(i)});
+        }
+    }
     return props;
 }
 
@@ -133,6 +153,10 @@ bool LevelMap::Blocked(float x, float y) const
         return m_WorldGeometry->Blocked(x + m_WorldOrigin.x, y + m_WorldOrigin.y);
     }
     const WorldPosition p{x, y};
+    if (m_Layout.BuildingBlocked(p, 11.f))
+    {
+        return true;
+    }
     // Every map is an authored, bounded walkable topology. Water and mine walls are extra terrain limits.
     if (!m_Layout.Walkable(p, 11.f) || (m_Layout.Water(p, 11.f) && !m_Layout.OnRoad(p, -11.f)) ||
         (m_Layout.Interior(p) && !m_Layout.InteriorFloor(p, 11.f)))

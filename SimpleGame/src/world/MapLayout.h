@@ -83,6 +83,40 @@ struct MapRectangle
     bool Contains(WorldPosition p, float margin = 0.f) const;
 };
 
+enum class BuildingStyle
+{
+    House,
+    Workshop,
+    Archive,
+    Monastery,
+    Wall,
+    Bookshelf
+};
+
+// A separately placed object: footprint is shared by collision and the building view.
+struct MapBuilding
+{
+    int id;
+    std::string name;
+    MapRectangle footprint;
+    float height;
+    BuildingStyle style;
+};
+
+struct MapDistrict
+{
+    std::string name;
+    MapRectangle bounds;
+    int paving = 0;
+};
+
+struct MapPortal
+{
+    ObjectId object;
+    MapId destination;
+    WorldPosition arrival;
+};
+
 struct MapDefinition
 {
     MapId id = 0;
@@ -98,6 +132,10 @@ struct MapDefinition
     bool openWorld = false;
     std::vector<MapRectangle> interiors;
     int fieldEnemyHealth = LevelTuning::EnemyHealth;
+    std::vector<MapBuilding> buildings;
+    std::vector<MapDistrict> districts;
+    std::vector<MapPortal> portals;
+    bool portalInterior = false;
 };
 
 class MapLayout
@@ -118,6 +156,8 @@ class MapLayout
     bool Interior(WorldPosition p) const;
     bool InteriorFloor(WorldPosition p, float inset = 0.f) const;
     bool Walkable(WorldPosition p, float inset = 0.f) const;
+    bool BuildingBlocked(WorldPosition p, float margin = 0.f) const;
+    const MapDistrict* DistrictAt(WorldPosition p) const;
     const MapLandmark* NearbyLandmark(WorldPosition p) const;
 
   private:

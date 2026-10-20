@@ -117,7 +117,7 @@ void SceneGraph::BuildRenderQueue(const SceneCamera& camera)
         // The ultimate blade/wave extends well above the ordinary actor bounds.
         const bool tallEffect =
             (prop.kind == 5 || prop.kind == 12) && camera.IsVisible({screen.x, screen.y - 180.f});
-        if (camera.IsVisible(screen) || tallEffect)
+        if (camera.IsVisible(screen, prop.kind == 13 ? prop.size * 2.f : 0.f) || tallEffect)
         {
             output.push_back({&actor, screen});
         }

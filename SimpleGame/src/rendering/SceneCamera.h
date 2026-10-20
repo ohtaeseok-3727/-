@@ -7,7 +7,7 @@ class SceneCamera
   public:
     SceneCamera(float x, float y, int width, int height);
     Point Project(float x, float y) const;
-    bool IsVisible(Point point) const;
+    bool IsVisible(Point point, float margin = 0.f) const;
     static float GroundDepthScale();
 
   private:

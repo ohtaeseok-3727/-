@@ -525,4 +525,11 @@
     <ClCompile Include="src\ui\MageUltimateView.cpp"><Filter>src\ui</Filter></ClCompile>
     <ClCompile Include="src\verification\MageUltimateVerification.cpp"><Filter>src\verification</Filter></ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\chapters\Chapter3Architecture.h"><Filter>src\chapters</Filter></ClInclude>
+    <ClCompile Include="src\chapters\Chapter3Architecture.cpp"><Filter>src\chapters</Filter></ClCompile>
+    <ClInclude Include="src\ui\BuildingView.h"><Filter>src\ui</Filter></ClInclude>
+    <ClCompile Include="src\ui\BuildingView.cpp"><Filter>src\ui</Filter></ClCompile>
+    <ClCompile Include="src\app\GameSessionPortals.cpp"><Filter>src\app</Filter></ClCompile>
+  </ItemGroup>
 </Project>

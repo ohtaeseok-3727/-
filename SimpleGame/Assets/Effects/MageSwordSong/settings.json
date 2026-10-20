@@ -1,0 +1,21 @@
+{
+  "frames": 16,
+  "cell": [
+    32,
+    64
+  ],
+  "render": [
+    96,
+    192
+  ],
+  "palette_reference": "../../Characters/SmallMage/walk-transparent-v2.png",
+  "alpha_threshold": 96,
+  "dither": false,
+  "filter": "nearest",
+  "material": "blue mana throughout blade, guard, grip and pommel",
+  "tip_in_cell": [
+    16,
+    5
+  ],
+  "display_scale": 1.5
+}

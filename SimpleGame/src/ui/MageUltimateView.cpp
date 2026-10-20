@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "MageUltimateView.h"
+#include "MageUltimateSwordView.h"
 #include "MageUltimate.h"
 #include "SceneCamera.h"
 #include <algorithm>
@@ -89,25 +90,6 @@ namespace
         Ring(r, center, radius * .12f, depth, 2.f, Color(.87f, .97f, 1.f, ink.a));
     }
 
-    void Sword(Renderer& r, Point tip, float direction, float alpha, bool upper)
-    {
-        const Color ink = upper ? Color(.41f, .84f, 1.f, alpha) : Color(.77f, .56f, 1.f, alpha);
-        const Point tail{tip.x, tip.y - direction * 62.f};
-        r.Triangle(tip,
-                   {tail.x - 8, tail.y},
-                   {tail.x + 8, tail.y},
-                   Color(ink.r, ink.g, ink.b, alpha * .08f));
-        r.Quad({tip.x, tip.y},
-               {tip.x - 4, tip.y - direction * 14},
-               {tip.x - 3, tip.y - direction * 39},
-               {tip.x + 3, tip.y - direction * 39},
-               ink);
-        Line(r, tip, {tip.x, tip.y - direction * 40}, .8f, Color(.91f, .98f, 1.f, alpha));
-        Line(
-            r, {tip.x - 8, tip.y - direction * 39}, {tip.x + 8, tip.y - direction * 39}, 1.4f, ink);
-        Line(r, {tip.x, tip.y - direction * 39}, {tip.x, tip.y - direction * 49}, 1.3f, ink);
-    }
-
     float Merge(float time)
     {
         return Ease((time - static_cast<float>(MageUltimate::MergeStart)) / .55f);
@@ -174,6 +156,7 @@ void MageUltimateView::DrawSky(Renderer& r, const MageUltimate& skill, Point cen
         if (t < start || t >= impact + .08f)
             continue;
         const float progress = std::clamp((t - start) / (impact - start), 0.f, 1.f);
+        const float travel = progress * progress;
         const float alpha = 1.f - Ease((t - impact) / .08f);
         for (int sword = 0; sword < 4; ++sword)
         {
@@ -183,11 +166,14 @@ void MageUltimateView::DrawSky(Renderer& r, const MageUltimate& skill, Point cen
             const Point floor = Polar(center, radius, angle, SceneCamera::GroundDepthScale());
             const Point sky = Polar({center.x, center.y - SkyHeight}, radius, angle, .34f);
             const Point from = upper ? sky : floor, to = upper ? floor : sky;
-            Sword(r,
-                  {from.x + (to.x - from.x) * progress, from.y + (to.y - from.y) * progress},
-                  upper ? 1.f : -1.f,
-                  alpha,
-                  upper);
+            MageUltimateSwordView::Draw(
+                r,
+                {from.x + (to.x - from.x) * travel, from.y + (to.y - from.y) * travel},
+                upper ? 1.f : -1.f,
+                alpha,
+                upper,
+                progress,
+                pulse * 4 + sword);
         }
     }
     if (!gpuEnergy && merge > 0.f && t < MageUltimate::ExplosionTime)

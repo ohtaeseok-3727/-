@@ -11,6 +11,7 @@
 #include "GameSession.h"
 #include "GameView.h"
 #include "MapView.h"
+#include "BuildingView.h"
 #include <cmath>
 
 namespace
@@ -23,6 +24,10 @@ void SceneRenderer::Draw(Renderer& r, const SceneGraph& graph, const SceneFrame&
     const float depthScale = SceneCamera::GroundDepthScale();
     for (const auto& item : graph.StaticVisible())
     {
+        if (item.actor->Description().kind == 13)
+        {
+            continue; // BuildingView draws the footprint-sized shadow.
+        }
         const Point p = item.screen;
         const float size = item.actor->Description().size;
         if (p.x > -150 && p.x < frame.width + 150 && p.y > -80 && p.y < frame.height + 80)
@@ -67,7 +72,11 @@ void SceneRenderer::DrawActor(Renderer& r, const SceneItem& item, const SceneFra
         q.y -= height * objectHeightScale * s;
         return q;
     };
-    if (o.kind == 9)
+    if (o.kind == 13)
+    {
+        BuildingView::Draw(r, frame.map.Layout().Definition().buildings[o.entity], p);
+    }
+    else if (o.kind == 9)
     {
         const auto& site = frame.map.Layout().Landmarks()[o.entity];
         if (!frame.level.DrawWorldLandmark(r, site, p, frame.time))

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Chapter.h"
+#include "Chapter1Sprites.h"
 #include <array>
 #include <bitset>
 
@@ -9,6 +10,7 @@ namespace Chapter3Maps
     constexpr MapId Memorial = 7;
     constexpr MapId Argen = 8;
     constexpr MapId Archive = 9;
+    constexpr MapId ReadingRoom = 10;
 }
 
 namespace Chapter3Objects
@@ -60,7 +62,15 @@ namespace Chapter3Objects
         SealedWagon,
         SupplyDesk,
         CommandSeal,
-        FieldPermit
+        FieldPermit,
+        MemorialEntrance,
+        ReadingEntrance,
+        ReadingReturn,
+        ArchiveReturn,
+        CityGate,
+        MarketSign,
+        MemorialSign,
+        MonasterySign
     };
 }
 
@@ -168,10 +178,12 @@ class Chapter3 final : public Chapter
     static MapDefinition MemorialMap();
     static MapDefinition CityMap();
     static MapDefinition ArchiveMap();
+    static MapDefinition ReadingRoomMap();
     static WorldPosition Foundation(int index);
     static WorldPosition Patrol(int index, float time);
     WorldPosition Cart() const;
     Chapter3State m_State;
+    mutable Chapter1Sprites m_Sprites;
     ChapterImpact m_Impact;
     std::string m_Message;
     WorldPosition m_Courier{360.f, -250.f};

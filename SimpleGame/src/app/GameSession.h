@@ -86,6 +86,8 @@ class GameSession
     void ActivateRegion(std::size_t region);
     void SynchronizeChapterHistory();
     bool StoryReady() const;
+    bool TravelThroughPortal(const ChapterTravel& travel, WorldPosition& destination);
+    std::optional<WorldMarker> PortalGoal(std::size_t target) const;
     enum class StorySkip
     {
         Chapter1,

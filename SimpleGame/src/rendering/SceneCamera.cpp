@@ -18,9 +18,9 @@ Point SceneCamera::Project(float x, float y) const
     return {m_Width * .5f + x - m_X, m_Height * .52f + (y - m_Y) * GroundDepthScale()};
 }
 
-bool SceneCamera::IsVisible(Point point) const
+bool SceneCamera::IsVisible(Point point, float margin) const
 {
     // Preserve the existing conservative bounds for tall props and attack effects.
-    return point.x >= -180.f && point.x <= m_Width + 180.f && point.y >= -80.f &&
-           point.y <= m_Height + 230.f;
+    return point.x >= -180.f - margin && point.x <= m_Width + 180.f + margin &&
+           point.y >= -80.f - margin && point.y <= m_Height + 230.f + margin;
 }

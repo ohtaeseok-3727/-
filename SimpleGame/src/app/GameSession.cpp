@@ -108,6 +108,12 @@ bool GameSession::ApplyPendingTravel(LevelMap& map, WorldPosition& destination)
 {
     if (m_OpenWorld)
     {
+        if (const auto pending = m_Chapter->PendingTravel())
+        {
+            const auto travel = *pending;
+            m_Chapter->ClearTravel();
+            return TravelThroughPortal(travel, destination);
+        }
         m_Chapter->ClearTravel();
         return false;
     }
@@ -435,11 +441,19 @@ void GameSession::Inspect(const MapLandmark& site, const LevelMap& sourceMap)
             ShowNotice("휴식 완료 · 체력/마나 회복 · 이 야영지를 복귀 지점으로 등록했습니다.");
             return;
         }
-        if (!StoryReady())
+        const auto& portals = m_Regions[m_Region].map.Layout().Definition().portals;
+        const bool portal = std::any_of(portals.begin(),
+                                        portals.end(),
+                                        [&local](const MapPortal& item)
+                                        {
+                                            return item.object == local.object;
+                                        });
+        if (!StoryReady() && !portal)
         {
-            ShowNotice(m_ActiveChapterId == "chapter3"
-                           ? "챕터 3 조사는 협곡 구호지의 피해 보고와 벽화 탁본 검토 후 시작됩니다."
-                           : "이 지역은 자유롭게 탐험할 수 있습니다. 주요 작전은 폐광의 장부와 용사 대화 후 시작됩니다.");
+            ShowNotice(
+                m_ActiveChapterId == "chapter3"
+                    ? "챕터 3 조사는 협곡 구호지의 피해 보고와 벽화 탁본 검토 후 시작됩니다."
+                    : "이 지역은 자유롭게 탐험할 수 있습니다. 주요 작전은 폐광의 장부와 용사 대화 후 시작됩니다.");
             return;
         }
     }

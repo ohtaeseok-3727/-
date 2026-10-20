@@ -244,6 +244,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\SolidRect.fs" />
+    <ClInclude Include="src\ui\MageUltimateSwordView.h" />
+    <None Include="Assets\Effects\MageSwordSong\sword-turntable.png" />
+    <None Include="Assets\Effects\MageSwordSong\sword-song.blend" />
+    <None Include="Assets\Effects\MageSwordSong\settings.json" />
     <None Include="Shaders\SolidRect.vs" />
     <None Include="Assets\Characters\knight-coarse-preview-v2.png" />
     <None Include="Assets\Characters\mage-coarse-preview-v2.png" />
@@ -399,5 +403,12 @@
     <ClCompile Include="src\app\GameSessionAreaAttack.cpp"></ClCompile>
     <ClCompile Include="src\ui\MageUltimateView.cpp"></ClCompile>
     <ClCompile Include="src\verification\MageUltimateVerification.cpp"></ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\chapters\Chapter3Architecture.h" />
+    <ClCompile Include="src\chapters\Chapter3Architecture.cpp" />
+    <ClInclude Include="src\ui\BuildingView.h" />
+    <ClCompile Include="src\ui\BuildingView.cpp" />
+    <ClCompile Include="src\app\GameSessionPortals.cpp" />
   </ItemGroup>
 </Project>

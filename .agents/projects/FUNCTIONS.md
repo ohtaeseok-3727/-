@@ -229,3 +229,28 @@ C++17 std::array는 고정 경로/시계, std::bitset은 조사 완료/중복 �
 - `Chapter2::SkipStory`, `Chapter3::SkipStory` ([ChapterSkipping.cpp](../../SimpleGame/src/chapters/ChapterSkipping.cpp)): 기존 선택을 보존하며 전체 완료 플래그와 임시 전투·조작 상태를 정리한다. 챕터 3 미수령 보급은 지급 없이 처리한다.
 - `SettingsMenu::Buttons`, `Activate`, `Draw`: 챕터 2 전체·챕터 3 스킵 버튼과 확인 문구를 제공한다. `PrototypeWorld`가 명령을 세션에 전달하고 위치·카메라·공격·발사체를 정리한다.
 - `VerifySkipping` ([Chapter3Verification.cpp](../../SimpleGame/src/verification/Chapter3Verification.cpp)): 순차 진행·선택 보존·무보상·반복 차단·미리보기 경로의 회귀 검사 소스. 실행하지 않았다.
+
+## 챕터 3 도시 구획·기록관 포탈 — 2026-10-20
+
+| 함수·클래스 | 책임과 연결 |
+| --- | --- |
+| `Chapter3Architecture::DressCity`, `EncloseRoom`, `DressReadingRoom` ([Chapter3Architecture.cpp](../../SimpleGame/src/chapters/Chapter3Architecture.cpp)) | 도시 구획·분리 건물·성벽·포탈을 배치하고 실내를 폐쇄 외벽으로 둘러싼다. 긴 벽은 청크에 맞춰 분할한다. |
+| `Chapter3::ReadingRoomMap`, `BuildMap` ([Chapter3Map.cpp](../../SimpleGame/src/chapters/Chapter3Map.cpp)) | 공개 열람실과 기록관 실내 지도를 구성한다. 필사본과 세라드 통보는 열람실에 둔다. |
+| `MapLayout::BuildingBlocked`, `DistrictAt` ([MapLayout.cpp](../../SimpleGame/src/world/MapLayout.cpp)) | 건물 발판 영역 충돌과 도시 구획 탐색을 제공한다. `LevelMap::Blocked`·소품 생성·지역명과 바닥 캐시에 연결된다. |
+| `LevelMap::ChunkObjects` ([LevelMap.cpp](../../SimpleGame/src/world/LevelMap.cpp)) | 개별 건물을 앞쪽 발선에 정적 액터 종류 13으로 등록한다. |
+| `WorldAtlas::Build` ([WorldAtlas.cpp](../../SimpleGame/src/world/WorldAtlas.cpp)) | 지역 건물·구획을 세계 좌표로 변환하고 포탈 실내 사이의 자동 연결 도로를 제외한다. |
+| `BuildingView::Draw` ([BuildingView.cpp](../../SimpleGame/src/ui/BuildingView.cpp)) | 충돌과 같은 footprint를 기준으로 건물 외관·성벽·서가·닫힌 문·이름판을 따로 그린다. SceneRenderer가 호출한다. |
+| `GameSession::TravelThroughPortal`, `PortalGoal` ([GameSessionPortals.cpp](../../SimpleGame/src/app/GameSessionPortals.cpp)) | 등록 포탈·도착 충돌 검증 후 지역을 바꾸며, 실내 목표에 필요한 출입 포탈을 먼저 안내한다. |
+| `Chapter3::Interact`, `GameSession::ApplyPendingTravel` | 챕터 단계 잠금 확인 → 이동 요청 → 등록 포탈 검증 → 지역 활성화 순서로 연결한다. 도시 복귀는 조사·선택·보상 상태를 초기화하지 않는다. |
+| `VerifyArchitecture` ([Chapter3Verification.cpp](../../SimpleGame/src/verification/Chapter3Verification.cpp)) | 포탈 잠금·왕복·진행 보존·개별 건물 충돌·도착 지점·목표 안내 회귀 소스. 빌드·실행하지 않았다. |
+
+## 2026-10-20 Blender 필살기 검
+
+| 영역 | 선언·구현 | 함수 | 코드에서 확인한 역할 |
+| --- | --- | --- | --- |
+| 필살기 검 | [MageUltimateSwordView.h](../../SimpleGame/src/ui/MageUltimateSwordView.h) | `Draw` | Blender 16프레임 시트의 회전 프레임·검끝 피벗·상하 반전·기울기·청색 픽셀 잔상을 표시한다. 피해 판정은 기존 궁극기에 맡긴다. |
+| 필살기 연출 | [MageUltimateView.cpp](../../SimpleGame/src/ui/MageUltimateView.cpp) | `DrawSky` | 기존 타격 시간과 상하 마법진 위치로 검의 가속 이동을 계산해 전용 검 뷰에 전달한다. |
+
+### Chapter3::DrawActor — 용사 스프라이트 복구 (2026-10-20)
+- actor 11은 Chapter1Sprites::Draw의 Hero 프레임 0을 사용한다. 기존 hero-v1.png를 높이 52, 발 위치 기준으로 표시하며 도형 인물로 대체하지 않는다. Chapter3가 보유한 캐시가 텍스처 수명을 관리한다.
+

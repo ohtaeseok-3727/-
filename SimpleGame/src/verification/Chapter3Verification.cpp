@@ -115,11 +115,13 @@ namespace
         f.Inspect(Shortcut);
         f.FollowGoal(10);
         Require(f.chapter.Goal()->object == ManuscriptEarly, "Nonlethal chase did not finish");
+        f.Enter(Chapter3Maps::ReadingRoom);
         f.Inspect(ManuscriptLate);
         Require(f.chapter.Goal()->object == ManuscriptEarly, "Wrong chronology accepted");
         f.Inspect(ManuscriptEarly);
         f.Inspect(ManuscriptMiddle);
         f.Inspect(ManuscriptLate);
+        f.Enter(Chapter3Maps::Argen);
         f.Inspect(WorkshopLedger);
         Require(f.chapter.Goal()->object == FoundationWest, "Ledger bypassed physical restoration");
         for (int id = FoundationWest; id <= FoundationEast; ++id)
@@ -133,7 +135,9 @@ namespace
         {
             f.Tick(f.Site(id).position);
         }
+        f.Enter(Chapter3Maps::ReadingRoom);
         f.Inspect(Censure);
+        f.Enter(Chapter3Maps::Argen);
         f.Inspect(TransferSeal);
         Require(f.chapter.Goal()->object == Edric, "Edric accountability skipped");
         f.Inspect(Edric);
@@ -276,6 +280,84 @@ namespace
                 "Chapter 3 preview skip did not use its predecessor fixture");
     }
 
+    void VerifyArchitecture()
+    {
+        using namespace Chapter3Objects;
+        GameSession session;
+        LevelMap world;
+        world.Generate(743);
+        session.Reset(0, 743, world);
+        session.OpenWorld(world, "chapter3");
+        const auto inspect = [&](ObjectId id)
+        {
+            for (const auto& site : world.Layout().Landmarks())
+            {
+                if (site.worldRegion >= 0 && site.object == id &&
+                    session.Atlas().Regions()[site.worldRegion].chapter == "chapter3")
+                {
+                    session.Inspect(site, world);
+                    return;
+                }
+            }
+            Require(false, "Portal/story site missing from world");
+        };
+        WorldPosition destination;
+        inspect(CityExit);
+        Require(session.ApplyPendingTravel(world, destination), "Memorial exit portal failed");
+        const auto city = session.Atlas().Find("chapter3", Chapter3Maps::Argen);
+        Require(city && session.Atlas().RegionAt(destination) == *city &&
+                    session.FindChapter("chapter3")->Goal()->object == Ceremony,
+                "Exiting the hall skipped its story");
+        const auto goal = session.TrackedGoal();
+        Require(goal && goal->label.find("포탈") != std::string::npos,
+                "Interior goal points at remote coordinates instead of an entrance portal");
+        inspect(ReadingEntrance);
+        Require(!session.ApplyPendingTravel(world, destination),
+                "Public records portal bypassed the chase prerequisite");
+        Require(session.SkipChapter3(destination),
+                "Could not prepare completed-story portal fixture");
+        const auto flags = session.FindChapter("chapter3")->ExportFlags();
+        for (const auto action : {ReadingEntrance,
+                                  ReadingReturn,
+                                  ArchiveExit,
+                                  ArchiveReturn,
+                                  MemorialEntrance,
+                                  CityExit})
+        {
+            inspect(action);
+            Require(session.ApplyPendingTravel(world, destination) &&
+                        !world.Blocked(destination.x, destination.y),
+                    "Archive portal failed or spawned inside a collider");
+            Require(session.FindChapter("chapter3")->ExportFlags() == flags,
+                    "Portal travel reset chapter state");
+        }
+        const auto& cityMap = session.Atlas().Regions()[*city].local;
+        Require(cityMap.portals.size() == 3 && cityMap.buildings.size() > 9 &&
+                    cityMap.districts.size() >= 7,
+                "City blocks, individual buildings, or archive entrances missing");
+        Require(!world.Blocked(4500, -23000), "Southern city gate is closed");
+        for (const auto& region : session.Atlas().Regions())
+        {
+            if (region.chapter != "chapter3")
+            {
+                continue;
+            }
+            const auto index = session.Atlas().Find(region.chapter, region.local.id);
+            for (const auto& building : region.local.buildings)
+            {
+                const auto p = session.Atlas().ToWorld(*index, building.footprint.center);
+                Require(world.Blocked(p.x, p.y), "Individual building has no world collision");
+            }
+            for (const auto& portal : region.local.portals)
+            {
+                const auto target = session.Atlas().Find("chapter3", portal.destination);
+                Require(target.has_value(), "Portal target not registered");
+                const auto arrival = session.Atlas().ToWorld(*target, portal.arrival);
+                Require(!world.Blocked(arrival.x, arrival.y), "Portal arrival blocked");
+            }
+        }
+    }
+
     void VerifyWorld()
     {
         GameSession session;
@@ -302,7 +384,7 @@ namespace
                 "Early exploration bypassed Chapter 2 or replaced the story target");
         session.Reset(0, 743, map);
         session.OpenWorld(map, "chapter3");
-        Require(session.ActiveChapterId() == "chapter3" && session.Atlas().Regions().size() == 9,
+        Require(session.ActiveChapterId() == "chapter3" && session.Atlas().Regions().size() == 10,
                 "Chapter 3 preview or region registration failed");
         Require(!session.CanSkipChapter1() && !session.CanSkipChapter2FieldStory(),
                 "Preview exposes predecessor skip actions");
@@ -338,6 +420,7 @@ int RunChapter3Verification()
         VerifyFlow();
         VerifyWorld();
         VerifySkipping();
+        VerifyArchitecture();
         std::cout << "PASS 챕터 3 선행 조건·조사·비살상·재시도·분산 보존·정치 상태·월드 연결\n";
         return 0;
     }

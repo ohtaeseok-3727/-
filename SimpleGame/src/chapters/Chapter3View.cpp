@@ -25,6 +25,12 @@ namespace
 std::string Chapter3::InteractionPrompt(const MapLandmark& site) const
 {
     using namespace Chapter3Objects;
+    if (site.object == MemorialEntrance || site.object == ReadingEntrance ||
+        site.object == ReadingReturn || site.object == ArchiveExit ||
+        site.object == ArchiveReturn || site.object == CityReturn || site.object == CityExit)
+    {
+        return "[Space] 기록관 포탈 · " + site.name;
+    }
     if (site.object >= FoundationWest && site.object <= FoundationEast)
     {
         return "[Space 2초 유지] " + site.name;
@@ -35,7 +41,7 @@ std::string Chapter3::InteractionPrompt(const MapLandmark& site) const
     }
     if (site.object >= RefugeRoom && site.object <= LastSermon)
     {
-        return "필체·인장 순서대로 방에 접근 · [Space] 안내";
+        return "외벽의 필체·방 배치 순서로 접근 · [Space] 안내";
     }
     return Chapter::InteractionPrompt(site);
 }
@@ -44,6 +50,26 @@ bool Chapter3::DrawLandmark(Renderer& r, const MapLandmark& site, Point p, float
 {
     using namespace Chapter3Objects;
     const auto id = site.object;
+    if (id == CityGate || id == MarketSign || id == MemorialSign || id == MonasterySign)
+    {
+        r.Rect(p.x - 4, p.y - 42, 8, 45, Stone);
+        const float width = r.TextWidth(site.name) + 20.f;
+        r.Rect(p.x - width * .5f, p.y - 65, width, 26, Color(.10f, .18f, .20f));
+        r.Text(p.x - width * .5f + 10, p.y - 47, site.name, Paper);
+        return true;
+    }
+    if (id == MemorialEntrance || id == ReadingEntrance || id == ReadingReturn ||
+        id == ArchiveExit || id == ArchiveReturn || id == CityReturn || id == CityExit)
+    {
+        r.Ellipse(p.x, p.y, 46, 18, Color(.22f, .72f, .82f, .25f));
+        r.Ellipse(p.x, p.y, 31, 11, Color(.50f, .86f, .93f, .55f));
+        r.Rect(p.x - 35, p.y - 69, 7, 70, Stone);
+        r.Rect(p.x + 28, p.y - 69, 7, 70, Stone);
+        r.Rect(p.x - 35, p.y - 75, 70, 8, Paper);
+        r.Rect(p.x - 25, p.y - 65, 50, 53, Color(.15f, .48f, .57f, .45f));
+        r.Text(p.x - 58, p.y - 87, "[Space] 기록관 포탈", Paper);
+        return true;
+    }
     r.Rect(p.x - 23, p.y - 25, 46, 25, Stone);
     r.Rect(p.x - 19, p.y - 32, 38, 7, Paper);
     if (id == Ceremony)
@@ -193,6 +219,14 @@ void Chapter3::AddActors(SceneGraph& scene, WorldPosition) const
             }
         }
     }
+    if (m_State.map == Chapter3Maps::ReadingRoom)
+    {
+        if (!m_State.hearing)
+        {
+            add({150, -1150}, 10);
+        }
+        add({-120, -1180}, 11);
+    }
     if (m_State.map == Chapter3Maps::Archive)
     {
         if (m_State.phase == Chapter3Phase::Infiltration)
@@ -224,7 +258,12 @@ void Chapter3::AddActors(SceneGraph& scene, WorldPosition) const
 
 void Chapter3::DrawActor(Renderer& r, int actor, Point p, float) const
 {
-    if (actor == 2)
+    if (actor == 11)
+    {
+        const bool drawn = m_Sprites.Draw(r, ChapterSprite::Hero, 0, p, 52.f);
+        r.Text(p.x - 25, p.y - 66, drawn ? "용사" : "용사 이미지 로드 실패", Paper);
+    }
+    else if (actor == 2)
     {
         r.Rect(p.x - 28, p.y - 32, 56, 28, Color(.48f, .3f, .15f));
         r.Rect(p.x - 23, p.y - 36, 46, 7, Paper);
@@ -264,10 +303,9 @@ void Chapter3::DrawActor(Renderer& r, int actor, Point p, float) const
                             : actor == 3  ? "호위대 · 용사가 저지"
                             : actor == 5  ? "세라드 · 생존"
                             : actor == 10 ? "엘리안"
-                            : actor == 11 ? "용사"
                             : actor == 12 ? "에드릭"
                                           : "공증 사본 운반자";
-        Person(r, p, actor == 11 ? Green : Stone, label);
+        Person(r, p, Stone, label);
         if (actor == 1)
         {
             r.Ellipse(p.x, p.y, 145, 125.5f, Color(.9f, .55f, .16f, .08f));
@@ -334,6 +372,14 @@ MonitorObservation Chapter3::ObserveMap(const MapDefinition& map, WorldPosition)
                     "patrolling",
                     Patrol(i, m_PatrolTime));
             }
+        }
+    }
+    if (map.id == Chapter3Maps::ReadingRoom)
+    {
+        add("hero-reading", "용사", "companion", "investigating", {-120, -1180});
+        if (!m_State.hearing)
+        {
+            add("elian-reading", "엘리안", "scholar", "investigating", {150, -1150});
         }
     }
     if (map.id == Chapter3Maps::Archive && m_State.phase == Chapter3Phase::Interception)

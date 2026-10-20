@@ -70,10 +70,6 @@ std::string Chapter3::Interact(const MapLandmark& site,
 {
     using namespace Chapter3Objects;
     using Phase = Chapter3Phase;
-    if (!m_State.previousComplete)
-    {
-        return "먼저 협곡 구호지에서 피해 보고와 벽화 탁본 검토를 마치세요.";
-    }
     // Reject foreign/local IDs before changing state, including out-of-order archive visits.
     const auto& sites = map.Layout().Landmarks();
     if (std::none_of(sites.begin(),
@@ -87,29 +83,27 @@ std::string Chapter3::Interact(const MapLandmark& site,
     }
     const auto phase = m_State.phase;
     const auto id = site.object;
-    if (id == CityExit && phase >= Phase::City)
+    const auto& portals = map.Layout().Definition().portals;
+    const auto portal = std::find_if(portals.begin(),
+                                     portals.end(),
+                                     [id](const MapPortal& item)
+                                     {
+                                         return item.object == id;
+                                     });
+    if (portal != portals.end())
     {
-        if (!ContinuousWorld())
+        if ((id == ReadingEntrance && phase < Phase::Research) ||
+            (id == ArchiveExit && phase < Phase::Infiltration) ||
+            (id == CityReturn && phase < Phase::Preservation))
         {
-            RequestTravel({{}, Chapter3Maps::Argen, std::nullopt});
+            return "포탈이 잠겨 있습니다. 먼저 현재 스토리 목표를 완료하세요.";
         }
-        return "연결된 길을 따라 기록도시 아르겐으로 이동하세요.";
+        RequestTravel({{}, portal->destination, portal->arrival});
+        return "[기록관 포탈] " + site.name;
     }
-    if (id == ArchiveExit && phase >= Phase::Infiltration)
+    if (!m_State.previousComplete)
     {
-        if (!ContinuousWorld())
-        {
-            RequestTravel({{}, Chapter3Maps::Archive, std::nullopt});
-        }
-        return "옛 군용 통로로 봉인 서고에 진입하세요. 순찰대는 피하거나 Space로 비살상 제압합니다.";
-    }
-    if (id == CityReturn && phase >= Phase::Preservation)
-    {
-        if (!ContinuousWorld())
-        {
-            RequestTravel({{}, Chapter3Maps::Argen, WorldPosition{0.f, -2050.f}});
-        }
-        return "서쪽 귀환로를 따라 아르겐 시민 회랑으로 돌아가세요.";
+        return "먼저 협곡 구호지에서 피해 보고와 벽화 탁본 검토를 마치세요.";
     }
     if (phase == Phase::Memorial && id >= Ceremony && id <= Rubbing)
     {

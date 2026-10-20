@@ -257,8 +257,8 @@ int RunOpenWorldVerification()
         session.Reset(1, 743, map);
         session.OpenWorld(map);
         const auto revision = map.Revision();
-        Require(map.Layout().Definition().openWorld && session.Atlas().Regions().size() == 9,
-                "World must contain the nine authored regions");
+        Require(map.Layout().Definition().openWorld && session.Atlas().Regions().size() == 10,
+                "World must contain the outdoor regions and portal-only archive rooms");
         for (std::size_t i = 0; i < session.Atlas().Regions().size(); ++i)
         {
             const auto& region = session.Atlas().Regions()[i];

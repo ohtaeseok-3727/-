@@ -58,6 +58,7 @@ const GeometryCache::Mesh& MapView::GroundGeometry(const LevelMap& map, int x, i
             const bool mine = layout.Interior(world);
             const bool water = layout.Water(world);
             const bool road = region == MapRegion::Village || layout.OnRoad(world);
+            const auto* district = layout.DistrictAt(world);
             Color color(.13f + shade, .18f + shade, .15f + shade);
             if (region == MapRegion::Farmland)
             {
@@ -89,9 +90,28 @@ const GeometryCache::Mesh& MapView::GroundGeometry(const LevelMap& map, int x, i
                             ? Color(.24f + shade, .23f + shade, .21f + shade)
                             : Color(.045f, .055f, .065f);
             }
+            if (district && !mine)
+            {
+                color = district->paving == 1   ? Color(.31f + shade, .33f + shade, .34f + shade)
+                        : district->paving == 2 ? Color(.35f + shade, .29f + shade, .22f + shade)
+                        : district->paving == 3 ? Color(.24f + shade, .29f + shade, .26f + shade)
+                                                : Color(.25f + shade, .27f + shade, .28f + shade);
+                if (layout.OnRoad(world))
+                {
+                    color = Color(.43f + shade, .43f + shade, .39f + shade);
+                }
+            }
             const float px = col * 16.f;
             const float py = row * 16.f * .8660254f;
             rect(px, py, 16.5f, 14.4f, color);
+            if (district && !water && (!mine || layout.InteriorFloor(world)))
+            {
+                rect(px, py, 16.f, 1.f, Color(color.r * .72f, color.g * .72f, color.b * .72f));
+                if ((x * 4 + col + y * 4 + row) % 2 == 0)
+                {
+                    rect(px, py, 1.f, 14.f, Color(color.r * .72f, color.g * .72f, color.b * .72f));
+                }
+            }
             if (!mine && region == MapRegion::Farmland && !road)
             {
                 rect(px + 2, py + 4, 12, 2, Color(.16f, .19f, .10f));

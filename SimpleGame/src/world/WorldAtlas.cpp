@@ -58,6 +58,16 @@ MapDefinition WorldAtlas::Build() const
         {
             world.encounters.push_back(ToWorld(i, encounter));
         }
+        for (auto building : region.local.buildings)
+        {
+            building.footprint.center = ToWorld(i, building.footprint.center);
+            world.buildings.push_back(std::move(building));
+        }
+        for (auto district : region.local.districts)
+        {
+            district.bounds.center = ToWorld(i, district.bounds.center);
+            world.districts.push_back(std::move(district));
+        }
         // Rest sites are reachable entry anchors, never boss-arena checkpoints.
         world.landmarks.push_back({LandmarkKind::Inn,
                                    ToWorld(i, region.local.entry),
@@ -66,7 +76,7 @@ MapDefinition WorldAtlas::Build() const
                                    0.f,
                                    -1,
                                    static_cast<int>(i)});
-        if (i > 0)
+        if (i > 0 && !region.local.portalInterior && !m_Regions[i - 1].local.portalInterior)
         {
             const auto exit = m_Regions[i - 1].departure;
             world.roads.push_back({ToWorld(i - 1, exit), ToWorld(i, region.local.entry), 100.f});

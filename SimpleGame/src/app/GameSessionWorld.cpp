@@ -39,9 +39,10 @@ void GameSession::OpenWorld(LevelMap& map, const std::string& startChapter)
     add("chapter2", Chapter2Maps::Graywall, {360, -8650}, {0, -2250});
     add("chapter2", Chapter2Maps::Canyon, {360, -12200}, {0, -2050});
     add("chapter2", Chapter2Maps::OldFortress, {360, -15900}, {0, -3550});
-    add("chapter3", Chapter3Maps::Memorial, {4500, -21000}, {0, -900});
+    add("chapter3", Chapter3Maps::Memorial, {16000, -21000}, {0, -900});
     add("chapter3", Chapter3Maps::Argen, {4500, -23500}, {0, -2900});
-    add("chapter3", Chapter3Maps::Archive, {4500, -28000}, {-850, -2000});
+    add("chapter3", Chapter3Maps::Archive, {16000, -28000}, {-850, -2000});
+    add("chapter3", Chapter3Maps::ReadingRoom, {21000, -23500}, {0, 280});
     auto world = m_Atlas.Build();
     // An outdoor route connects both ends of the mine; exploration never requires the boss.
     world.roads.push_back({{360, -4030}, {1900, -4350}, 90.f});
@@ -54,8 +55,9 @@ void GameSession::OpenWorld(LevelMap& map, const std::string& startChapter)
     world.roads.push_back({{1010, -11750}, {360, -11400}, 90.f});
     // A road from the relief camp reaches the record city without re-entering the fortress.
     world.roads.push_back({{1010, -11750}, {3000, -11750}, 100.f});
-    world.roads.push_back({{3000, -11750}, {3000, -20820}, 100.f});
-    world.roads.push_back({{3000, -20820}, {4500, -20820}, 100.f});
+    world.roads.push_back({{3000, -11750}, {3000, -22850}, 100.f});
+    world.roads.push_back({{3000, -22850}, {4500, -22850}, 100.f});
+    world.roads.push_back({{4500, -22850}, {4500, -23300}, 100.f});
     map.Load("world", std::move(world));
     m_Regions.resize(m_Atlas.Regions().size());
     for (std::size_t i = 0; i < m_Regions.size(); ++i)
@@ -234,6 +236,10 @@ std::optional<WorldMarker> GameSession::TrackedGoal() const
     if (!region)
     {
         return std::nullopt;
+    }
+    if (const auto portal = PortalGoal(*region))
+    {
+        return portal;
     }
     if (goal->position)
     {

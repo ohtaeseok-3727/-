@@ -33,10 +33,10 @@ float MapLayout::RoadDistanceSquared(WorldPosition p, const MapRoad& road)
     const float lengthSquared = dx * dx + dy * dy;
     const float t =
         lengthSquared > 0.f
-            ? (std::max)(
-                  0.f,
-                  (std::min)(1.f,
-                             ((p.x - road.from.x) * dx + (p.y - road.from.y) * dy) / lengthSquared))
+            ? (std::max)(0.f,
+                         (std::min)(1.f,
+                                    ((p.x - road.from.x) * dx + (p.y - road.from.y) * dy) /
+                                        lengthSquared))
             : 0.f;
     const float px = p.x - road.from.x - dx * t;
     const float py = p.y - road.from.y - dy * t;
@@ -58,6 +58,10 @@ bool MapLayout::OnRoad(WorldPosition p, float margin) const
 
 bool MapLayout::Reserved(WorldPosition p, float margin) const
 {
+    if (BuildingBlocked(p, margin))
+    {
+        return true;
+    }
     if (OnRoad(p, margin))
     {
         return true;
@@ -126,6 +130,28 @@ bool MapLayout::Walkable(WorldPosition p, float inset) const
     return OnRoad(p, -inset);
 }
 
+bool MapLayout::BuildingBlocked(WorldPosition p, float margin) const
+{
+    return std::any_of(m_Definition.buildings.begin(),
+                       m_Definition.buildings.end(),
+                       [p, margin](const MapBuilding& building)
+                       {
+                           return building.footprint.Contains(p, margin);
+                       });
+}
+
+const MapDistrict* MapLayout::DistrictAt(WorldPosition p) const
+{
+    for (const auto& district : m_Definition.districts)
+    {
+        if (district.bounds.Contains(p))
+        {
+            return &district;
+        }
+    }
+    return nullptr;
+}
+
 MapRegion MapLayout::RegionAt(WorldPosition p) const
 {
     for (const auto& area : m_Definition.areas)
@@ -141,6 +167,10 @@ MapRegion MapLayout::RegionAt(WorldPosition p) const
 
 const char* MapLayout::RegionName(WorldPosition p) const
 {
+    if (const auto* district = DistrictAt(p))
+    {
+        return district->name.c_str();
+    }
     for (const auto& area : m_Definition.areas)
     {
         if (std::abs(p.x - area.center.x) <= area.halfWidth &&
