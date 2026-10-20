@@ -1,0 +1,1053 @@
+{
+  "schema_version": 1,
+  "recorded_date": "2026-10-20",
+  "timezone": "Asia/Seoul",
+  "scope": "development preparation only; no game build, runtime or visual QA",
+  "entry": "_game_resource_production/08_final/C03_C18_DEVELOPMENT_START.md",
+  "chapters": [
+    {
+      "chapter": 3,
+      "search_key": "C03 개발 준비",
+      "status": "CODE_EXISTS_ART_PARTIAL",
+      "story": "_story_scene_production/05_final_chapters/CHAPTER_03_FINAL.md",
+      "story_sha256": "0c15f39c10151b4d82844f6001fba0ab4dee06e5dd0f08e9d5a09768d58c248d",
+      "spec": "_game_resource_production/08_final/CHAPTER_03_PRODUCTION_SPEC.md",
+      "spec_sha256": "1666e8ca534d4b7fcb7d43fe72f53bc26400544ed55823e3e6d4f6791ebf5038",
+      "scenes": [
+        "S01",
+        "S02",
+        "S03",
+        "S04",
+        "S05",
+        "S06",
+        "S07",
+        "S08",
+        "S09",
+        "S10"
+      ],
+      "documentation_map_ids": [
+        "GP-M03-ARCHIVE",
+        "GP-M03-CITY",
+        "GP-M03-MEMORIAL",
+        "GP-M03-READING"
+      ],
+      "chapter_resource_ids": [
+        "C03-COURIER",
+        "C03-EDRIC",
+        "C03-ELIAN",
+        "C03-GUARD",
+        "C03-RECORD",
+        "C03-SERAD",
+        "C03-TRANSPORT"
+      ]
+    },
+    {
+      "chapter": 4,
+      "search_key": "C04 개발 준비",
+      "status": "SPEC_ONLY",
+      "story": "_story_scene_production/05_final_chapters/CHAPTER_04_FINAL.md",
+      "story_sha256": "131c0fe0a0fb25d071ab3d27e091c05a1a2cd642d9d6660c627d2298f99e33b4",
+      "spec": "_game_resource_production/08_final/CHAPTER_04_PRODUCTION_SPEC.md",
+      "spec_sha256": "82dc37c893baf1635c0124c4ef2fef53f34ba63e5eb7da1c87aad78523cc9986",
+      "scenes": [
+        "S01",
+        "S02",
+        "S03",
+        "S04",
+        "S05",
+        "S06",
+        "S07",
+        "S08",
+        "S09"
+      ],
+      "documentation_map_ids": [
+        "GP-M04-FOREST",
+        "GP-M04-OUTPOST",
+        "GP-M04-SANCTUARY"
+      ],
+      "chapter_resource_ids": [
+        "C04-BEAST",
+        "C04-DRAGONTRACE",
+        "C04-EVIDENCE",
+        "C04-GARKAN",
+        "C04-HARVEN",
+        "C04-HOUND",
+        "C04-MARKS",
+        "C04-RESONANCE",
+        "C04-SCOUT",
+        "C04-SERAK"
+      ]
+    },
+    {
+      "chapter": 5,
+      "search_key": "C05 개발 준비",
+      "status": "SPEC_ONLY",
+      "story": "_story_scene_production/05_final_chapters/CHAPTER_05_FINAL.md",
+      "story_sha256": "4b5cf4c312c7b3a43240da4115c81c8be7f00a8281ac89fc006ff4f6aca5951d",
+      "spec": "_game_resource_production/08_final/CHAPTER_05_PRODUCTION_SPEC.md",
+      "spec_sha256": "583c5753e76a75e86c3195c1cf06d68992323196f94267028c4050b380238e9d",
+      "scenes": [
+        "S01",
+        "S02",
+        "S03",
+        "S04",
+        "S05",
+        "S06",
+        "S07",
+        "S08"
+      ],
+      "documentation_map_ids": [
+        "GP-M05-ARKAS",
+        "GP-M05-OUTER"
+      ],
+      "chapter_resource_ids": [
+        "C05-ACCESS",
+        "C05-ARCHIVIST",
+        "C05-CLOCK",
+        "C05-COMMANDER",
+        "C05-DISARM",
+        "C05-EVAC",
+        "C05-RAIDERS",
+        "C05-RECORDS"
+      ]
+    },
+    {
+      "chapter": 6,
+      "search_key": "C06 개발 준비",
+      "status": "SPEC_ONLY",
+      "story": "_story_scene_production/05_final_chapters/CHAPTER_06_FINAL.md",
+      "story_sha256": "d6b5cb48994be4a5bc1be5e1dc45e32bb712870086e715c4043efc814b737400",
+      "spec": "_game_resource_production/08_final/CHAPTER_06_PRODUCTION_SPEC.md",
+      "spec_sha256": "d8bc9f3c6393a303a80803d5f07198704061cfd59a98d199213ea5c48321c270",
+      "scenes": [
+        "S01",
+        "S02",
+        "S03",
+        "S04",
+        "S05",
+        "S06"
+      ],
+      "documentation_map_ids": [
+        "GP-M06-SPINE"
+      ],
+      "chapter_resource_ids": [
+        "C06-BATTLEFIELD",
+        "C06-DRAGONMED",
+        "C06-ERGANON",
+        "C06-GATE",
+        "C06-HUMAN",
+        "C06-ROUTE"
+      ]
+    },
+    {
+      "chapter": 7,
+      "search_key": "C07 개발 준비",
+      "status": "SPEC_ONLY",
+      "story": "_story_scene_production/05_final_chapters/CHAPTER_07_FINAL.md",
+      "story_sha256": "cabb7d67cd6140ba598e7055b020a946d4058d1ff28ddd4bb9403aeba14193f0",
+      "spec": "_game_resource_production/08_final/CHAPTER_07_PRODUCTION_SPEC.md",
+      "spec_sha256": "0dca2dbb59fe41c88400d441de3bf0182178fdc0cc798709b79623deaa19809a",
+      "scenes": [
+        "S01",
+        "S02",
+        "S03",
+        "S04",
+        "S05",
+        "S06",
+        "S07"
+      ],
+      "documentation_map_ids": [
+        "GP-M07-WHITECASTLE"
+      ],
+      "chapter_resource_ids": [
+        "C07-CONTRACT",
+        "C07-DEMON",
+        "C07-HAND",
+        "C07-HERALDRY",
+        "C07-NODES",
+        "C07-OBSERVATION",
+        "C07-SUPPLY"
+      ]
+    },
+    {
+      "chapter": 8,
+      "search_key": "C08 개발 준비",
+      "status": "SPEC_ONLY",
+      "story": "_story_scene_production/05_final_chapters/CHAPTER_08_FINAL.md",
+      "story_sha256": "8153b42e5df3583058f5018f9f37a0ba466245cfb9c5e53856ad51f8c1ccabe1",
+      "spec": "_game_resource_production/08_final/CHAPTER_08_PRODUCTION_SPEC.md",
+      "spec_sha256": "235d047b181b557b5ba1a98d9fbe9241fe0e923aa530850c7c85b896c0d39288",
+      "scenes": [
+        "S01",
+        "S02",
+        "S03",
+        "S04",
+        "S05",
+        "S06",
+        "S07"
+      ],
+      "documentation_map_ids": [
+        "GP-M08-OBSERVATORY"
+      ],
+      "chapter_resource_ids": [
+        "C08-CODES",
+        "C08-DRAGON",
+        "C08-HOLOGRAM",
+        "C08-HUMAN",
+        "C08-MONSTER",
+        "C08-MORKA",
+        "C08-ROUTING",
+        "C08-SYNC"
+      ]
+    },
+    {
+      "chapter": 9,
+      "search_key": "C09 개발 준비",
+      "status": "SPEC_ONLY",
+      "story": "_story_scene_production/05_final_chapters/CHAPTER_09_FINAL.md",
+      "story_sha256": "15dbddedbe9c24c91c9ee89f4de4795d525d0e15738fd806ab979909022c15d6",
+      "spec": "_game_resource_production/08_final/CHAPTER_09_PRODUCTION_SPEC.md",
+      "spec_sha256": "4c8e7aac7d19c58cc2072a0769af80fc2ddd03a919f1847149d7a051bcd86226",
+      "scenes": [
+        "S01",
+        "S02",
+        "S03",
+        "S04",
+        "S05",
+        "S06",
+        "S07"
+      ],
+      "documentation_map_ids": [
+        "GP-M09-BLOODCASTLE"
+      ],
+      "chapter_resource_ids": [
+        "C09-CLAIM",
+        "C09-COMMANDERS",
+        "C09-FOUR",
+        "C09-RANK",
+        "C09-RING",
+        "C09-WARKING"
+      ]
+    },
+    {
+      "chapter": 10,
+      "search_key": "C10 개발 준비",
+      "status": "SPEC_ONLY",
+      "story": "_story_scene_production/05_final_chapters/CHAPTER_10_FINAL.md",
+      "story_sha256": "134b394a73bbd0057499c1b7298c06030ee0ec8a8b9feda1cbc1c9d1a8216fb2",
+      "spec": "_game_resource_production/08_final/CHAPTER_10_PRODUCTION_SPEC.md",
+      "spec_sha256": "bfba33b991e91f49904a911bbe0a6402783a01aeafad6cea491cb97501c58e81",
+      "scenes": [
+        "S01",
+        "S02",
+        "S03",
+        "S04",
+        "S05",
+        "S06",
+        "S07",
+        "S08"
+      ],
+      "documentation_map_ids": [
+        "GP-M10-FRONT",
+        "GP-M10-ROYAL"
+      ],
+      "chapter_resource_ids": [
+        "C10-COMMAND",
+        "C10-FRONT",
+        "C10-GATE",
+        "C10-LAUREN",
+        "C10-ORDER",
+        "C10-SERAGON",
+        "C10-TARGON",
+        "C10-TOWERS"
+      ]
+    },
+    {
+      "chapter": 11,
+      "search_key": "C11 개발 준비",
+      "status": "SPEC_ONLY",
+      "story": "_story_scene_production/05_final_chapters/CHAPTER_11_FINAL.md",
+      "story_sha256": "400769a72e979bd82a758b108a014e81abe073a82224d5458ea5a233f13dca29",
+      "spec": "_game_resource_production/08_final/CHAPTER_11_PRODUCTION_SPEC.md",
+      "spec_sha256": "b3c7e10bf934373b4356f017964ca22a1963891f43b9cc7e5ed2289636d25057",
+      "scenes": [
+        "S01",
+        "S02",
+        "S03",
+        "S04",
+        "S05",
+        "S06",
+        "S07"
+      ],
+      "documentation_map_ids": [
+        "GP-M10-FRONT",
+        "GP-M11-EVAC"
+      ],
+      "chapter_resource_ids": [
+        "C11-BRIDGE",
+        "C11-GUARDDRAGON",
+        "C11-HANDOVER",
+        "C11-LURE",
+        "C11-SEAL",
+        "C11-VALLEY"
+      ]
+    },
+    {
+      "chapter": 12,
+      "search_key": "C12 개발 준비",
+      "status": "SPEC_ONLY",
+      "story": "_story_scene_production/05_final_chapters/CHAPTER_12_FINAL.md",
+      "story_sha256": "49283eabb3fe5affa6d86eb303b439d2865e0e3183a49461599c53d82bcaf8f6",
+      "spec": "_game_resource_production/08_final/CHAPTER_12_PRODUCTION_SPEC.md",
+      "spec_sha256": "9cda166d75fda0a31d291c5be61e886103001343d5843ed23f7261699d1cb408",
+      "scenes": [
+        "S01",
+        "S02",
+        "S03",
+        "S04",
+        "S05",
+        "S06",
+        "S07",
+        "S08"
+      ],
+      "documentation_map_ids": [
+        "GP-M10-ROYAL"
+      ],
+      "chapter_resource_ids": [
+        "C12-CLONE",
+        "C12-DIVIDE",
+        "C12-LANDING",
+        "C12-MEASURE",
+        "C12-NODES",
+        "C12-REGEN",
+        "C12-SIGNAL"
+      ]
+    },
+    {
+      "chapter": 13,
+      "search_key": "C13 개발 준비",
+      "status": "SPEC_ONLY",
+      "story": "_story_scene_production/05_final_chapters/CHAPTER_13_FINAL.md",
+      "story_sha256": "32574b6a29aee391aff96038efed17d140328a51ac0b8178a7b612a6e6f5b988",
+      "spec": "_game_resource_production/08_final/CHAPTER_13_PRODUCTION_SPEC.md",
+      "spec_sha256": "0031bfd424b9e7643897bcc4b377770b54e53c52c817cf191a9a7514ef967ec7",
+      "scenes": [
+        "S01",
+        "S02",
+        "S03",
+        "S04",
+        "S05",
+        "S06",
+        "S07"
+      ],
+      "documentation_map_ids": [
+        "GP-M10-FRONT",
+        "GP-M13-FIRSTGATE"
+      ],
+      "chapter_resource_ids": [
+        "C13-ANCHOR",
+        "C13-CHAIN",
+        "C13-METER",
+        "C13-MOVINGCORE",
+        "C13-RULES"
+      ]
+    },
+    {
+      "chapter": 14,
+      "search_key": "C14 개발 준비",
+      "status": "SPEC_ONLY",
+      "story": "_story_scene_production/05_final_chapters/CHAPTER_14_FINAL.md",
+      "story_sha256": "82713899b356dafa740bf84871f976f06369bc21d318e2c3e754b83c2ae8087c",
+      "spec": "_game_resource_production/08_final/CHAPTER_14_PRODUCTION_SPEC.md",
+      "spec_sha256": "3c8287aa119ff5bc9eb991260bb8fe0468b87ec0c1071796694bd61cc8994ff6",
+      "scenes": [
+        "S01",
+        "S02",
+        "S03",
+        "S04",
+        "S05",
+        "S06",
+        "S07"
+      ],
+      "documentation_map_ids": [
+        "GP-M14-CENTRALGATE"
+      ],
+      "chapter_resource_ids": [
+        "C14-ANCHORS",
+        "C14-EXPERIMENT",
+        "C14-METER",
+        "C14-OUTER",
+        "C14-PHASE",
+        "C14-SHARDS"
+      ]
+    },
+    {
+      "chapter": 15,
+      "search_key": "C15 개발 준비",
+      "status": "SPEC_ONLY",
+      "story": "_story_scene_production/05_final_chapters/CHAPTER_15_FINAL.md",
+      "story_sha256": "2579c5be16f23f8114320a0cd1ac8abea827069fa5532a2d7b5fda4233641833",
+      "spec": "_game_resource_production/08_final/CHAPTER_15_PRODUCTION_SPEC.md",
+      "spec_sha256": "0f9d349d6bc5e2526ec0467866ba1d2456f7e8e5336b26c2334ac3927bbb199b",
+      "scenes": [
+        "S01",
+        "S02",
+        "S03",
+        "S04",
+        "S05",
+        "S06",
+        "S07"
+      ],
+      "documentation_map_ids": [
+        "GP-M15-CONQUEST"
+      ],
+      "chapter_resource_ids": [
+        "C15-CAPTIVES",
+        "C15-CARGO",
+        "C15-CORE",
+        "C15-FLAGS",
+        "C15-KING",
+        "C15-OWNERSHIP",
+        "C15-RESIDUE",
+        "C15-THRONE"
+      ]
+    },
+    {
+      "chapter": 16,
+      "search_key": "C16 개발 준비",
+      "status": "SPEC_ONLY",
+      "story": "_story_scene_production/05_final_chapters/CHAPTER_16_FINAL.md",
+      "story_sha256": "74421aaa5e9e7f2bc4db5d8d437b230666fc695b2e5026606f0da2f47b2d9ab8",
+      "spec": "_game_resource_production/08_final/CHAPTER_16_PRODUCTION_SPEC.md",
+      "spec_sha256": "27c820bafa4dccfdd2d24ff2f9c70b260a49b2cc5aa2c4a22db349f1f0ea2717",
+      "scenes": [
+        "S01",
+        "S02",
+        "S03",
+        "S04",
+        "S05",
+        "S06",
+        "S07"
+      ],
+      "documentation_map_ids": [
+        "GP-M16-FAMINE"
+      ],
+      "chapter_resource_ids": [
+        "C16-DELIVERY",
+        "C16-HEALPIPE",
+        "C16-KING",
+        "C16-MANAPIPE",
+        "C16-RESIDUE",
+        "C16-SUPPLYPIPE",
+        "C16-THRONECORE",
+        "C16-WELL"
+      ]
+    },
+    {
+      "chapter": 17,
+      "search_key": "C17 개발 준비",
+      "status": "SPEC_ONLY",
+      "story": "_story_scene_production/05_final_chapters/CHAPTER_17_FINAL.md",
+      "story_sha256": "da43909e47acc2afc9ff8b25d59d39b9364f314ef3973c491e3467b749830733",
+      "spec": "_game_resource_production/08_final/CHAPTER_17_PRODUCTION_SPEC.md",
+      "spec_sha256": "30ed96ec0874b7953b139299113059e2a6ae80b6fbc0248de6d8f90319de1392",
+      "scenes": [
+        "S01",
+        "S02",
+        "S03",
+        "S04",
+        "S05",
+        "S06",
+        "S07"
+      ],
+      "documentation_map_ids": [
+        "GP-M17-WAR"
+      ],
+      "chapter_resource_ids": [
+        "C09-WARKING",
+        "C17-COERCION",
+        "C17-ECHO",
+        "C17-METER",
+        "C17-REJOIN",
+        "C17-RESIDUE",
+        "C17-SPLIT",
+        "C17-WARKING"
+      ]
+    },
+    {
+      "chapter": 18,
+      "search_key": "C18 개발 준비",
+      "status": "SPEC_ONLY",
+      "story": "_story_scene_production/05_final_chapters/CHAPTER_18_FINAL.md",
+      "story_sha256": "dda283150a673eed95ebdec890a6d509aa120d39866de5143d92220d075a59c6",
+      "spec": "_game_resource_production/08_final/CHAPTER_18_PRODUCTION_SPEC.md",
+      "spec_sha256": "d117cf78e4291ac607f00396a96d8c8444c072e8a47a09e7da06f6d370964ec1",
+      "scenes": [
+        "S01",
+        "S02",
+        "S03",
+        "S04",
+        "S05",
+        "S06",
+        "S07",
+        "S08",
+        "S09",
+        "S10",
+        "S11"
+      ],
+      "documentation_map_ids": [
+        "GP-M14-CENTRALGATE",
+        "GP-M18-DEATH"
+      ],
+      "chapter_resource_ids": [
+        "C14-SHARDS",
+        "C18-CLOSURE",
+        "C18-DEAD",
+        "C18-ENDING",
+        "C18-INNER",
+        "C18-INTERFERENCE",
+        "C18-KING",
+        "C18-NAILS",
+        "C18-RECOVERY",
+        "C18-RELICS",
+        "C18-TESTS",
+        "C18-THREAD",
+        "C18-THRONE",
+        "C18-WEDGE"
+      ]
+    }
+  ],
+  "context_files": [
+    {
+      "path": "_game_resource_production/00_sprite_reference/SMALL_KNIGHT_STYLE_SPEC.md",
+      "sha256": "47bf08057f00a3be9f2625d5b92f53ee38f0a39819717155892e73a17aab1e59"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "26d3cd8e1f200d4588b31b60a55eaf67ad025ed0440234fb7538ffd960250a3d"
+    },
+    {
+      "path": "docs/design/01-development-principles.md",
+      "sha256": "214780bbb2f93d5f314261db389570e85acda76c81d506c8dc63cb13efa7640c"
+    },
+    {
+      "path": "docs/design/02-world-and-player.md",
+      "sha256": "d902b9901a79c038d0730ef4234d249e264e3a779cdfa27c40654ad5fcab2340"
+    },
+    {
+      "path": "docs/design/04-sprites-and-basic-combat.md",
+      "sha256": "b6d345215346e63f179b323c41fabe611cd4ba6f02c7466b748eca00118dc4f5"
+    },
+    {
+      "path": "docs/design/05-story-and-enemies.md",
+      "sha256": "efed44ed110862f6c4342850e3ce74ce38d572a716f9f1279142af0b6c5cae48"
+    },
+    {
+      "path": "docs/implementation/CHAPTER_03_CITY.md",
+      "sha256": "e0aeb56b467fea21e8b8b0e5ec8d75ded3cdd2ec387209c2cb953ad2350cdf4d"
+    },
+    {
+      "path": "docs/implementation/CHAPTER_03_IMPLEMENTATION.md",
+      "sha256": "53d8d97adf4170520af75e1f5a3a5f9711d333d0c92e0ac620f6f23d07ce7eef"
+    },
+    {
+      "path": "docs/prompts/game_resource_and_map_production_full_prompt.md",
+      "sha256": "eca4b4697782f584dbe036857c7c294e962ef1abf4f49c8cbed7d4f65298bd41"
+    },
+    {
+      "path": "GAME_DESIGN.md",
+      "sha256": "9dec8bc00a988b6babe6073510dab2177d2f6dbb838b5f2dd9e59b78fe961490"
+    },
+    {
+      "path": "SimpleGame/src/app/GameSession.cpp",
+      "sha256": "7fa0fc3200961f9bb2c7b5279af4b0b12b523cf8e786365790d51500fae5ab0b"
+    },
+    {
+      "path": "SimpleGame/src/app/GameSession.h",
+      "sha256": "fbb79f4cc0836b2199ab832115acb7d1c362e7e468b0b7bbdc3aa79bd3fff9f8"
+    },
+    {
+      "path": "SimpleGame/src/app/GameSessionPortals.cpp",
+      "sha256": "0df32e9ffbc50aa993748ce89aa52c4f05231f57c0ddfb9929475e5a56ad2e4e"
+    },
+    {
+      "path": "SimpleGame/src/app/GameSessionWorld.cpp",
+      "sha256": "9607bd0f14004681127bf9a8b175ff1ad8ac13e7c87ee2852153d8862d0c4158"
+    },
+    {
+      "path": "SimpleGame/src/chapters/Chapter.h",
+      "sha256": "64250c0889c5f1a40f29f1f4287198459c4399dc4c7f6d1ad2d813b1880352db"
+    },
+    {
+      "path": "SimpleGame/src/chapters/Chapter1Sprites.cpp",
+      "sha256": "35514dac216b13f42ab66d5b1e24cce3083353ad153780b7f03272f40629ff5b"
+    },
+    {
+      "path": "SimpleGame/src/chapters/Chapter3.cpp",
+      "sha256": "f13b0c4e3015a665b18840bd504b3f4e2842ad5101e749de72509236e2bd0173"
+    },
+    {
+      "path": "SimpleGame/src/chapters/Chapter3.h",
+      "sha256": "eeb00afda9204e3c7144f88a3d74657211efb5f67d24d05dd2722d20e3b5ee9b"
+    },
+    {
+      "path": "SimpleGame/src/chapters/Chapter3Architecture.cpp",
+      "sha256": "c1807ebf8211adfdd14ef2b20acc397a10a7270d3569ddf160ab9c61e2f981ac"
+    },
+    {
+      "path": "SimpleGame/src/chapters/Chapter3Architecture.h",
+      "sha256": "fa9b15e13bb7ec6cbd74ae6a165fde750f6df5aec32f71b02f77851a396630b4"
+    },
+    {
+      "path": "SimpleGame/src/chapters/Chapter3Gameplay.cpp",
+      "sha256": "c964a46dc0e2a9478bb6ee844613f932a3106f0da27f78914c52d82482760554"
+    },
+    {
+      "path": "SimpleGame/src/chapters/Chapter3Map.cpp",
+      "sha256": "adf4b9a45a398b52d4b53899eedcf185fac45e5acf8d06c5cab632b6f374ddaf"
+    },
+    {
+      "path": "SimpleGame/src/chapters/Chapter3View.cpp",
+      "sha256": "d1fdbc5e3a45afa9d3005bae9a69ee7b305f80aa7f0a71c5bd6fdaf677a9f03e"
+    },
+    {
+      "path": "SimpleGame/src/chapters/ChapterCatalog.cpp",
+      "sha256": "72273f78d481589402a70d44035ad561331e0787b7682ff68b5b58eac9c5a6c4"
+    },
+    {
+      "path": "SimpleGame/src/combat/EnemySystem.h",
+      "sha256": "f1094bb0cad2c5f0e6e5207d7ab58859b4bb88062e9bacd4ee0dfd253a322f89"
+    },
+    {
+      "path": "SimpleGame/src/ui/ExpeditionView.cpp",
+      "sha256": "9e8d1c536b8e3f7601f6024f35fab4e3c1f369054f790ab98fbf25f5521b05ed"
+    },
+    {
+      "path": "SimpleGame/src/ui/MapView.cpp",
+      "sha256": "866e8431dca8989d01246ce9ba01059b37eea5469eca1149f05edbd612f032cb"
+    },
+    {
+      "path": "SimpleGame/src/world/LevelMap.h",
+      "sha256": "0e48d9d8fcbec7687e0e9b0bece3737afad1918637c0b7078194be3165922f5c"
+    },
+    {
+      "path": "SimpleGame/src/world/MapLayout.h",
+      "sha256": "6a910bbeb12df3bb685619f8f016df1a71f852b904ee5951aff616288cab3f23"
+    },
+    {
+      "path": "SimpleGame/src/world/WorldAtlas.h",
+      "sha256": "f585f3d50a7c12af75b2bf155b4666182b344d2c5b91061d38af60d828d1f5f7"
+    }
+  ],
+  "asset_inventory_status": "FILES_EXIST_ONLY; includes historical and rejected assets; reuse requires document/loader/style review",
+  "asset_files": [
+    {
+      "path": "SimpleGame/Assets/Characters/Attack/knight-attacks-sheet-v1.png",
+      "sha256": "3399aacf679032611fd4b266fc880ed85ca82749b127c9315fa5817c9c9a3eaf"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/Attack/knight-horizontal-slash-v2.png",
+      "sha256": "7fd32a4a73fd34bf11ba8b74f971a7aab6cae0d5c508bf436577a5bffb06d8f0"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/Attack/knight-horizontal-slash-v3.png",
+      "sha256": "496e96b24a15b5504d50983a5e1c54dd255014600caf960e89a7a7d3e5b7cca0"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/Attack/knight-horizontal-slash-v4.png",
+      "sha256": "237839b546768a4ca3bf646bb46da1e450f5bd172bdb0cc9033088d5cb2744e2"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/Attack/knight-overhead-chop-v2.png",
+      "sha256": "feac50f7715252bc69a1efe7c025a0030f181f773250c260c6c9750e99b5b694"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/Attack/knight-overhead-chop-v3.png",
+      "sha256": "7cf65aa4f86d14964c925f819f1077be84f93b77f77c20ea064d40172137933b"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/Attack/knight-shield-bash-v2.png",
+      "sha256": "dacaff7b3202a7460616d03c3e875ac8de59f15625469033c45e97f7b3d40974"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/Attack/knight-shield-bash-v3.png",
+      "sha256": "439080620f4615c340958ba5be1011e5883da44fdb8a67997ada4b03327e47f0"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/Attack/Mage/mage-burst-b-v2.png",
+      "sha256": "86cd2e8d37a009bd57d846c5982dbeb4ee3ca5cfed08f13c846ca2110445fe38"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/Attack/Mage/mage-melee-effects-v1.png",
+      "sha256": "e37a536e93f3e148429c60a7b3249c4684efb6b5dd80e5072eb650caf3e46ea5"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/Attack/Mage/mage-melee-v1.png",
+      "sha256": "f31b3ac8573447101296e9b46b5d0f0b965b23b64f8779938a0505c2b24586d3"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/Attack/Mage/mage-melee-v2.png",
+      "sha256": "4b4250218c67ae28ebab45428272ff8d679739bf4cd5b3749060c184686ff80c"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/Attack/Mage/mage-melee-v3.png",
+      "sha256": "663492090a688e2c43f19fd59f1b81b470690358bac5b79c62f7dd6a8275c5af"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/combat-visuals.json",
+      "sha256": "1b14040aed0e1572e8ee4d3a60ec8cd0afc63bada236193cadb2b18f923dfa38"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/Concepts/knight-small-cute-v1.png",
+      "sha256": "4efff4d443c62eebb2cbdcec3b316fe1afadbf1372614e212be087df0ae115ec"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/knight-coarse-preview-v2.png",
+      "sha256": "cf1d8a822d7afb6b4875ecfead555593ce22b9a77e570594db9969eb37a36b1e"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/knight-idle-v1.png",
+      "sha256": "968653340636807e3226a5f5fd7b91f40e5a65ef6e64b1432291a429e54c3816"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/mage-coarse-preview-v2.png",
+      "sha256": "da2b730cf04385079525f116eb24e7dca1f71f0aca6d92eb364c70fa2b0582ef"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/mage-idle-v1.png",
+      "sha256": "b5a3d9b6d23f7385a2315684fdc8b9c4dbda574b580f2e6e547c96db3c5167c6"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/NPC/Hero/hero-v1.png",
+      "sha256": "9009eabd0e0e976b9f8bb65cd0da3368eb2dc392d4e65bff3266f3fa169d898b"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/NPC/VeteranMercenary/idle-draft-v1.png",
+      "sha256": "20b6812663831f6ba8be6fc40948969b0c6994903f573ef663c90c7a0c55ee85"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/NPC/VeteranMercenary/idle-transparent-aligned-v2-frame-1.png",
+      "sha256": "bb4d2f25b28cc14b7dd11b7c3b1b19a4a09076e913c3b8fde6b3ff861011f765"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/NPC/VeteranMercenary/idle-transparent-aligned-v2-frame-2.png",
+      "sha256": "40062c9a8b89d61c7d1e3910e19653dcc8cffc7cf9e8e03f07dbf95041199327"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/NPC/VeteranMercenary/idle-transparent-aligned-v2-frame-3.png",
+      "sha256": "4683fbc0eced2272679e9cb04d8573289d0025b2a86aa78e1ea9bc5f190f262a"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/NPC/VeteranMercenary/idle-transparent-aligned-v2-frame-4.png",
+      "sha256": "93cf1c2df5f667bc2a7c3596ec62909198d9895b6dd943a7fe8a865ff858fcc3"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/NPC/VeteranMercenary/idle-transparent-aligned-v2.metadata.json",
+      "sha256": "36423011c8e488820c0ddd91a331f496e16c9e319036c2de5c7cababc3f84634"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/NPC/VeteranMercenary/idle-transparent-aligned-v2.png",
+      "sha256": "c4d761883b0579fff93353b6239b60030a0c6ab8ce0698dac962c59e27bf24f0"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/NPC/Villager/villager-v1.png",
+      "sha256": "b4b2fe72592bef2ffd90d1712eb88d211aae70157aa03af49a4de37149e1f862"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/Skills/dash-trail.png",
+      "sha256": "35df76d651b5e67858061430f69fe04f5f48447b8d06aed5413c9bca5c8b0766"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/Skills/Knight/aura.png",
+      "sha256": "200dba76cd72d8d20429435f47a50de0e68bd29596090c59a416d58db47f2a56"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/Skills/Knight/thrust-effect.png",
+      "sha256": "1cf3a35aa4b6ef4929c6669301e24b27956c7a09d6d25a0e5874e246ff494a6f"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/Skills/Knight/thrust.png",
+      "sha256": "c7416042ad346eca59760dcaf78a79a18f4011d84fe2ffdd20e18c85c50aa786"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/Skills/Knight/wave.png",
+      "sha256": "810a4ae09c8871fe03756c3f15ed1ea792521a0afb701cc93a6c90a254a4fcab"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/Skills/wind-blade-01.png",
+      "sha256": "3d549526f6a3dc19f416feae065e2d8b33194be735087a0bc9feea5f7c86c224"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallKnight/attacks-checkerboard-rejected.png",
+      "sha256": "cac0beaf162221bf88dbf4a0f55593b341bdc7494b65e7102f1065fdce729521"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallKnight/attacks-source-v1.png",
+      "sha256": "e4d0a6155bd7980ebcfd9753442ed9682f888d9239c8c2426eacd201c3e9835b"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallKnight/attacks-transparent-v2.png",
+      "sha256": "6b6dae9d8f7feaa73f3dfa3fc506c86f856a563454c6a57939f1f712c48008a6"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallKnight/effects-checkerboard-rejected.png",
+      "sha256": "f316e258f6ff13e8e253218984c3887a9c3923900c2d0ab64dcd529c74220335"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallKnight/effects-source-v1.png",
+      "sha256": "4afba61047c0c98e870e034e56270899eae2b01b25ff399d533be6611dafe0dd"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallKnight/effects-transparent-v2.png",
+      "sha256": "9bc7e82b3aa2e3ac1272aa9c5c38993998d158c9e41b1025e648102375b8ef72"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallKnight/walk-source-v1.png",
+      "sha256": "b55a46bbada94468da73bccf715f1bf463d8f5a017650bf080f34bdf26ff8377"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallKnight/walk-transparent-v1.png",
+      "sha256": "4f9677f76f62c624259a93a12b74cf8c0a206f7ceecb983cc2606c16b16f736c"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallMage/attacks-pixel-draft-v1.png",
+      "sha256": "08a2806351159170e088a745a44e6a86440fbd0897e6ad880bbcfbf5fe962226"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallMage/attacks-proportion-draft-v1.png",
+      "sha256": "5fb383f4920949640845574fb4e04bf59cb75966abd6c2fc1133c06d29b0fd13"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallMage/attacks-rigid-parts-v1.png",
+      "sha256": "13d310b39adbeda289fceb792773ceda30c3f8c42ea9b2ac39bb0be7661981dd"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallMage/attacks-selected-v1.png",
+      "sha256": "357b4ac2979f4bf8f6901c96a0d4f07e6620e0efb299d32c96177dfde9fd2e92"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallMage/attacks-style-rejected-v1.png",
+      "sha256": "ba04cc3f2c8f741d49670de46dc53371cc5237744a09269e40ec21520faff461"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallMage/attacks-transparent-v1.png",
+      "sha256": "e635055ea850c44cfd70142a69e17acd33bab1d28c8a569a943d95b0eab164c2"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallMage/attacks-transparent-v2.png",
+      "sha256": "68e1bb277bf95e374af1a555afb89600f4182531409b055852256dd740c6fe2c"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallMage/attacks-transparent-v3.png",
+      "sha256": "bb02f2a5543badf164e8e7a8c7e3d43c4e1f2e28c6c2be34367b2fda00207719"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallMage/double-palm-motion-v1.png",
+      "sha256": "a9d3f934b3acdc591284d071b4111ee05ecafb242b673ce31e4bacfe00518ad9"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallMage/double-palm-motion-v2.png",
+      "sha256": "badd9da48c74145ecf447172c59344dc8b2c67f402296501a5ed29368bc644ba"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallMage/left-jab-drawn-v1.png",
+      "sha256": "1e1e152ab1956cdffb03ef7dbe1ac50523c2b360f1dc788d66e65622e3269e36"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallMage/left-jab-drawn-v2.animation.json",
+      "sha256": "9864e518c430de50fc6233370e1d6de58311b4e9db54f0f649cc119781cd8243"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallMage/left-jab-drawn-v2.png",
+      "sha256": "a35badd58ee7e3382c723da833495b62fbbaa6b162146892e2dbc87fa608ce17"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallMage/left-jab-pixels-v1.json",
+      "sha256": "7e6499c9d7ec45ac1adf456534db86948dccb7eadb35cb7cf7bd1e50ae195f76"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallMage/left-jab-pixels-v1.png",
+      "sha256": "1e691855cf11a788d79981b2043ab9f1a291f2551b756a1e72684f70255bc7d3"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallMage/mana-blade-motion-v1.png",
+      "sha256": "c900a7bf02ab52a3db6a3b4830d6796c4ab78a31b42fa3965fd2e5c9fbfed6f2"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallMage/mana-blade-v1.png",
+      "sha256": "d85022bd0215c65b57823703c0ce4e749e2068f0525b9c8ebc2018dcb28f5e63"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallMage/rig-parts/cape.png",
+      "sha256": "fa030e7070fa9825bcfc5fbdb9ef78678c4568be45a056a51a11ebf4f7690192"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallMage/rig-parts/head.png",
+      "sha256": "24f92c6ed95792c4450e4ad417ecc6387066415997a20a2dd7a1109e2eaa11b3"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallMage/rig-parts/left_arm.png",
+      "sha256": "dfe2c1e65dd4f6bae449212cbeb83385df1795f2652d272b06491b062a5f87a2"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallMage/rig-parts/left_glove.png",
+      "sha256": "2413679b8552e38c77275c204a9a98e5d5cfa9f43b07edb841ee808cab3dc5b4"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallMage/rig-parts/left_leg.png",
+      "sha256": "7375d523c983865ea044dac0c121a7c7b47401b4d202650fa6a424ca58be8487"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallMage/rig-parts/right_arm.png",
+      "sha256": "f63da720bddee544347234c8d5df1ed40229cbb6752f95e5eba43d539e023ffb"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallMage/rig-parts/right_glove.png",
+      "sha256": "77293f9eba47959cc65400589ee497ca45880f8e8e87f3dd2e6aa926e21a497f"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallMage/rig-parts/right_leg.png",
+      "sha256": "937971a9ab49cfb6f6fb713e2f4a9c2fefe68eb8843eecb7d91914e6d415b645"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallMage/rig-parts/torso.png",
+      "sha256": "14d56859732e850cc050a3cc9675dfb32cca56b646649d7dd24f50fa77ef0a03"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallMage/rig-reference.png",
+      "sha256": "f4b1e8a430a08b15e6601536fb62216e5043a3db135c166b7dbc5ef0a7c66c58"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallMage/rigid-attack.json",
+      "sha256": "1240be78643bc67ec0134d931b2287d8a9dd6be05b0c2d59f5cb6b3c1c94b528"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallMage/walk-transparent-v1.png",
+      "sha256": "c368c24fef59e7fd9dff57b86790f42a15145c02e01077708566d829a44e3ec0"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/SmallMage/walk-transparent-v2.png",
+      "sha256": "189b319327e71102868af500690ef70dd272e088c1fcf38f58935a6f74b9518d"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/Walk/knight-walk-sheet-v1.png",
+      "sha256": "7757bb0b93958da951146de4db3d43c922d4a2a3bd0a0f6d7345035a799f0000"
+    },
+    {
+      "path": "SimpleGame/Assets/Characters/Walk/mage-walk-sheet-v1.png",
+      "sha256": "0fd4cd0b34f87257bf026bebd470628e26a59a6cc7f7ff53974ad15654d965e9"
+    },
+    {
+      "path": "SimpleGame/Assets/Effects/MageSwordSong/settings.json",
+      "sha256": "c9387d24bc63fd53ad9dbf07902186df7dc6f2075272ae0b1cb24932d157116f"
+    },
+    {
+      "path": "SimpleGame/Assets/Effects/MageSwordSong/sword-song.blend",
+      "sha256": "6bc76b6e9202a99c29fc9f20b9a1f098ceccfbee138c1e9ad3be220f61af8c58"
+    },
+    {
+      "path": "SimpleGame/Assets/Effects/MageSwordSong/sword-turntable.png",
+      "sha256": "81ad9273c7b0d7c7442110feceb15d5dba2ccf1478dbdfeaa063d3cfcabf9cd2"
+    },
+    {
+      "path": "SimpleGame/Assets/Environment/Props/campfire-a-v1.png",
+      "sha256": "0fcf7ee30ed56c744e2260f7853fe86167f25ac5886b8eb4cc4b9b5636d4f44d"
+    },
+    {
+      "path": "SimpleGame/Assets/Environment/Props/campfire-a-v2.png",
+      "sha256": "9c373dae74f9406eeaffa31f3eab7a0d713fe9c097f3b7169811afcb8c29108d"
+    },
+    {
+      "path": "SimpleGame/Assets/Environment/Props/dead-tree-a-v1.png",
+      "sha256": "50d1d4fb711016ee177c7efa5efcf0d2e201eb163791fc4680c3b73afa4cb472"
+    },
+    {
+      "path": "SimpleGame/Assets/Environment/Props/dead-tree-a-v2.png",
+      "sha256": "8502e505f81bfdfc2046dfba3bbdad7474466b9ff6efe05ecd7be21ec7501cbb"
+    },
+    {
+      "path": "SimpleGame/Assets/Environment/Props/rock-a-v1.png",
+      "sha256": "21f42ca9566afb6ebd77b4db3725592bc5883446a3b6e8402746653dbdae77f3"
+    },
+    {
+      "path": "SimpleGame/Assets/Environment/Props/rock-a-v2.png",
+      "sha256": "b6fc837d2ddb3dc46829e8d6a46e51c7d4138abeafdc1483795ff7c09228de24"
+    },
+    {
+      "path": "SimpleGame/Assets/Environment/Props/ruined-wall-a-v1.png",
+      "sha256": "b72786406106e15a569d161029c3e7c37092079888811fe1e4d4dda20d2457f7"
+    },
+    {
+      "path": "SimpleGame/Assets/Environment/Props/ruined-wall-a-v2.png",
+      "sha256": "0385ef537f6ba61ad738c21801bb219daebd7331956bb9b5808da65ca402549b"
+    },
+    {
+      "path": "SimpleGame/Assets/Monsters/Goblin/Common/attack-v1.png",
+      "sha256": "c88b0a8cb75fd9a6accfad5665a3ccf167fe2fb1e6841d9de8f771ebf835eecf"
+    },
+    {
+      "path": "SimpleGame/Assets/Monsters/Goblin/Common/attack-v2.png",
+      "sha256": "803fc3f9b303cab59f76ce30d286172110ec2b782ef192e691561f683fbda168"
+    },
+    {
+      "path": "SimpleGame/Assets/Monsters/Goblin/Common/walk-v1.png",
+      "sha256": "20dc1f401624ef2c27a65fee26476426bf5589896f3d6f3a334960802ac1a203"
+    },
+    {
+      "path": "SimpleGame/Assets/Monsters/Goblin/Common/walk-v2.png",
+      "sha256": "6776307c994faa09773338e13d73208a49a3a0477b0b09048f5cd76e53008b80"
+    },
+    {
+      "path": "SimpleGame/Assets/Monsters/Goblin/Healer/healer-v1.png",
+      "sha256": "5c98cfc2c6f11f57897f28d55adceb857e5eb6fd6812765159de66d9f13fefee"
+    },
+    {
+      "path": "SimpleGame/Assets/Monsters/Goblin/LegionCommander/legion-commander-v1.png",
+      "sha256": "8a506291465c369804dbfe88cdf9a92cd8debfccdcc0afb1ab9b1a3f740e66b4"
+    },
+    {
+      "path": "SimpleGame/Assets/Monsters/Orc/Barkan/barkan-attacks-v2.json",
+      "sha256": "c63b29737beded551e52da753006935450c25395dea954475682ee740b96c6ee"
+    },
+    {
+      "path": "SimpleGame/Assets/Monsters/Orc/Barkan/barkan-attacks-v2.png",
+      "sha256": "aadebce4b4490252263599ce4a7f969b4e16dfab3548a810b896e636ff60b53e"
+    },
+    {
+      "path": "SimpleGame/Assets/Monsters/Orc/Barkan/barkan-support-v2.json",
+      "sha256": "ae2579908fb99deb80be6355fa36078cbda138d9d8de6ea794fc2cee4be8bc72"
+    },
+    {
+      "path": "SimpleGame/Assets/Monsters/Orc/Barkan/barkan-support-v2.png",
+      "sha256": "6cea0bb1a530fdab64800e97f8300fc1a3ef6282cf35afcd450989cd9e329fed"
+    },
+    {
+      "path": "SimpleGame/Assets/Monsters/Orc/Barkan/walk-v1.png",
+      "sha256": "11817fe43225e6335f95a3cd61baa3497992c2138a8bcd2cbc2521d7a79dad06"
+    },
+    {
+      "path": "SimpleGame/Assets/Monsters/Orc/Common/common-combat-v2.json",
+      "sha256": "2bc096ddc2a5a3bd6911f2e06fea8177e36d9199040c5cfcb68d154639466aac"
+    },
+    {
+      "path": "SimpleGame/Assets/Monsters/Orc/Common/common-combat-v2.png",
+      "sha256": "1a31e29c904564584b7957b6950a0d158dde6ecd80fc552ea21926b773ebc4ad"
+    },
+    {
+      "path": "SimpleGame/Assets/Monsters/Orc/Common/walk-v1.png",
+      "sha256": "0f9f0fcafacc7f13c9c5827e7a0f3cb7a49f052e41e44597f2871745829971f8"
+    },
+    {
+      "path": "SimpleGame/Assets/Monsters/Orc/Elite/elite-combat-v2.json",
+      "sha256": "01a8c40138e6d8155358e9d539c7845436fed6daea1576a869327703240d80ed"
+    },
+    {
+      "path": "SimpleGame/Assets/Monsters/Orc/Elite/elite-combat-v2.png",
+      "sha256": "121775d2295c938d15146e2a55dc2cbf7cee547af45991d3349d0abce4d102f2"
+    },
+    {
+      "path": "SimpleGame/Assets/Monsters/Orc/Elite/walk-v1.png",
+      "sha256": "d7af708a86d818f3ee80938ffc9f4393fd88ec31cfd497458b8061ccafb3e710"
+    }
+  ]
+}

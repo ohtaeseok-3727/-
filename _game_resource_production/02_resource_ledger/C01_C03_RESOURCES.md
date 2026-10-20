@@ -57,4 +57,4 @@
 - One mine architecture kit reused across exterior, corridors, relay storehouse and command depth.
 
 ## C02-C03
-Not processed in this Chapter 1-only delivery.
+이 문서의 본문은 최초 C01 추출 기록이다. C02는 [C02 리소스 장부](C02_RESOURCE_LEDGER.md), C03은 [C03 개발 준비](../08_final/CHAPTER_03_PRODUCTION_SPEC.md)를 사용한다. C03~C18 전체의 최신 준비 자료는 [빠른 착수 안내](../08_final/C03_C18_DEVELOPMENT_START.md)와 [공유 리소스 장부](C03_C18_SHARED_RESOURCES.md)에 있다.
