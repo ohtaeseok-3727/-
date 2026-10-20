@@ -10,7 +10,7 @@
 | --- | --- |
 | 게임 기획·설정 | [GAME_DESIGN.md](GAME_DESIGN.md)에서 주제를 고른다 |
 | 챕터 1 확정 스토리 | [CHAPTER_01_FINAL.md](_story_scene_production/05_final_chapters/CHAPTER_01_FINAL.md) |
-| 챕터 구현 현황 | [챕터 1 점검](docs/implementation/CHAPTER_01_IMPLEMENTATION_AUDIT.md), [챕터 2 구현](docs/implementation/CHAPTER_02_IMPLEMENTATION.md) |
+| 챕터 구현 현황 | [챕터 1 점검](docs/implementation/CHAPTER_01_IMPLEMENTATION_AUDIT.md), [챕터 2 구현](docs/implementation/CHAPTER_02_IMPLEMENTATION.md), [챕터 3 구현](docs/implementation/CHAPTER_03_IMPLEMENTATION.md) |
 | 성능·구조 변경 | [PERFORMANCE_ANALYSIS.md](docs/performance/PERFORMANCE_ANALYSIS.md) |
 | 현재 작업 기록·함수 사전 | [프로젝트 로컬 인덱스](.agents/projects/INDEX.md) |
 | 과거 협업 기록 | [WORK_LOG.md](docs/process/WORK_LOG.md) |
@@ -42,10 +42,15 @@
 | 문서 제목 | 위치 |
 | --- | --- |
 | [챕터 2 오크 전투 스프라이트 시안 — 2026-09-24](output/chapter2-orc-combat-sprites/README.md) | `output/chapter2-orc-combat-sprites/README.md` |
+| [천단참 사선 베기·화면 균열 미리보기](output/cheondan-preview-v2/README.md) | `output/cheondan-preview-v2/README.md` |
 | [후속 교정 및 정밀 검사](output/knight-skills-v1/QA-v3.md) | `output/knight-skills-v1/QA-v3.md` |
 | [기사 스킬 미리보기](output/knight-skills-v1/README-preview.md) | `output/knight-skills-v1/README-preview.md` |
 | [기사 스킬 스프라이트 제작 시안](output/knight-skills-v1/README.md) | `output/knight-skills-v1/README.md` |
 | [기사 찌르기 효과 제작](output/knight-thrust-effect-v1/PROMPT.md) | `output/knight-thrust-effect-v1/PROMPT.md` |
 | [기사 찌르기 이펙트 v1](output/knight-thrust-effect-v1/README.md) | `output/knight-thrust-effect-v1/README.md` |
+| [마법과 검의 노래 — OpenGL 효과 v2 미리보기](output/mage-sword-song-v1/README.md) | `output/mage-sword-song-v1/README.md` |
 | [다중 마력검 미리보기](output/mana-swords-v1/README.md) | `output/mana-swords-v1/README.md` |
+| [코드 기반 이펙트 시안](output/procedural-effects-v1/README.md) | `output/procedural-effects-v1/README.md` |
+| [기사 스프라이트 기반 검 이펙트 v2](output/procedural-sword-v2/README.md) | `output/procedural-sword-v2/README.md` |
+| [거친 단면의 검 이펙트 v3](output/procedural-sword-v3/README.md) | `output/procedural-sword-v3/README.md` |
 | [플레이어 모션 연결](output/wind-blade-v4/PLAYER_MOTION.md) | `output/wind-blade-v4/PLAYER_MOTION.md` |

@@ -28,15 +28,21 @@ void LootSystem::Drop(WorldPosition position, int killCount, int level)
     }
 }
 
-std::vector<LootDrop> LootSystem::Update(float dt, WorldPosition player)
+std::vector<LootDrop> LootSystem::Update(float dt, WorldPosition player, float simulationRadius)
 {
     std::vector<LootDrop> collected;
     for (auto it = m_Drops.begin(); it != m_Drops.end();)
     {
-        it->age += dt;
         float dx = player.x - it->position.x;
         float dy = player.y - it->position.y;
         const float distance = std::sqrt(dx * dx + dy * dy);
+        if (simulationRadius > 0.f && distance > simulationRadius)
+        {
+            it->attracted = false;
+            ++it;
+            continue;
+        }
+        it->age += dt;
         if (distance <= LevelTuning::MagnetRadius)
         {
             it->attracted = true;

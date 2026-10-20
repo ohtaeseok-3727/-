@@ -9,4 +9,5 @@
 
 | 문서 제목 | 파일 |
 | --- | --- |
+| [개발 및 디버그 환경](DEVELOPMENT_SETUP.md) | `DEVELOPMENT_SETUP.md` |
 | [프로젝트 작업 기록 (WORK_LOG.md)](WORK_LOG.md) | `WORK_LOG.md` |

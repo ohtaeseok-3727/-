@@ -2,6 +2,7 @@
 #include "Chapter2.h"
 #include "Renderer.h"
 #include "SceneGraph.h"
+#include "CombatCueView.h"
 #include <algorithm>
 #include <cmath>
 
@@ -33,6 +34,28 @@ namespace
             return "피해 억제만 가능";
         }
         return "";
+    }
+}
+
+std::string Chapter2::InteractionPrompt(const MapLandmark& site) const
+{
+    switch (site.object)
+    {
+    case Chapter2Objects::CommandTarget:
+        return Has(Chapter2Event::ArmorBroken) ? "[Ctrl] 지휘 인장 파괴"
+                                               : "지휘 인장 · 바르칸 약화 필요";
+    case Chapter2Objects::Mural:
+        return "[Space 유지] 벽화 탁본 · 10초";
+    case Chapter2Objects::DemolitionLine:
+    case Chapter2Objects::Bypass:
+    case Chapter2Objects::RetreatChain:
+    case Chapter2Objects::BossDemolition:
+    case Chapter2Objects::BeaconControl:
+    case Chapter2Objects::WorkshopControl:
+    case Chapter2Objects::CampControl:
+        return "[Space 유지] " + site.name + " · 경계 처치 후";
+    default:
+        return Chapter::InteractionPrompt(site);
     }
 }
 
@@ -157,8 +180,15 @@ void Chapter2::DrawActor(Renderer& r, int actor, Point p, float time) const
                              : m_Combat.bossAction == EnemyAction::JumpSlam  ? 110.f
                              : m_Combat.bossAction == EnemyAction::BattleCry ? 185.f
                                                                              : 85.f;
-        const float pulse = .22f + .14f * std::sin(time * 12.f);
-        r.Ellipse(p.x, p.y, radius, radius * .5f, Color(1.f, .25f, .12f, pulse));
+        const float progress =
+            actor == 2 ? 1.f - m_Combat.explosionWarning / 1.5f : m_Combat.bossProgress;
+        CombatCueView::DrawArea(r, p, radius, progress);
+        r.Rect(p.x - 35.f, p.y + radius * .8660254f + 5.f, 70.f, 4.f, Color(.14f, .09f, .06f));
+        r.Rect(p.x - 35.f,
+               p.y + radius * .8660254f + 5.f,
+               70.f * std::clamp(progress, 0.f, 1.f),
+               4.f,
+               Color(1.f, .55f, .12f));
         r.Text(p.x - 42.f,
                p.y - 18.f,
                actor == 2                                      ? "폭발 임박"
@@ -196,13 +226,13 @@ void Chapter2::DrawActor(Renderer& r, int actor, Point p, float time) const
     }
     else if (actor == 0)
     {
-        m_Sprites.DrawHero(r, p, time, m_Combat.heroAttack > 0.f);
+        m_Sprites.DrawHero(r, p, time, m_Combat.heroAttack > 0.f, m_Combat.heroFaceLeft);
     }
 }
 
 bool Chapter2::EnemyVisible(const FieldEnemy& enemy) const
 {
-    return enemy.health > 0 || enemy.stats.preserveCorpse;
+    return enemy.health > 0 || enemy.stats.preserveCorpse || enemy.DeathAnimationPlaying();
 }
 
 void Chapter2::AddActors(SceneGraph& scene, WorldPosition) const
@@ -250,6 +280,10 @@ void Chapter2::AddActors(SceneGraph& scene, WorldPosition) const
 
 void Chapter2::DrawWeather(Renderer& r, float, int width, int) const
 {
+    if (ContinuousWorld())
+    {
+        return;
+    }
     if (width < 760)
     {
         r.Text(16.f,

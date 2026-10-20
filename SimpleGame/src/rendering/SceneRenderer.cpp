@@ -3,6 +3,10 @@
 #include "BasicAttack.h"
 #include "MageProjectiles.h"
 #include "MageProjectileView.h"
+#include "MageUltimate.h"
+#include "MageUltimateView.h"
+#include "KnightSkills.h"
+#include "KnightSkillView.h"
 #include "LevelMap.h"
 #include "GameSession.h"
 #include "GameView.h"
@@ -66,7 +70,7 @@ void SceneRenderer::DrawActor(Renderer& r, const SceneItem& item, const SceneFra
     if (o.kind == 9)
     {
         const auto& site = frame.map.Layout().Landmarks()[o.entity];
-        if (!frame.level.CurrentChapter().DrawLandmark(r, site, p, frame.time))
+        if (!frame.level.DrawWorldLandmark(r, site, p, frame.time))
         {
             frame.mapView.DrawLandmark(r, site, p, frame.time);
         }
@@ -77,18 +81,42 @@ void SceneRenderer::DrawActor(Renderer& r, const SceneItem& item, const SceneFra
     }
     else if (o.kind == 6)
     {
-        frame.level.CurrentChapter().DrawEnemy(r, frame.level.Enemies().Enemies()[o.entity], p);
+        frame.level.DrawWorldEnemy(r, o.worldRegion, o.entity, p);
     }
     else if (o.kind == 7)
     {
-        frame.levelView.DrawDrop(r, frame.level.Loot().Drops()[o.entity], p);
+        frame.levelView.DrawDrop(r, frame.level.WorldDrop(o.worldRegion, o.entity), p);
     }
     else if (o.kind == 11)
     {
         MageProjectileView::Draw(r, frame.mageProjectiles.Projectiles()[o.entity], p);
     }
+    else if (o.kind == 12)
+    {
+        KnightSkillView::DrawShot(r, frame.knightSkills.Shots()[o.entity], p);
+    }
     else if (o.kind == 5)
     {
+        const int walkFrame = frame.moving ? static_cast<int>(frame.walk) : 0;
+        if (frame.mageUltimate.Casting())
+        {
+            MageUltimateView::DrawCaster(r, frame.mageUltimate, p);
+            return;
+        }
+        const auto aura = [&]()
+        {
+            if (frame.profession == 1 && frame.level.Progress().KnightAuraActive())
+            {
+                KnightSkillView::DrawAura(
+                    r, frame.knightSkills, frame.attack, p, frame.faceLeft, walkFrame, frame.time);
+            }
+        };
+        if (frame.knightSkills.Casting())
+        {
+            KnightSkillView::DrawBody(r, frame.knightSkills, p);
+            aura();
+            return;
+        }
         if (frame.mageProjectiles.Casting() &&
             r.CombatVisual("mage-2",
                            frame.mageProjectiles.CastMilliseconds(),
@@ -100,18 +128,20 @@ void SceneRenderer::DrawActor(Renderer& r, const SceneItem& item, const SceneFra
         {
             return;
         }
-        if (frame.attack.IsAttacking() && r.CharacterAttack(frame.profession,
-                                                            frame.attack.ClipId(),
-                                                            frame.attack.ElapsedMilliseconds(),
-                                                            x,
-                                                            y,
-                                                            frame.faceLeft))
+        if (frame.attack.IsAttacking() &&
+            r.CharacterAttack(frame.profession,
+                              frame.attack.ClipId(),
+                              frame.attack.ElapsedMilliseconds(),
+                              x,
+                              y,
+                              frame.faceLeft,
+                              frame.level.Progress().AttackRangeScale()))
         {
+            aura();
             return;
         }
-
-        const int walkFrame = frame.moving ? static_cast<int>(frame.walk) : 0;
         r.Character(frame.profession, x, y, frame.faceLeft, 1, -1, walkFrame);
+        aura();
     }
     else if (o.kind == 0)
     {

@@ -7,6 +7,7 @@ class PlayerProgression
     void DebugSetLevel(int level);
     int AddExperience(int amount);
     void Heal(int amount);
+    void Restore();
     void Damage(int amount);
     int RequiredExperience() const;
     int Level() const;
@@ -19,6 +20,9 @@ class PlayerProgression
     int Strength() const;
     int Intelligence() const;
     int Attack() const;
+    bool KnightAuraActive() const;
+    float EffectiveAttack(int equipmentBonus = 0) const;
+    float AttackRangeScale() const;
 
   private:
     int m_Profession = 0;

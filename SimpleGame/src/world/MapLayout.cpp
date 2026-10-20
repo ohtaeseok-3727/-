@@ -95,16 +95,26 @@ bool MapLayout::Water(WorldPosition p, float margin) const
 
 bool MapLayout::Interior(WorldPosition p) const
 {
-    return m_Definition.interior && m_Definition.interior->Contains(p);
+    return (m_Definition.interior && m_Definition.interior->Contains(p)) ||
+           std::any_of(m_Definition.interiors.begin(),
+                       m_Definition.interiors.end(),
+                       [p](const MapRectangle& area)
+                       {
+                           return area.Contains(p);
+                       });
 }
 
 bool MapLayout::InteriorFloor(WorldPosition p, float inset) const
 {
-    return m_Definition.interior.has_value() && Walkable(p, inset);
+    return Interior(p) && Walkable(p, inset);
 }
 
 bool MapLayout::Walkable(WorldPosition p, float inset) const
 {
+    if (m_Definition.openWorld && !Interior(p))
+    {
+        return true;
+    }
     for (const auto& area : m_Definition.areas)
     {
         if (std::abs(p.x - area.center.x) <= area.halfWidth - inset &&
@@ -131,15 +141,15 @@ MapRegion MapLayout::RegionAt(WorldPosition p) const
 
 const char* MapLayout::RegionName(WorldPosition p) const
 {
-    const auto id = RegionAt(p);
     for (const auto& area : m_Definition.areas)
     {
-        if (area.id == id)
+        if (std::abs(p.x - area.center.x) <= area.halfWidth &&
+            std::abs(p.y - area.center.y) <= area.halfHeight)
         {
             return area.name.c_str();
         }
     }
-    return Interior(p) ? m_Definition.wallName.c_str() : "경계 밖";
+    return Interior(p) ? m_Definition.wallName.c_str() : "변경의 야생지";
 }
 
 const MapLandmark* MapLayout::NearbyLandmark(WorldPosition p) const

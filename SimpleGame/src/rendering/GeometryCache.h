@@ -17,11 +17,17 @@ class GeometryCache
     bool Append(int kind, float x, float y, float scale, Mesh& destination) const
     {
         const auto& mesh = m_Props[static_cast<std::size_t>(kind)];
-        for (auto vertex : mesh)
+        if (mesh.empty())
         {
-            vertex.x = x + vertex.x * scale;
-            vertex.y = y + vertex.y * scale;
-            destination.push_back(vertex);
+            return false;
+        }
+        const auto first = destination.size();
+        destination.insert(destination.end(), mesh.begin(), mesh.end());
+        auto* vertices = destination.data() + first;
+        for (std::size_t i = 0; i < mesh.size(); ++i)
+        {
+            vertices[i].x = x + vertices[i].x * scale;
+            vertices[i].y = y + vertices[i].y * scale;
         }
         return !mesh.empty();
     }

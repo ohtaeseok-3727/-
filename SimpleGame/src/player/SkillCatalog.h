@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include <string>
 #include <vector>
@@ -22,9 +22,11 @@ struct SkillData
     float statRatio = 0.f;
     int iconVariant = 0;
     int projectileCount = 1;
+    float burstAttackRatio = 0.f;
+    float burstStatRatio = 0.f;
 };
 
-// Demo-only catalog. Names and numeric values are intentionally not game balance decisions.
+// Named skills use confirmed data; demo_ entries remain development placeholders.
 class SkillCatalog
 {
   public:

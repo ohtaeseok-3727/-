@@ -7,9 +7,13 @@
 #include "GameView.h"
 #include "SkillSystem.h"
 #include "MageProjectiles.h"
+#include "MageUltimate.h"
+#include "KnightSkills.h"
 #include "MapView.h"
 #include "SceneGraph.h"
 #include "SceneRenderer.h"
+#include "ExpeditionView.h"
+#include "SettingsMenu.h"
 #include <utility>
 #include <vector>
 
@@ -40,6 +44,17 @@ class PrototypeWorld
     void SkillMouseMove(int x, int y);
     void CancelSkillDrag();
     bool IsSkillWindowOpen() const;
+    bool MenuOpen() const;
+    bool CloseMenus();
+    void ToggleSystemMenu();
+    bool SystemMenuOpen() const;
+    bool SystemMenuMouseButton(
+        bool down, int x, int y, int width, int height, PostSettings& settings);
+    void SystemMenuMouseMove(int x, int y);
+    void CancelMenuPress();
+    void ToggleJournal();
+    void ReturnToCamp();
+    void RetryDefeat();
 
     void SetPaused(bool value)
     {
@@ -56,7 +71,10 @@ class PrototypeWorld
         return m_Started;
     }
 
+    MonitorSnapshot CaptureMonitoring() const;
+
   private:
+    friend class VisualPlaytest;
     void Stream();
     bool Blocked(float x, float y) const;
     Point Project(float x, float y) const;
@@ -74,7 +92,13 @@ class PrototypeWorld
     GameView m_LevelView;
     SkillSystem m_Skills;
     MageProjectiles m_MageProjectiles;
+    MageUltimate m_MageUltimate;
+    KnightSkills m_KnightSkills;
     MapView m_MapView;
+    ExpeditionView m_ExpeditionView;
+    SettingsMenu m_SettingsMenu;
+    bool m_JournalOpen = false;
+    bool m_CompletionShown = false;
     InteractionBubbleView m_InteractionBubbleView;
     bool m_MapGenerated = false;
     std::string m_PreviewChapter;

@@ -1,0 +1,98 @@
+#include "stdafx.h"
+#include "GameSession.h"
+#include "Chapter1.h"
+#include "Chapter2.h"
+
+bool GameSession::CanSkipChapter1() const
+{
+    const auto* chapter = dynamic_cast<const Chapter1*>(FindChapter("chapter1"));
+    return m_OpenWorld && !m_StartAtChapter2 && !m_StartAtChapter3 && chapter &&
+           !chapter->Complete();
+}
+
+bool GameSession::CanSkipChapter2FieldStory() const
+{
+    const auto* first = FindChapter("chapter1");
+    const auto* second = dynamic_cast<const Chapter2*>(FindChapter("chapter2"));
+    return m_OpenWorld && !m_StartAtChapter3 && first && (first->Complete() || m_StartAtChapter2) &&
+           second && second->CanSkipFieldStory();
+}
+
+bool GameSession::SkipChapter1(WorldPosition& destination)
+{
+    return SkipStory(true, destination);
+}
+
+bool GameSession::SkipChapter2FieldStory(WorldPosition& destination)
+{
+    return SkipStory(false, destination);
+}
+
+bool GameSession::SkipStory(bool chapter1, WorldPosition& destination)
+{
+    if (!(chapter1 ? CanSkipChapter1() : CanSkipChapter2FieldStory()))
+    {
+        ShowNotice("이미 완료했거나 스킵에 필요한 선행 조건이 충족되지 않았습니다.");
+        return false;
+    }
+    const auto target =
+        m_Atlas.Find("chapter2", chapter1 ? Chapter2Maps::Graywall : Chapter2Maps::OldFortress);
+    if (!target)
+    {
+        return false;
+    }
+    const auto entry = m_Atlas.Regions()[*target].local.entry;
+    if (m_Regions[*target].map.Blocked(entry.x, entry.y))
+    {
+        ShowNotice("스킵 목적지에 진입할 수 없습니다.");
+        return false;
+    }
+    if (chapter1)
+    {
+        dynamic_cast<Chapter1&>(*m_Chapters.at("chapter1").instance).SkipStory();
+    }
+    else
+    {
+        dynamic_cast<Chapter2&>(*m_Chapters.at("chapter2").instance).SkipFieldStory();
+    }
+    // Retire authored encounters without kill rewards; ambient field populations remain.
+    for (std::size_t i = 0; i < m_Regions.size(); ++i)
+    {
+        const auto& region = m_Atlas.Regions()[i];
+        if (region.chapter != (chapter1 ? "chapter1" : "chapter2") ||
+            (!chapter1 && region.local.id == Chapter2Maps::OldFortress))
+        {
+            continue;
+        }
+        auto& enemies = i == m_Region ? m_Enemies : m_Regions[i].enemies;
+        if (chapter1)
+        {
+            for (std::size_t id = static_cast<std::size_t>(Chapter1Encounter::FarmRaid);
+                 id <= static_cast<std::size_t>(Chapter1Encounter::HeroPayoff);
+                 ++id)
+            {
+                enemies.RemoveEncounter(id);
+            }
+        }
+        else
+        {
+            for (const std::size_t id : {201u, 202u, 203u, 210u, 211u, 212u})
+            {
+                enemies.RemoveEncounter(id);
+            }
+        }
+    }
+    ActivateRegion(*target);
+    m_Chapter->ClearTravel();
+    m_Chapter->PlayerArrived(entry, m_Regions[*target].map);
+    destination = m_Atlas.ToWorld(*target, entry);
+    m_Checkpoint = destination;
+    m_Push = {};
+    m_LandmarkInteractionTime = 0.f;
+    m_LandmarkInteractionText.clear();
+    m_Progress.Restore();
+    m_Invulnerable = 1.f;
+    ShowNotice(chapter1 ? "챕터 1 스킵 완료 · 회색벽 작전실에서 브리핑을 확인하세요."
+                        : "회색벽·협곡 스킵 완료 · 성채 진입로를 선택하세요.");
+    return true;
+}

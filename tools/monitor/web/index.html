@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>월드 모니터 · SimpleGame</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <script type="module" src="dashboard.js"></script>
+</head>
+<body>
+<main>
+    <header>
+        <div><p class="eyebrow">SIMPLEGAME / LOCAL MONITOR</p><h1>월드 모니터</h1><p>마을과 지역, NPC, 몬스터의 현재 상태</p></div>
+        <div class="connection"><strong id="connection" role="status">수신 대기</strong><span id="received">아직 데이터가 없습니다.</span></div>
+    </header>
+    <div id="notice" class="notice" role="status">수신 서버 연결 중…</div>
+    <section class="metrics" aria-label="전체 월드 집계">
+        <article><span>현재 존재 NPC</span><strong id="npc-count">—</strong><small id="npc-note">등록 상태 대기</small></article>
+        <article><span>살아 있는 몬스터</span><strong id="monster-count">—</strong><small id="monster-note">지역 전체 합계</small></article>
+        <article><span>마을권 / 전체 지역</span><strong id="region-count">—</strong><small>마을권은 주변 농경지·방어선 포함</small></article>
+        <article><span>게임 상태</span><strong id="game-status" class="state-value">대기</strong><small id="chapter">게임 연결을 기다립니다.</small></article>
+    </section>
+    <section>
+        <div class="section-title"><h2>마을·지역 전체 상태</h2><label><input id="settlements-only" type="checkbox"> 마을권만 보기</label></div>
+        <div id="regions" class="regions"><p class="empty">게임에서 첫 JSON 메시지를 받으면 지역별 상태가 표시됩니다.</p></div>
+    </section>
+    <section class="entities">
+        <div class="section-title"><h2>개체 상태</h2><button id="clear-filter" type="button">전체 지역</button></div>
+        <div class="filters">
+            <label>지역 <select id="region-filter"><option value="">전체 지역</option></select></label>
+            <label>이름 / ID / 상태 <input id="search" type="search" placeholder="농부, 용사, chase…"></label>
+            <label><input id="present-only" type="checkbox"> 현재 존재 NPC만</label>
+        </div>
+        <h3>NPC <span id="npc-results"></span></h3>
+        <div class="table-wrap"><table><thead><tr><th>이름 · 역할</th><th>지역</th><th>상태</th><th>존재</th><th>체력</th><th>월드 좌표</th><th>세부 상태</th></tr></thead><tbody id="npcs"><tr><td colspan="7" class="empty">수신 대기</td></tr></tbody></table></div>
+        <div class="section-title"><h3>몬스터 <span id="monster-results"></span></h3><label><input id="dead-monsters" type="checkbox"> 사망 개체 포함</label></div>
+        <div class="table-wrap"><table><thead><tr><th>개체 ID · 역할</th><th>지역</th><th>AI 상태</th><th>체력</th><th>월드 좌표</th><th>제어 방식</th></tr></thead><tbody id="monsters"><tr><td colspan="6" class="empty">수신 대기</td></tr></tbody></table></div>
+    </section>
+    <details id="raw-panel"><summary>마지막 수신 JSON 보기</summary><pre id="raw">수신 대기</pre></details>
+    <footer><p>현재 로드된 NPC 액터 수를 집계합니다. 미등장·구출 후 퇴장 NPC는 등록 목록에 남고 현재 개수에서 제외됩니다. 주민 인구·미생성 몬스터 수를 추정하지 않습니다.</p><p>비활성 지역의 사건·동행 상태는 보관된 값이며, 원거리 몬스터는 게임의 기존 갱신 범위를 따릅니다. 수신 간격 약 1초 · 5초 이상 미수신 시 연결 끊김.</p></footer>
+</main>
+</body>
+</html>

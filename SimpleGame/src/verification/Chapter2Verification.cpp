@@ -109,7 +109,41 @@ namespace
             Require(chapter.RecordEvent(bypassFirst ? Chapter2Event::DemolitionCut
                                                     : Chapter2Event::BypassOpened),
                     "둘째 우회 장치 처리 실패");
-            Require(chapter.RecordEvent(Chapter2Event::HeroRejoined), "합류 실패");
+            LevelMap reunionMap;
+            reunionMap.Generate(743u + permutations);
+            reunionMap.Load("chapter2", chapter.BuildMap(Chapter2Maps::OldFortress));
+            EnemySystem reunionEnemies;
+            PlayerProgression reunionProgress;
+            reunionProgress.Reset(0);
+            PlayerInventory reunionInventory;
+            const WorldPosition signal{0.f, -2470.f};
+            Require(!reunionMap.Blocked(signal.x, signal.y), "Reunion signal is inside a wall");
+            EnemyPathfinder pathfinder;
+            std::vector<WorldPosition> route;
+            Require(pathfinder.FindPath({-500.f, -2100.f}, signal, reunionMap, route),
+                    "Hero cannot find an A* route to the reunion signal");
+            chapter.Update(.05f, signal, false, reunionMap, reunionEnemies, reunionProgress);
+            const auto& sites = reunionMap.Layout().Landmarks();
+            const auto signalSite =
+                std::find_if(sites.begin(),
+                             sites.end(),
+                             [](const MapLandmark& site)
+                             {
+                                 return site.object == Chapter2Objects::ReunionSignal;
+                             });
+            Require(signalSite != sites.end(), "Reunion signal is missing");
+            chapter.Interact(
+                *signalSite, reunionMap, reunionEnemies, reunionProgress, reunionInventory);
+            for (int frame = 0; frame < 600 && chapter.State().phase == Chapter2Phase::Reunion;
+                 ++frame)
+            {
+                const auto previous = chapter.Combat().hero;
+                chapter.Update(.05f, signal, false, reunionMap, reunionEnemies, reunionProgress);
+                Require(reunionMap.ClearPath(previous, chapter.Combat().hero),
+                        "Hero crossed a wall while rejoining");
+            }
+            Require(chapter.State().phase == Chapter2Phase::Boss,
+                    "Hero never physically reached the reunion signal");
             Require(!chapter.RecordEvent(Chapter2Event::ArmorBroken), "퇴로 차단 전 자세 붕괴");
             Require(!chapter.RecordEvent(Chapter2Event::CommandTargetDestroyed),
                     "자세 붕괴 전 최종 입력");
@@ -282,6 +316,34 @@ namespace
         Require(session.ApplyPendingTravel(map, destination) && map.Map() == Chapter2Maps::Canyon,
                 "정상 협곡 연결로 이동 실패");
         Require(!session.ApplyPendingTravel(map, destination), "이동 중복 적용");
+        Require(chapter.RecordEvent(Chapter2Event::ConvoyPlanRead), "작전 지도 확인 실패");
+        const std::array<ObjectId, 3> choices{Chapter2Objects::ChooseBeacon,
+                                              Chapter2Objects::ChooseWorkshop,
+                                              Chapter2Objects::ChooseCamp};
+        for (std::size_t index = 0; index < choices.size(); ++index)
+        {
+            const auto& landmarks = map.Layout().Landmarks();
+            const auto site = std::find_if(landmarks.begin(),
+                                           landmarks.end(),
+                                           [object = choices[index]](const MapLandmark& landmark)
+                                           {
+                                               return landmark.object == object;
+                                           });
+            Require(site != landmarks.end(), "협곡 목표 선택지가 없음");
+            session.Inspect(*site, map);
+            const auto target = static_cast<Chapter2Target>(index);
+            Require(chapter.State().activeTarget == target && chapter.PendingTravel(),
+                    "협곡 목표 선택 후 이동 요청이 없음");
+            Require(session.ApplyPendingTravel(map, destination) &&
+                        map.Map() == Chapter2Maps::Canyon &&
+                        !map.Blocked(destination.x, destination.y),
+                    "협곡 목표 진입 지점으로 이동 실패");
+            const auto center = Chapter2::DevicePosition(target, 0);
+            Require(std::hypot(destination.x - center.x, destination.y - center.y) < 500.f,
+                    "선택한 목표와 다른 위치로 이동함");
+            Require(!session.ApplyPendingTravel(map, destination), "목표 이동 중복 적용");
+            Require(chapter.ResolveTarget(target), "다음 목표 선택 준비 실패");
+        }
         Require(session.CurrentChapter().ExportFlags().at("C02_COMPLETE") == 0,
                 "지도만 이동해서 완료됨");
         Require(session.TravelTo({"chapter1", std::nullopt, std::nullopt}, map, destination),

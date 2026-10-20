@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>충격파 · 검 오라</title>
+<style>
+body{margin:0;background:#10151d;color:#eef2fa;font:16px system-ui}main{max-width:1100px;margin:32px auto;padding:0 20px}h1{font-size:28px}p{color:#aebacf;line-height:1.7}.controls{display:flex;gap:20px;align-items:center;flex-wrap:wrap;margin:24px 0}button,select{background:#263449;color:white;border:1px solid #536580;border-radius:8px;padding:10px}canvas{display:block;width:100%;border:1px solid #354052;border-radius:16px;background:#111925}label{display:flex;gap:8px;align-items:center}
+</style>
+<main>
+<h1>충격파 · 검의 오라와 잔상</h1>
+<p>왼쪽: 원형 파동 → 지면 균열 → 솟아오르는 파편. 오른쪽: 검 주변의 오라와 휘두른 궤적의 잔상.<br>모든 효과는 코드로 그립니다. 캐릭터 대신 무기와 발생 위치를 표시한 연출 시안입니다.</p>
+<div class="controls">
+<button id="pause">일시정지</button><button id="replay">처음부터</button>
+<label>속도 <select id="speed"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="1.5">1.5×</option></select></label>
+<label>검 오라 <input id="color" type="color" value="#65dcff"></label>
+</div>
+<canvas id="stage" width="1100" height="550" aria-label="충격파와 검 오라 애니메이션"></canvas>
+<p>3초마다 반복 · 수치와 색상은 시안용 · 실제 지형 및 피해 판정에는 연결하지 않았습니다.</p>
+</main>
+<script type="module" src="preview.js"></script>
+</html>

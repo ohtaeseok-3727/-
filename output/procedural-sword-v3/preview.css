@@ -1,0 +1,55 @@
+* { box-sizing: border-box; }
+:root { color-scheme: dark; font-family: "Segoe UI", "Malgun Gothic", sans-serif; color: #eee9df; background: #101315; }
+body { margin: 0; background: radial-gradient(ellipse at 80% 0, #29271e55, transparent 50%); }
+main { max-width: 1240px; margin: auto; padding: 36px 28px 24px; }
+header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 26px; gap: 20px; }
+.eyebrow { font-size: 10px; letter-spacing: 2.5px; color: #b9a57a; font-weight: 600; margin: 0 0 12px; }
+h1 { font-size: 32px; letter-spacing: -1px; margin: 0; font-weight: 650; }
+h1 span { font-size: 16px; font-weight: 400; color: #8e938f; letter-spacing: -.4px; margin-left: 24px; }
+.badge { border: 1px solid #3c4039; padding: 10px 14px; border-radius: 20px; font-size: 11px; color: #b6bcb2; white-space: nowrap; }
+.badge i { display: inline-block; background: #b9c48c; width: 5px; height: 5px; border-radius: 50%; margin-right: 7px; }
+.studio { border: 1px solid #3a3e36; border-radius: 12px; overflow: hidden; background: #181c1d; }
+.toolbar { display: flex; justify-content: space-between; align-items: center; padding: 12px 18px; border-bottom: 1px solid #333832; gap: 12px; }
+button, select { font: inherit; font-size: 12px; color: #b6bcb5; background: #222827; border: 1px solid #394039; border-radius: 6px; padding: 9px 13px; cursor: pointer; }
+button:hover, select:hover { border-color: #9e8b62; color: #fff3d4; }
+button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid #dcc08b; outline-offset: 3px; }
+button.active, button.primary { color: #181c19; background: #dcc79f; border-color: #dcc79f; }
+button:disabled { opacity: .4; cursor: wait; }
+.tabs { display: flex; gap: 6px; }
+.toolbar label, .speed { font-size: 11px; color: #8c968e; display: flex; align-items: center; gap: 10px; }
+.stage-wrap { position: relative; background: #10181b; }
+canvas { width: 100%; height: auto; display: block; image-rendering: pixelated; }
+.stage-label { position: absolute; left: 28px; top: 24px; display: flex; flex-direction: column; gap: 9px; pointer-events: none; }
+.stage-label span { color: #a7b2a9; font-size: 10px; letter-spacing: 2px; }
+.stage-label small { color: #e7d4ad; font-size: 12px; }
+.stage-note { position: absolute; right: 24px; bottom: 20px; font-size: 10px; color: #818c81; }
+#loading { position: absolute; inset: 0; display: grid; place-items: center; color: #decba9; background: #11191be8; }
+#loading[hidden] { display: none; }
+.transport { display: flex; align-items: center; gap: 8px; padding: 17px 20px 8px; }
+.speed { margin-left: auto; }
+#time-readout { font: 11px monospace; color: #9fa899; width: 62px; text-align: right; }
+.scrubber { padding: 0 22px 17px; }
+.scrubber input { width: 100%; accent-color: #cfb580; cursor: ew-resize; }
+.scrubber div { display: flex; justify-content: space-between; color: #79867d; font-size: 9px; margin-top: 4px; }
+.details { display: grid; grid-template-columns: 1fr 1fr .8fr; gap: 36px; margin: 28px 0; }
+h2 { font-size: 14px; font-weight: 500; margin: 0 0 10px; }
+.details p:not(.eyebrow) { font-size: 12px; color: #939c96; line-height: 1.8; margin: 0; }
+.settings { border-left: 1px solid #353b34; padding-left: 28px; }
+.settings label { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #b5bdb5; margin-bottom: 8px; }
+.settings select { margin-left: auto; padding: 5px 8px; }
+input[type=checkbox] { accent-color: #d6bd8b; }
+footer { border-top: 1px solid #2e342f; padding-top: 18px; font-size: 10px; color: #717e75; display: flex; justify-content: space-between; }
+a { color: #b3a17e; text-decoration: none; }
+@media(max-width: 720px) {
+    main { padding: 20px 12px; }
+    h1 { font-size: 26px; }
+    h1 span, .badge { display: none; }
+    .toolbar { padding: 10px; }
+    .transport { flex-wrap: wrap; padding: 12px; }
+    .details { grid-template-columns: 1fr; gap: 20px; }
+    .settings { border: 0; padding: 0; max-width: 340px; }
+    .stage-label { top: 12px; left: 14px; }
+    .stage-wrap { height: 340px; }
+    canvas { width: 100%; height: 100%; object-fit: cover; }
+    .stage-note { right: 12px; bottom: 12px; font-size: 9px; }
+}

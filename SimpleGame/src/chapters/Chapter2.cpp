@@ -23,6 +23,7 @@ MapId Chapter2::InitialMap() const
 void Chapter2::Reset()
 {
     m_State = Chapter2State{};
+    m_RegionCombat = {};
     m_Combat = Chapter2Combat{};
     m_Impact = {};
     ClearTravel();
@@ -198,6 +199,16 @@ bool Chapter2::ChooseTarget(Chapter2Target target)
     m_State.priority[index] = m_State.completedTargets;
     m_Combat.group = 0;
     m_Combat.interaction = 0.f;
+    if (!ContinuousWorld())
+    {
+        // Legacy authored-map verification keeps its explicit travel contract.
+        const auto center = DevicePosition(target, 0);
+        const WorldPosition approach{center.x * .82f, center.y * .82f};
+        m_Combat.hero = {approach.x - 55.f, approach.y + 20.f};
+        m_Combat.heroPath.clear();
+        m_Combat.heroRepath = 0.f;
+        RequestTravel({{}, Chapter2Maps::Canyon, approach});
+    }
     return true;
 }
 
@@ -326,6 +337,14 @@ std::string Chapter2::Interact(const MapLandmark& site,
     {
         return "용사와 함께 바르칸의 지휘를 끝내고 있습니다.";
     }
+    if (Complete() && site.object == Chapter2Objects::MuralReview)
+    {
+        if (!ContinuousWorld())
+        {
+            RequestTravel({"chapter3", std::nullopt, std::nullopt});
+        }
+        return "왕립 기록관 기념홀에서 엘리안과 공식 전승을 대조하세요. [M] 금빛 목표 확인";
+    }
     std::optional<Chapter2Event> event;
     bool accepted = false;
     switch (site.object)
@@ -374,6 +393,12 @@ std::string Chapter2::Interact(const MapLandmark& site,
         if (m_State.phase == Chapter2Phase::Reunion && Has(Chapter2Event::DemolitionCut) &&
             Has(Chapter2Event::BypassOpened))
         {
+            if (!m_Combat.reunionRequested)
+            {
+                m_Combat.heroPath.clear();
+                m_Combat.heroWaypoint = 0;
+                m_Combat.heroRepath = 0.f;
+            }
             m_Combat.reunionRequested = true;
             return "플레이어: 길 열었어. 이쪽으로! 용사가 포위선을 벗어나 합류합니다.";
         }
@@ -408,7 +433,7 @@ std::string Chapter2::Interact(const MapLandmark& site,
     case Chapter2Objects::BeaconControl:
     case Chapter2Objects::WorkshopControl:
     case Chapter2Objects::CampControl:
-        return "작전 지도에서 목표를 선택하고 경계를 격파한 뒤, 장치 옆에서 Space를 유지하세요.";
+        return "위험을 확인한 뒤 대응할 지역으로 접근하세요. 경계를 격파하고 장치 옆에서 Space를 유지하세요.";
     case Chapter2Objects::Aqueduct:
         accepted = SelectRoute(Chapter2Route::Aqueduct);
         break;
@@ -420,21 +445,21 @@ std::string Chapter2::Interact(const MapLandmark& site,
         break;
     case Chapter2Objects::CanyonExit:
         accepted = Has(Chapter2Event::PursuitAbandoned);
-        if (accepted)
+        if (accepted && !ContinuousWorld())
         {
             RequestTravel({{}, Chapter2Maps::Canyon, std::nullopt});
         }
         break;
     case Chapter2Objects::FortressExit:
         accepted = Has(Chapter2Event::CommandOrdersRecovered);
-        if (accepted)
+        if (accepted && !ContinuousWorld())
         {
             RequestTravel({{}, Chapter2Maps::OldFortress, std::nullopt});
         }
         break;
     case Chapter2Objects::AftermathExit:
         accepted = m_State.outcome.barkanDefeated;
-        if (accepted)
+        if (accepted && !ContinuousWorld())
         {
             RequestTravel({{}, Chapter2Maps::Canyon, WorldPosition{850.f, 250.f}});
         }
@@ -465,7 +490,8 @@ void Chapter2::Retry(EnemySystem& enemies)
     enemies.Clear();
     m_Combat = Chapter2Combat{};
     m_Impact = {};
-    if (m_State.phase == Chapter2Phase::Boss)
+    if (m_State.phase == Chapter2Phase::Boss &&
+        (!ContinuousWorld() || m_State.map == Chapter2Maps::OldFortress))
     {
         for (const auto event : {Chapter2Event::RetreatBlocked,
                                  Chapter2Event::ArmorBroken,
@@ -499,6 +525,8 @@ const Chapter2State& Chapter2::State() const
 
 std::string Chapter2::Objective() const
 {
+    const auto& combat =
+        ContinuousWorld() && m_State.map != Chapter2Maps::Canyon ? m_RegionCombat[1] : m_Combat;
     switch (m_State.phase)
     {
     case Chapter2Phase::Briefing:
@@ -515,14 +543,15 @@ std::string Chapter2::Objective() const
             const auto target = *m_State.activeTarget;
             const char* action = target == Chapter2Target::Beacon     ? "신호 장치 차단"
                                  : target == Chapter2Target::Workshop ? "폭약 해체·지지대 확보"
-                                 : m_Combat.objectiveStep == 0        ? "수용소 문 해제"
+                                 : combat.objectiveStep == 0          ? "수용소 문 해제"
                                                                       : "대피 지점 방어";
             return std::string(TargetName(target)) + " · " + action + " " +
-                   std::to_string(m_Combat.objectiveStep + 1) + "/" +
+                   std::to_string(combat.objectiveStep + 1) + "/" +
                    std::to_string(TargetSteps(target)) + " · 표시된 위치에서 Space 유지/방어";
         }
-        return m_State.completedTargets == 3 ? "명령서 확인 후 옛 성채로 이동"
-                                             : "위험을 읽고 다음 대응 목표 선택";
+        return m_State.completedTargets == 3
+                   ? "명령서 확인 후 옛 성채로 이동"
+                   : "위험을 읽고 봉화탑·작업장·수용소 중 다음 목적지로 이동";
     case Chapter2Phase::Infiltration:
         return "사용 가능한 진입로 선택 후 벽화 탁본 확보";
     case Chapter2Phase::Reunion:
@@ -534,7 +563,7 @@ std::string Chapter2::Objective() const
     case Chapter2Phase::Aftermath:
         return "협곡 구호지에서 피해 확인 후 벽화 탁본 검토";
     case Chapter2Phase::Complete:
-        return "챕터 2 완료 · 다음 목표: 공식 전승과 원본 기록 대조";
+        return "챕터 2 완료 · 챕터 3: 왕립 기록관 기념홀에서 공식 전승과 원본 기록 대조";
     }
     return {};
 }

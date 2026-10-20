@@ -13,6 +13,12 @@ class InventoryView
               int viewportHeight) const;
     void Toggle();
     void Close();
+
+    bool IsOpen() const
+    {
+        return m_IsOpen;
+    }
+
     void ChangePage(int direction, int itemCount);
 
   private:

@@ -13,10 +13,12 @@ struct SkillLayout
     float panelWidth = 620.f;
     float cardWidth = 162.f;
     bool canShowWindow = false;
+    int columns = 3;
 
-    static SkillLayout Create(int width, int height)
+    static SkillLayout Create(int width, int height, int skillCount = 6)
     {
         SkillLayout layout;
+        layout.columns = skillCount > 6 ? 4 : 3;
         layout.slotGap = (std::min)(7.f, width * .012f);
         layout.slotSize = (std::min)(58.f, (width * .96f - layout.slotGap * 7.f) / 8.f);
         layout.slotsX = (width - (layout.slotSize * 8.f + layout.slotGap * 7.f)) * .5f;
@@ -24,7 +26,7 @@ struct SkillLayout
         layout.panelWidth = (std::max)(280.f, (std::min)(620.f, width - 20.f));
         layout.panelX = (width - layout.panelWidth) * .5f;
         layout.panelY = 82.f;
-        layout.cardWidth = (layout.panelWidth - 52.f) / 3.f;
+        layout.cardWidth = (layout.panelWidth - 52.f) / layout.columns;
         layout.canShowWindow = width >= 600 && height >= 570;
         return layout;
     }
@@ -36,12 +38,12 @@ struct SkillLayout
 
     float CardX(int index) const
     {
-        return panelX + 26.f + (index % 3) * cardWidth;
+        return panelX + 26.f + (index % columns) * cardWidth;
     }
 
     float CardY(int index) const
     {
-        return panelY + 104.f + (index / 3) * 118.f;
+        return panelY + 104.f + (index / columns) * 118.f;
     }
 
     int SlotAt(float x, float y) const

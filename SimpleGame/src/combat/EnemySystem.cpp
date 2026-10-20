@@ -26,6 +26,10 @@ void EnemySystem::Add(WorldPosition position,
     FieldEnemy enemy;
     enemy.id = m_NextId++;
     enemy.position = position;
+    enemy.ai.home = position;
+    enemy.ai.patrolTarget = position;
+    enemy.ai.perceptionTimer = static_cast<float>(enemy.id % 5) * .04f;
+    enemy.ai.patrolStep = static_cast<unsigned>(enemy.id % 8);
     enemy.encounter = encounter;
     enemy.role = role;
     enemy.stats = stats;
@@ -37,7 +41,8 @@ void EnemySystem::Add(WorldPosition position,
                                    m_Enemies.end(),
                                    [](const FieldEnemy& item)
                                    {
-                                       return item.health <= 0 && !item.stats.preserveCorpse;
+                                       return item.health <= 0 && !item.stats.preserveCorpse &&
+                                              !item.DeathAnimationPlaying();
                                    });
     if (slot != m_Enemies.end())
     {
@@ -118,7 +123,7 @@ bool EnemySystem::DamageEnemy(std::uint64_t id, int damage)
     return false;
 }
 
-int EnemySystem::Update(float dt, WorldPosition player, const LevelMap& map)
+int EnemySystem::Update(float dt, WorldPosition player, const LevelMap& map, float simulationRadius)
 {
     if (dt <= 0.f || m_Enemies.empty())
     {
@@ -130,6 +135,27 @@ int EnemySystem::Update(float dt, WorldPosition player, const LevelMap& map)
     for (std::size_t offset = 0; offset < m_Enemies.size(); ++offset)
     {
         auto& enemy = m_Enemies[(m_UpdateStart + offset) % m_Enemies.size()];
+        if (enemy.health <= 0)
+        {
+            // Finish the visual even outside the AI radius. No perception,
+            // pathfinding or combat runs for dead actors.
+            if (enemy.ai.state != EnemyState::Dead)
+            {
+                m_StateMachine.Interrupt(enemy);
+            }
+            if (enemy.DeathAnimationPlaying())
+            {
+                enemy.stateTime =
+                    (std::min)(FieldEnemy::DeathAnimationDuration, enemy.stateTime + dt);
+            }
+            continue;
+        }
+        const float dx = enemy.position.x - player.x;
+        const float dy = enemy.position.y - player.y;
+        if (simulationRadius > 0.f && dx * dx + dy * dy > simulationRadius * simulationRadius)
+        {
+            continue;
+        }
         incomingDamage =
             (std::max)(incomingDamage,
                        m_StateMachine.Update(
@@ -139,18 +165,17 @@ int EnemySystem::Update(float dt, WorldPosition player, const LevelMap& map)
     return incomingDamage;
 }
 
-std::vector<WorldPosition> EnemySystem::Strike(WorldPosition player,
-                                               bool faceLeft,
-                                               int damage,
-                                               const LevelMap& map)
+std::vector<WorldPosition> EnemySystem::Strike(
+    WorldPosition player, bool faceLeft, int damage, const LevelMap& map, float rangeScale)
 {
     std::vector<WorldPosition> defeated;
     for (auto& enemy : m_Enemies)
     {
         const float dx = (enemy.position.x - player.x) * (faceLeft ? -1.f : 1.f);
         const float dy = enemy.position.y - player.y;
-        if (enemy.health <= 0 || dx < -18.f ||
-            dx * dx + dy * dy * 2 > LevelTuning::HitRange * LevelTuning::HitRange ||
+        if (enemy.health <= 0 || dx < -18.f * rangeScale ||
+            dx * dx + dy * dy * 2 >
+                LevelTuning::HitRange * LevelTuning::HitRange * rangeScale * rangeScale ||
             !map.ClearPath(player, enemy.position))
         {
             continue;
@@ -182,7 +207,9 @@ std::vector<WorldPosition> EnemySystem::StrikeProjectile(
     float radiusY,
     int damage,
     std::unordered_set<std::uint64_t>& hitTargets,
-    const LevelMap& map)
+    const LevelMap& map,
+    float height,
+    std::optional<WorldPosition> sightOrigin)
 {
     std::vector<WorldPosition> defeated;
     for (auto& enemy : m_Enemies)
@@ -190,11 +217,11 @@ std::vector<WorldPosition> EnemySystem::StrikeProjectile(
         const float x = (std::max)((std::min)(from.x, to.x),
                                    (std::min)((std::max)(from.x, to.x), enemy.position.x));
         // Compare projected projectile centers with the enemy's torso, not its feet.
-        const float dy = (enemy.position.y - to.y) * SceneCamera::GroundDepthScale() +
-                         MageProjectiles::Height - 35.f;
+        const float dy =
+            (enemy.position.y - to.y) * SceneCamera::GroundDepthScale() + height - 35.f;
         if (enemy.health <= 0 || hitTargets.count(enemy.id) ||
             std::abs(enemy.position.x - x) > radiusX + 16.f || std::abs(dy) > radiusY + 25.f ||
-            !map.ClearPath({x, to.y}, enemy.position))
+            !map.ClearPath(sightOrigin.value_or(WorldPosition{x, to.y}), enemy.position))
         {
             continue;
         }

@@ -1,4 +1,4 @@
-﻿/*
+/*
 Copyright 2022 Lee Taek Hee (Tech University of Korea)
 This program is free software: you can redistribute it and/or modify
 it under the terms of the What The Hell License. Do it plz.
@@ -9,10 +9,17 @@ but WITHOUT ANY WARRANTY.
 #include "Renderer.h"
 #include "FrameProfiler.h"
 #include "PrototypeWorld.h"
+#include "KnightSkillVerification.h"
+#include "MageUltimateVerification.h"
 #include "AttackInput.h"
 #include "Chapter1Verification.h"
 #include "Chapter2Verification.h"
+#include "Chapter3Verification.h"
+#include "VisualPlaytest.h"
+#include "../monitoring/MonitorPublisher.h"
 #include <cstring>
+#include <exception>
+#include <cstdlib>
 #include "Dependencies/freeglut.h"
 #include <chrono>
 #include <iostream>
@@ -24,9 +31,12 @@ namespace
     std::unique_ptr<Renderer> renderer;
     FrameProfiler frameProfiler;
     PrototypeWorld world;
+    MonitorPublisher worldMonitor;
     AttackInput attackInput;
     bool keys[256] = {}, arrows[256] = {}, suppressedKeys[256] = {}, paused = false;
     int width = 1280, height = 720;
+    bool benchmarkRender = false;
+    int benchmarkFrames = 0;
     auto previous = std::chrono::steady_clock::now();
 
     int VirtualKey(int key)
@@ -54,6 +64,7 @@ namespace
             suppressedKeys[i] = (GetAsyncKeyState(VirtualKey(i)) & 0x8000) != 0;
         }
         world.CancelSkillDrag();
+        world.CancelMenuPress();
     }
 
     void Close()
@@ -71,7 +82,7 @@ namespace
         const auto& effects = renderer->Effects();
         const unsigned flags = (effects.enabled ? 1u : 0u) | (effects.bloom ? 2u : 0u) |
                                (effects.vignette ? 4u : 0u) | (effects.edgeBlur ? 8u : 0u);
-        frameProfiler.SetContext(width, height, flags, Focused(), paused);
+        frameProfiler.SetContext(width, height, flags, Focused(), paused || world.SystemMenuOpen());
         world.Draw(*renderer, width, height);
         frameProfiler.SetPhase(FrameProfiler::Phase::Present);
         glutSwapBuffers();
@@ -80,6 +91,7 @@ namespace
 
     void Resize(int w, int h)
     {
+        world.CancelMenuPress();
         width = w > 0 ? w : 1;
         height = h > 0 ? h : 1;
         if (renderer)
@@ -106,6 +118,12 @@ namespace
             ClearInput();
             return;
         }
+        if (key == 13 && !world.SystemMenuOpen())
+        {
+            world.RetryDefeat();
+            attackInput.Suspend();
+            return;
+        }
         key = NormalizeKey(key);
         if (suppressedKeys[key])
         {
@@ -118,12 +136,26 @@ namespace
         keys[key] = true;
         if (key == 27)
         {
-            glutLeaveMainLoop();
+            if (!world.Started())
+            {
+                return;
+            }
+            paused = false;
+            world.SetPaused(false);
+            world.ToggleSystemMenu();
+            ClearInput();
+            keys[27] = true;
+            attackInput.Suspend();
+            return;
+        }
+        if (world.SystemMenuOpen())
+        {
             return;
         }
         if (!world.Started() && key >= '1' && key <= '2')
         {
             world.Select(key - '1');
+            return;
         }
         if (key == '1')
         {
@@ -132,10 +164,19 @@ namespace
         }
         if (key == 'p')
         {
+            if (!world.Started())
+            {
+                return;
+            }
             attackInput.Suspend();
             world.CancelSkillDrag();
             paused = !paused;
             world.SetPaused(paused);
+        }
+        if (key == 'j')
+        {
+            world.ToggleJournal();
+            return;
         }
         if (key == 'k')
         {
@@ -152,7 +193,7 @@ namespace
             {
                 return;
             }
-            world.Reset();
+            world.ReturnToCamp();
             attackInput.Suspend();
         }
         if (key == 'i')
@@ -200,11 +241,20 @@ namespace
 
     void SpecialDown(int key, int, int)
     {
+        if (!Focused() || world.SystemMenuOpen())
+        {
+            return;
+        }
         if (key < 0 || key >= 256 || arrows[key])
         {
             return;
         }
         arrows[key] = true;
+        if (key == GLUT_KEY_F10)
+        {
+            glutLeaveMainLoop();
+            return;
+        }
         if (key == GLUT_KEY_PAGE_UP)
         {
             world.ChangeInventoryPage(-1);
@@ -254,7 +304,30 @@ namespace
 
     void MouseButton(int button, int state, int x, int y)
     {
-        if (!Focused() || paused)
+        if (!Focused())
+        {
+            ClearInput();
+            return;
+        }
+        if (world.SystemMenuOpen())
+        {
+            attackInput.Suspend();
+            if (renderer && button == GLUT_LEFT_BUTTON)
+            {
+                const bool quit = world.SystemMenuMouseButton(
+                    state == GLUT_DOWN, x, y, width, height, renderer->Effects());
+                if (state == GLUT_UP)
+                {
+                    ClearInput();
+                }
+                if (quit)
+                {
+                    glutLeaveMainLoop();
+                }
+            }
+            return;
+        }
+        if (paused)
         {
             world.CancelSkillDrag();
             return;
@@ -267,6 +340,11 @@ namespace
 
     void MouseMove(int x, int y)
     {
+        if (world.SystemMenuOpen())
+        {
+            world.SystemMenuMouseMove(x, y);
+            return;
+        }
         world.SkillMouseMove(x, y);
     }
 
@@ -283,7 +361,7 @@ namespace
         {
             dt = .05f;
         }
-        bool focused = Focused();
+        bool focused = benchmarkRender || Focused();
         if (!focused)
         {
             ClearInput();
@@ -295,7 +373,7 @@ namespace
                 suppressedKeys[i] = false;
             }
         }
-        const bool skillUi = world.IsSkillWindowOpen();
+        const bool skillUi = world.MenuOpen();
         const bool aMoves = !skillUi && !world.IsSkillBound('a') && keys['a'];
         const bool dMoves = !skillUi && !world.IsSkillBound('d') && keys['d'];
         const bool sMoves = !skillUi && !world.IsSkillBound('s') && keys['s'];
@@ -309,22 +387,73 @@ namespace
         }
         bool sprint = focused && (GetAsyncKeyState(VK_SHIFT) & 0x8000) != 0;
         world.SetPaused(paused || !focused);
-        const bool attackPressed =
-            attackInput.Poll(focused && !paused && !skillUi && world.Started());
+        bool attackPressed = attackInput.Poll(focused && !paused && !skillUi && world.Started());
         const auto updateStart = std::chrono::steady_clock::now();
+        if (benchmarkRender)
+        {
+            dt = 1.f / 60.f;
+            dx = 0.f;
+            dy = benchmarkFrames > 120 ? -1.f : 0.f;
+            sprint = false;
+            attackPressed = false;
+        }
         world.Update(
             dt, dx, dy, sprint, attackPressed, focused && !paused && !skillUi && keys[' ']);
+        if (!benchmarkRender && worldMonitor.Due())
+        {
+            try
+            {
+                worldMonitor.Publish(world.CaptureMonitoring());
+            }
+            catch (const std::exception&)
+            {
+                OutputDebugStringA("World monitor: snapshot could not be prepared.\n");
+            }
+        }
+        if (benchmarkRender && ++benchmarkFrames >= 1200)
+        {
+            // Automated benchmark has no interactive shutdown; logs flush each interval.
+            std::cout.flush();
+            std::_Exit(0);
+        }
         frameProfiler.RecordUpdate(std::chrono::duration<double, std::milli>(
                                        std::chrono::steady_clock::now() - updateStart)
                                        .count());
         glutPostRedisplay();
-        glutTimerFunc(16, Timer, 0);
+        // Let active rendering exceed the old ~60 Hz timer ceiling, but avoid
+        // spending the same CPU budget on an unfocused window.
+        const double workMs =
+            std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - now)
+                .count();
+        const double targetMs = focused ? 4.0 : 100.0;
+        const unsigned delay = static_cast<unsigned>((std::max)(1.0, targetMs - workMs));
+        glutTimerFunc(delay, Timer, 0);
     }
 }
 
 int main(int argc, char** argv)
 {
     SetConsoleOutputCP(CP_UTF8);
+    if (argc == 3 && std::strcmp(argv[1], "--playtest-visual") == 0)
+    {
+        return RunVisualPlaytest(argv[2]);
+    }
+    if (argc == 2 && std::strcmp(argv[1], "--benchmark-enemies") == 0)
+    {
+        return RunEnemyBenchmark();
+    }
+    if (argc == 2 && std::strcmp(argv[1], "--verify-mage-ultimate") == 0)
+    {
+        return RunMageUltimateVerification();
+    }
+    if (argc == 2 && std::strcmp(argv[1], "--verify-knight-skills") == 0)
+    {
+        return RunKnightSkillVerification();
+    }
+    if (argc == 2 && std::strcmp(argv[1], "--verify-open-world") == 0)
+    {
+        return RunOpenWorldVerification();
+    }
     if (argc == 2 && std::strcmp(argv[1], "--verify-chapter1") == 0)
     {
         return RunChapter1Verification();
@@ -333,25 +462,41 @@ int main(int argc, char** argv)
     {
         return RunChapter2Verification();
     }
+    if (argc == 2 && std::strcmp(argv[1], "--verify-chapter3") == 0)
+    {
+        return RunChapter3Verification();
+    }
     if (argc == 2 && std::strcmp(argv[1], "--preview-chapter2") == 0)
     {
         world.EnableChapterPreview("chapter2");
         argc = 1; // Do not forward the application flag to freeglut.
         argv[1] = nullptr;
-        std::cout
-            << "챕터 2 개발용 블록아웃: 직업 선택 후 입장합니다. 전투와 연출은 모의 입력입니다.\n";
+        std::cout << "챕터 2 시작 미리보기: 직업 선택 후 연결된 세계의 회색벽에서 시작합니다.\n";
+    }
+    if (argc == 2 && std::strcmp(argv[1], "--preview-chapter3") == 0)
+    {
+        world.EnableChapterPreview("chapter3");
+        argc = 1;
+        argv[1] = nullptr;
+        std::cout << "챕터 3 시작 미리보기: 기념홀에서 시작합니다. 챕터 2 완료·피해 단계 1을 가정하며 챕터 3 진행은 생략하지 않습니다.\n";
+    }
+    if (argc == 2 && std::strcmp(argv[1], "--benchmark-render") == 0)
+    {
+        benchmarkRender = true;
+        argc = 1;
+        argv[1] = nullptr;
     }
     glutInit(&argc, argv);
     glutInitContextVersion(3, 3);
     glutInitContextProfile(GLUT_COMPATIBILITY_PROFILE);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
     glutInitWindowSize(width, height);
-    int window = glutCreateWindow("The Long War - Rendering Prototype");
+    int window = glutCreateWindow("The Long War - Open World");
     if (window <= 0)
     {
         return 1;
     }
-    SetWindowTextW(GetActiveWindow(), L"긴 전쟁 - 렌더링 프로토타입");
+    SetWindowTextW(GetActiveWindow(), L"긴 전쟁 - 변경의 여정");
     glewExperimental = GL_TRUE;
     if (glewInit() != GLEW_OK || !GLEW_VERSION_3_3)
     {
@@ -382,11 +527,15 @@ int main(int argc, char** argv)
     glutPassiveMotionFunc(MouseMove);
     glutIgnoreKeyRepeat(1);
     world.Reset();
+    if (benchmarkRender)
+    {
+        world.Select(1);
+    }
     previous = std::chrono::steady_clock::now();
     glutTimerFunc(0, Timer, 0);
     std::cout
         << "1/2 선택. 이동: WASD/방향키. 달리기: Shift. 공격: Ctrl (1-2-3 연계). "
-           "인벤토리: I (Page Up/Down). 지도: M. 확인: Space. 스킬: K. 일시정지: P. 마을: B. 종료: Esc.\n";
+           "인벤토리: I (Page Up/Down). 지도: M. 확인: Space. 스킬: K. 기록: J. 일시정지: P. 시스템 메뉴: Esc (마우스 클릭). 야영지: B. 재도전: Enter. 종료: F10.\n";
     std::cout << "후처리: F1 전체, F2 블룸, F3 비네트, F4 가장자리 흐림, [ ] 노출.\n";
     glutMainLoop();
     // Freeglut close callback releases GPU objects before context destruction.

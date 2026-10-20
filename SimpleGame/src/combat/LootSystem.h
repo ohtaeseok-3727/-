@@ -18,7 +18,7 @@ class LootSystem
   public:
     void Reset(unsigned seed);
     void Drop(WorldPosition position, int killCount, int level);
-    std::vector<LootDrop> Update(float dt, WorldPosition player);
+    std::vector<LootDrop> Update(float dt, WorldPosition player, float simulationRadius = 0.f);
     const std::vector<LootDrop>& Drops() const;
 
   private:

@@ -1,4 +1,5 @@
 #pragma once
+#include "FieldPopulation.h"
 
 #include "EnemySystem.h"
 #include "Chapter.h"
@@ -9,6 +10,7 @@
 #include "PlayerInventory.h"
 #include "PlayerProgression.h"
 #include <string>
+#include "WorldAtlas.h"
 
 class GameSession
 {
@@ -16,12 +18,34 @@ class GameSession
     using ChapterFactory = std::function<std::unique_ptr<Chapter>()>;
     GameSession();
     void RegisterChapter(std::string id, ChapterFactory factory);
+    void OpenWorld(LevelMap& map, const std::string& startChapter = {});
+    void FollowPlayer(WorldPosition player);
+    bool WorldEnabled() const;
+    WorldPosition LocalPlayer(WorldPosition world) const;
+    WorldPosition WorldOrigin() const;
+    bool BlocksMovement(WorldPosition world) const;
+    bool InCombat(WorldPosition world) const;
+    const WorldAtlas& Atlas() const;
+    MonitorSnapshot CaptureMonitoring(const LevelMap& map, WorldPosition player) const;
+    std::optional<WorldMarker> TrackedGoal() const;
+    WorldPosition Checkpoint() const;
+    bool ReturnToCamp(WorldPosition player, WorldPosition& destination);
+    const Chapter& StoryChapter() const;
+    bool CanSkipChapter1() const;
+    bool CanSkipChapter2FieldStory() const;
+    bool SkipChapter1(WorldPosition& destination);
+    bool SkipChapter2FieldStory(WorldPosition& destination);
+    bool DrawWorldLandmark(Renderer& renderer, const MapLandmark& site, Point p, float time) const;
+    void AddWorldActors(SceneGraph& scene, WorldPosition player) const;
+    void DrawWorldEnemy(Renderer& renderer, int region, int enemy, Point p) const;
+    const LootDrop& WorldDrop(int region, int drop) const;
     bool TravelTo(const ChapterTravel& travel, LevelMap& map, WorldPosition& destination);
     bool ApplyPendingTravel(LevelMap& map, WorldPosition& destination);
     const std::string& ActiveChapterId() const;
     const Chapter* FindChapter(const std::string& id) const;
     void Reset(int profession, unsigned seed, LevelMap& map);
     void Strike(int step, WorldPosition player, bool faceLeft, const LevelMap& map);
+    void StrikeArea(WorldPosition center, float radius, int damage);
     void Update(float dt, WorldPosition player, const LevelMap& map, bool interactionHeld = false);
     void Revive();
     WorldPosition ConsumePush();
@@ -29,6 +53,7 @@ class GameSession
     bool Complete() const;
     std::string Objective() const;
     const std::string& Notice() const;
+    std::string LandmarkPrompt(const MapLandmark& site) const;
     bool HasLandmarkInteraction() const;
     const std::string& LandmarkInteractionText() const;
     WorldPosition LandmarkInteractionPosition() const;
@@ -49,12 +74,36 @@ class GameSession
                           float radiusY,
                           int damage,
                           std::unordered_set<std::uint64_t>& hitTargets,
-                          const LevelMap& map);
+                          const LevelMap& map,
+                          float height = LevelTuning::ProjectileHeight,
+                          std::optional<WorldPosition> sightOrigin = std::nullopt);
 
   private:
+    void ActivateRegion(std::size_t region);
+    void SynchronizeChapterHistory();
+    bool StoryReady() const;
+    bool SkipStory(bool chapter1, WorldPosition& destination);
+
+    struct RegionRuntime
+    {
+        LevelMap map;
+        EnemySystem enemies;
+        FieldPopulation population;
+        LootSystem loot;
+    };
+
+    WorldAtlas m_Atlas;
+    std::vector<RegionRuntime> m_Regions;
+    std::size_t m_Region = 0;
+    bool m_OpenWorld = false;
+    bool m_StartAtChapter2 = false;
+    bool m_StartAtChapter3 = false;
+    WorldPosition m_Checkpoint{};
     void ClearMapActors();
     void ShowNotice(const std::string& text);
     void RewardDefeated(const std::vector<WorldPosition>& defeated);
+    void RewardDefeated(const std::vector<WorldPosition>& defeated, LootSystem& loot);
+    void CollectLoot(const std::vector<LootDrop>& drops);
     PlayerProgression m_Progress;
     PlayerInventory m_Inventory;
 

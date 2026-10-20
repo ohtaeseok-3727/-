@@ -4,6 +4,7 @@
 #include "EnemySystem.h"
 #include "PlayerInventory.h"
 #include "PlayerProgression.h"
+#include "../monitoring/MonitorSnapshot.h"
 #include <optional>
 #include <string>
 #include <unordered_map>
@@ -28,6 +29,16 @@ struct ChapterImpact
     WorldPosition push{};
 };
 
+struct ChapterGoal
+{
+    MapId map;
+    ObjectId object;
+    std::optional<WorldPosition> position;
+    std::string label;
+    std::string hint;
+    WorldPosition offset{};
+};
+
 // One implementation owns a chapter's state, events, authored maps and presentation.
 // Split long implementations into .cpp files, not additional coordinating classes.
 class Chapter
@@ -39,6 +50,36 @@ class Chapter
     virtual MapDefinition BuildMap(MapId map) const = 0;
     virtual void Reset() = 0;
     virtual void EnterMap(MapId map) noexcept = 0;
+
+    virtual void VisitMap(MapId map)
+    {
+        EnterMap(map);
+    }
+
+    virtual void PlayerArrived(WorldPosition, const LevelMap&)
+    {
+    }
+
+    virtual std::optional<ChapterGoal> Goal() const
+    {
+        return std::nullopt;
+    }
+
+    virtual std::string InteractionPrompt(const MapLandmark& site) const
+    {
+        return "[Space] " + site.name;
+    }
+
+    void SetContinuousWorld(bool enabled)
+    {
+        m_ContinuousWorld = enabled;
+    }
+
+    bool ContinuousWorld() const
+    {
+        return m_ContinuousWorld;
+    }
+
     virtual void Update(float dt,
                         WorldPosition player,
                         bool interactionHeld,
@@ -53,8 +94,10 @@ class Chapter
     virtual void StrikeObjects(WorldPosition player,
                                bool faceLeft,
                                int damage,
-                               const LevelMap& map);
+                               const LevelMap& map,
+                               float rangeScale = 1.f);
     virtual void Retry(EnemySystem& enemies) = 0;
+
     virtual ChapterImpact ConsumeImpact()
     {
         return {};
@@ -70,7 +113,10 @@ class Chapter
                                          float,
                                          float,
                                          int,
-                                         const LevelMap&)
+                                         const LevelMap&,
+                                         float = LevelTuning::ProjectileHeight,
+                                         std::unordered_set<std::uint64_t>* = nullptr,
+                                         std::optional<WorldPosition> = std::nullopt)
     {
     }
 
@@ -80,6 +126,15 @@ class Chapter
     virtual std::string Objective() const = 0;
     // Queried on demand by later chapters; no per-frame copying or concrete state casts.
     virtual ChapterFlags ExportFlags() const;
+
+    virtual void ImportPrevious(const ChapterFlags&)
+    {
+    }
+
+    virtual MonitorObservation ObserveMap(const MapDefinition&, WorldPosition) const
+    {
+        return {};
+    }
 
     virtual bool EnemyVisible(const FieldEnemy& enemy) const;
     virtual void AddActors(SceneGraph& scene, WorldPosition player) const;
@@ -98,5 +153,6 @@ class Chapter
     void RequestTravel(ChapterTravel travel);
 
   private:
+    bool m_ContinuousWorld = false;
     std::optional<ChapterTravel> m_Travel;
 };

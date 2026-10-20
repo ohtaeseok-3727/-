@@ -22,11 +22,26 @@ class LevelMap
     std::uint32_t Seed() const;
     std::uint32_t Hash(int x, int y, unsigned salt = 0) const;
     const MapLayout& Layout() const;
+    void UseWorldGeometry(const LevelMap& world, WorldPosition origin);
 
   private:
     bool CellProp(int x, int y, WorldProp& prop) const;
+    bool GenerateCellProp(int x, int y, WorldProp& prop) const;
+
+    struct PropCell
+    {
+        int x = 0;
+        int y = 0;
+        bool valid = false;
+        bool occupied = false;
+        WorldProp prop{};
+    };
+
+    mutable std::vector<PropCell> m_PropCells;
     std::uint32_t m_Seed = 1;
     std::uint64_t m_Revision = 0;
     MapLayout m_Layout;
     std::string m_ChapterId;
+    const LevelMap* m_WorldGeometry = nullptr;
+    WorldPosition m_WorldOrigin{};
 };

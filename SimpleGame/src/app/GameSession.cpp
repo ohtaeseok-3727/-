@@ -22,6 +22,11 @@ void GameSession::RegisterChapter(std::string id, ChapterFactory factory)
 
 bool GameSession::TravelTo(const ChapterTravel& travel, LevelMap& map, WorldPosition& destination)
 {
+    if (m_OpenWorld)
+    {
+        ShowNotice("지역은 연결된 길을 따라 이동할 수 있습니다. M으로 목적지를 확인하세요.");
+        return false;
+    }
     const std::string id = travel.chapter.empty() ? m_ActiveChapterId : travel.chapter;
     const auto found = m_Chapters.find(id);
     if (found == m_Chapters.end())
@@ -88,6 +93,7 @@ bool GameSession::TravelTo(const ChapterTravel& travel, LevelMap& map, WorldPosi
         }
         m_Chapter = next;
         m_ActiveChapterId = std::move(activeId);
+        SynchronizeChapterHistory();
         destination = entry;
         return true;
     }
@@ -100,6 +106,11 @@ bool GameSession::TravelTo(const ChapterTravel& travel, LevelMap& map, WorldPosi
 
 bool GameSession::ApplyPendingTravel(LevelMap& map, WorldPosition& destination)
 {
+    if (m_OpenWorld)
+    {
+        m_Chapter->ClearTravel();
+        return false;
+    }
     if (!m_Chapter || !m_Chapter->PendingTravel())
     {
         return false;
@@ -123,6 +134,11 @@ const Chapter* GameSession::FindChapter(const std::string& id) const
 
 void GameSession::Reset(int profession, unsigned seed, LevelMap& map)
 {
+    m_OpenWorld = false;
+    m_StartAtChapter2 = false;
+    m_StartAtChapter3 = false;
+    m_Regions.clear();
+    m_Atlas.Clear();
     m_Profession = profession;
     m_Kills = 0;
     m_Invulnerable = 0.f;
@@ -146,16 +162,36 @@ void GameSession::Reset(int profession, unsigned seed, LevelMap& map)
     ShowNotice(std::string(m_Chapter->Title()) + " — " + m_Chapter->Objective());
 }
 
-void GameSession::Strike(int step, WorldPosition player, bool faceLeft, const LevelMap& map)
+void GameSession::Strike(int step, WorldPosition player, bool faceLeft, const LevelMap& sourceMap)
 {
-    const int damage =
-        (m_Progress.Attack() + m_Inventory.AttackBonus()) * (100 + (step - 1) * 25) / 100;
-    if (m_Chapter->ControlLocked())
+    const auto& map = m_OpenWorld ? m_Regions[m_Region].map : sourceMap;
+    const auto worldPlayer = player;
+    player = LocalPlayer(player);
+    const float rawDamage =
+        m_Progress.EffectiveAttack(m_Inventory.AttackBonus()) * (100 + (step - 1) * 25) / 100.f;
+    const int damage = m_Progress.KnightAuraActive() ? static_cast<int>(std::lround(rawDamage))
+                                                     : static_cast<int>(rawDamage);
+    const float rangeScale = m_Progress.AttackRangeScale();
+    if (m_Chapter->ControlLocked() || IsDefeated())
     {
         return;
     }
-    m_Chapter->StrikeObjects(player, faceLeft, damage, map);
-    RewardDefeated(m_Enemies.Strike(player, faceLeft, damage, map));
+    m_Chapter->StrikeObjects(player, faceLeft, damage, map, rangeScale);
+    RewardDefeated(m_Enemies.Strike(player, faceLeft, damage, map, rangeScale));
+    if (m_OpenWorld)
+    {
+        for (std::size_t i = 0; i < m_Regions.size(); ++i)
+        {
+            if (i != m_Region)
+            {
+                auto& region = m_Regions[i];
+                RewardDefeated(
+                    region.enemies.Strike(
+                        m_Atlas.ToLocal(i, worldPlayer), faceLeft, damage, region.map, rangeScale),
+                    region.loot);
+            }
+        }
+    }
 }
 
 void GameSession::StrikeProjectile(WorldPosition from,
@@ -164,23 +200,75 @@ void GameSession::StrikeProjectile(WorldPosition from,
                                    float radiusY,
                                    int damage,
                                    std::unordered_set<std::uint64_t>& hitTargets,
-                                   const LevelMap& map)
+                                   const LevelMap& sourceMap,
+                                   float height,
+                                   std::optional<WorldPosition> sightOrigin)
 {
-    if (m_Chapter->ControlLocked())
+    const auto& map = m_OpenWorld ? m_Regions[m_Region].map : sourceMap;
+    const auto worldFrom = from, worldTo = to;
+    from = LocalPlayer(from);
+    to = LocalPlayer(to);
+    if (m_Chapter->ControlLocked() || IsDefeated())
     {
         return;
     }
-    RewardDefeated(m_Enemies.StrikeProjectile(from, to, radiusX, radiusY, damage, hitTargets, map));
-    m_Chapter->StrikeProjectileObjects(from, to, radiusX, radiusY, damage, map);
+    RewardDefeated(m_Enemies.StrikeProjectile(
+        from,
+        to,
+        radiusX,
+        radiusY,
+        damage,
+        hitTargets,
+        map,
+        height,
+        sightOrigin ? std::optional<WorldPosition>(LocalPlayer(*sightOrigin)) : std::nullopt));
+    m_Chapter->StrikeProjectileObjects(
+        from,
+        to,
+        radiusX,
+        radiusY,
+        damage,
+        map,
+        height,
+        &hitTargets,
+        sightOrigin ? std::optional<WorldPosition>(LocalPlayer(*sightOrigin)) : std::nullopt);
+    if (m_OpenWorld)
+    {
+        for (std::size_t i = 0; i < m_Regions.size(); ++i)
+        {
+            if (i != m_Region)
+            {
+                auto& region = m_Regions[i];
+                RewardDefeated(
+                    region.enemies.StrikeProjectile(
+                        m_Atlas.ToLocal(i, worldFrom),
+                        m_Atlas.ToLocal(i, worldTo),
+                        radiusX,
+                        radiusY,
+                        damage,
+                        hitTargets,
+                        region.map,
+                        height,
+                        sightOrigin ? std::optional<WorldPosition>(m_Atlas.ToLocal(i, *sightOrigin))
+                                    : std::nullopt),
+                    region.loot);
+            }
+        }
+    }
 }
 
 void GameSession::RewardDefeated(const std::vector<WorldPosition>& defeated)
+{
+    RewardDefeated(defeated, m_Loot);
+}
+
+void GameSession::RewardDefeated(const std::vector<WorldPosition>& defeated, LootSystem& loot)
 {
     for (const auto& position : defeated)
     {
         ++m_Kills;
         const int levels = m_Progress.AddExperience(LevelTuning::KillExperience);
-        m_Loot.Drop(position, m_Kills, m_Progress.Level());
+        loot.Drop(position, m_Kills, m_Progress.Level());
         if (levels > 0)
         {
             ShowNotice("레벨 상승! 레벨 " + std::to_string(m_Progress.Level()) +
@@ -193,8 +281,18 @@ void GameSession::RewardDefeated(const std::vector<WorldPosition>& defeated)
     }
 }
 
-void GameSession::Update(float dt, WorldPosition player, const LevelMap& map, bool interactionHeld)
+void GameSession::Update(float dt,
+                         WorldPosition player,
+                         const LevelMap& sourceMap,
+                         bool interactionHeld)
 {
+    if (IsDefeated())
+    {
+        return;
+    }
+    const auto& map = m_OpenWorld ? m_Regions[m_Region].map : sourceMap;
+    const auto worldPlayer = player;
+    player = LocalPlayer(player);
     m_NoticeTime = (std::max)(0.f, m_NoticeTime - dt);
     if (m_NoticeTime == 0.f)
     {
@@ -206,14 +304,35 @@ void GameSession::Update(float dt, WorldPosition player, const LevelMap& map, bo
         m_LandmarkInteractionText.clear();
     }
     m_Invulnerable = (std::max)(0.f, m_Invulnerable - dt);
-    m_Chapter->Update(dt, player, interactionHeld, map, m_Enemies, m_Progress);
+    const bool storyReady = StoryReady();
+    if (storyReady)
+    {
+        m_Chapter->Update(dt, player, interactionHeld, map, m_Enemies, m_Progress);
+    }
     RewardDefeated(m_Enemies.ConsumeScriptDefeats());
     const auto impact = m_Chapter->ConsumeImpact();
-    const int damage = m_Chapter->ControlLocked()
-                           ? 0
-                           : (std::max)(impact.damage, m_Enemies.Update(dt, player, map));
+    int damage = m_Chapter->ControlLocked()
+                     ? 0
+                     : (std::max)(impact.damage,
+                                  m_Enemies.Update(dt, player, map, m_OpenWorld ? 1500.f : 0.f));
     if (!m_Chapter->ControlLocked())
     {
+        if (m_OpenWorld)
+        {
+            m_Regions[m_Region].population.Update(dt, player, m_Enemies);
+            for (std::size_t i = 0; i < m_Regions.size(); ++i)
+            {
+                if (i != m_Region)
+                {
+                    auto& region = m_Regions[i];
+                    const auto local = m_Atlas.ToLocal(i, worldPlayer);
+                    region.population.Update(dt, local, region.enemies);
+                    // Adjacent ordinary enemies remain live across region boundaries.
+                    damage =
+                        (std::max)(damage, region.enemies.Update(dt, local, region.map, 1500.f));
+                }
+            }
+        }
         m_Push = impact.push;
     }
     if (damage > 0 && m_Invulnerable <= 0.f)
@@ -231,7 +350,22 @@ void GameSession::Update(float dt, WorldPosition player, const LevelMap& map, bo
     {
         return;
     }
-    for (const auto& drop : m_Loot.Update(dt, player))
+    CollectLoot(m_Loot.Update(dt, player, m_OpenWorld ? 1500.f : 0.f));
+    if (m_OpenWorld)
+    {
+        for (std::size_t i = 0; i < m_Regions.size(); ++i)
+        {
+            if (i != m_Region)
+            {
+                CollectLoot(m_Regions[i].loot.Update(dt, m_Atlas.ToLocal(i, worldPlayer), 1500.f));
+            }
+        }
+    }
+}
+
+void GameSession::CollectLoot(const std::vector<LootDrop>& drops)
+{
+    for (const auto& drop : drops)
     {
         switch (drop.kind)
         {
@@ -254,7 +388,7 @@ void GameSession::Revive()
     m_Chapter->Retry(m_Enemies);
     m_Push = {};
     m_Loot.Reset(1);
-    m_Progress.Heal(m_Progress.MaxHealth());
+    m_Progress.Restore();
     m_Invulnerable = 3.f;
     ShowNotice("현재 지역 입구로 돌아왔습니다. 레벨·돈·장비는 유지됩니다.");
 }
@@ -266,17 +400,51 @@ bool GameSession::IsDefeated() const
 
 bool GameSession::Complete() const
 {
-    return m_Chapter->Complete();
+    return m_OpenWorld ? FindChapter("chapter3")->Complete() : m_Chapter->Complete();
 }
 
 std::string GameSession::Objective() const
 {
-    return m_Chapter->Objective();
+    return StoryChapter().Objective();
 }
 
-void GameSession::Inspect(const MapLandmark& site, const LevelMap& map)
+void GameSession::Inspect(const MapLandmark& site, const LevelMap& sourceMap)
 {
-    m_LandmarkInteractionText = m_Chapter->Interact(site, map, m_Enemies, m_Progress, m_Inventory);
+    if (IsDefeated() || m_Chapter->ControlLocked())
+    {
+        return;
+    }
+    auto local = site;
+    if (m_OpenWorld)
+    {
+        if (site.worldRegion < 0)
+        {
+            return;
+        }
+        ActivateRegion(static_cast<std::size_t>(site.worldRegion));
+        local.position = LocalPlayer(site.position);
+        if (site.object == -1)
+        {
+            if (InCombat(site.position))
+            {
+                ShowNotice("야영지 주변의 적을 처리한 뒤 휴식하세요.");
+                return;
+            }
+            m_Checkpoint = site.position;
+            m_Progress.Restore();
+            ShowNotice("휴식 완료 · 체력/마나 회복 · 이 야영지를 복귀 지점으로 등록했습니다.");
+            return;
+        }
+        if (!StoryReady())
+        {
+            ShowNotice(m_ActiveChapterId == "chapter3"
+                           ? "챕터 3 조사는 협곡 구호지의 피해 보고와 벽화 탁본 검토 후 시작됩니다."
+                           : "이 지역은 자유롭게 탐험할 수 있습니다. 주요 작전은 폐광의 장부와 용사 대화 후 시작됩니다.");
+            return;
+        }
+    }
+    const auto& map = m_OpenWorld ? m_Regions[m_Region].map : sourceMap;
+    m_LandmarkInteractionText = m_Chapter->Interact(local, map, m_Enemies, m_Progress, m_Inventory);
     m_LandmarkInteractionPosition = site.position;
     m_LandmarkInteractionKind = site.kind;
     m_LandmarkInteractionTime = 9.f;

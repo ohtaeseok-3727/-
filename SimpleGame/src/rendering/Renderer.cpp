@@ -103,6 +103,9 @@ Renderer::Renderer(int width, int height, FrameProfiler& profiler)
     {
         m_TextRenderer.reset(new WindowsTextRenderer());
         m_Initialized = m_TextRenderer->Initialize();
+        // Optional effect program: failure leaves the geometric fallback available.
+        if (m_Initialized)
+            m_Arcane.Initialize();
     }
 }
 
@@ -135,6 +138,8 @@ void Renderer::Resize(int width, int height)
 
 void Renderer::Begin()
 {
+    m_Post.screenCut = {};
+    m_Post.arcaneShock = {};
     m_Vertices.clear();
     m_InLinearScene = m_Post.BeginScene();
     glViewport(0, 0, m_Width, m_Height);
@@ -198,6 +203,22 @@ bool Renderer::CachedGeometry(int kind, float x, float y, float scale)
     const bool cached = m_GeometryCache.Append(kind, x, y, scale, m_Vertices);
     m_Profiler.RecordGeometry(cached);
     return cached;
+}
+
+void Renderer::DrawGeometry(const GeometryCache::Mesh& mesh, Point origin)
+{
+    if (mesh.empty())
+    {
+        return;
+    }
+    const auto first = m_Vertices.size();
+    m_Vertices.insert(m_Vertices.end(), mesh.begin(), mesh.end());
+    auto* vertices = m_Vertices.data() + first;
+    for (std::size_t i = 0; i < mesh.size(); ++i)
+    {
+        vertices[i].x += origin.x;
+        vertices[i].y += origin.y;
+    }
 }
 
 void Renderer::BeginGeometry()
@@ -358,8 +379,13 @@ float Renderer::CharacterScale(int profession)
     return profession == 0 ? .35f : .32f;
 }
 
-bool Renderer::CharacterAttack(
-    int profession, const char* clipId, float milliseconds, float footX, float footY, bool faceLeft)
+bool Renderer::CharacterAttack(int profession,
+                               const char* clipId,
+                               float milliseconds,
+                               float footX,
+                               float footY,
+                               bool faceLeft,
+                               float effectScale)
 {
     if (profession < 0 || profession >= 2)
     {
@@ -372,7 +398,8 @@ bool Renderer::CharacterAttack(
                         std::round(footY),
                         faceLeft,
                         CharacterScale(profession),
-                        true);
+                        true,
+                        effectScale);
 }
 
 bool Renderer::CombatVisual(const char* clipId,
@@ -381,7 +408,8 @@ bool Renderer::CombatVisual(const char* clipId,
                             float footY,
                             bool faceLeft,
                             float scale,
-                            bool effects)
+                            bool effects,
+                            float effectScale)
 {
     if (!m_Initialized || !clipId || scale <= 0 || !std::isfinite(milliseconds))
         return false;
@@ -427,9 +455,10 @@ bool Renderer::CombatVisual(const char* clipId,
     {
         const auto& s = commands[i];
         const auto& asset = CombatVisuals::assets[s.asset];
-        const float w = s.w * s.scale * scale, h = s.h * s.scale * scale;
-        const float x = footX + (faceLeft ? -s.dx * scale - w : s.dx * scale),
-                    y = footY + s.dy * scale;
+        const float layerScale = scale * (i == 0 ? 1.f : effectScale);
+        const float w = s.w * s.scale * layerScale, h = s.h * s.scale * layerScale;
+        const float x = footX + (faceLeft ? -s.dx * layerScale - w : s.dx * layerScale),
+                    y = footY + s.dy * layerScale;
         float u0 = float(s.x) / asset.width, u1 = float(s.x + s.w) / asset.width;
         if (faceLeft)
         {
@@ -528,7 +557,8 @@ void Renderer::Sprite(GLuint texture,
     m_Vertices.insert(m_Vertices.end(), {a, b, c, a, c, d});
 }
 
-void Renderer::ImageQuad(const std::wstring& path, Point a, Point b, Point c, Point d, float alpha)
+void Renderer::ImageQuad(
+    const std::wstring& path, Point a, Point b, Point c, Point d, float alpha, Point uv0, Point uv1)
 {
     if (!m_Initialized)
     {
@@ -564,7 +594,9 @@ void Renderer::ImageQuad(const std::wstring& path, Point a, Point b, Point c, Po
         Flush();
     }
     m_ActiveTexture = texture;
-    const Vertex va{a.x, a.y, 1, 1, 1, alpha, 0, 0}, vb{b.x, b.y, 1, 1, 1, alpha, 1, 0};
-    const Vertex vc{c.x, c.y, 1, 1, 1, alpha, 1, 1}, vd{d.x, d.y, 1, 1, 1, alpha, 0, 1};
+    const Vertex va{a.x, a.y, 1, 1, 1, alpha, uv0.x, uv0.y},
+        vb{b.x, b.y, 1, 1, 1, alpha, uv1.x, uv0.y};
+    const Vertex vc{c.x, c.y, 1, 1, 1, alpha, uv1.x, uv1.y},
+        vd{d.x, d.y, 1, 1, 1, alpha, uv0.x, uv1.y};
     m_Vertices.insert(m_Vertices.end(), {va, vb, vc, va, vc, vd});
 }

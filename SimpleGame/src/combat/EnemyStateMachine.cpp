@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "EnemyStateMachine.h"
 #include "EnemySystem.h"
+#include "EnemyPatrol.h"
 #include <algorithm>
 #include <cmath>
 
@@ -12,12 +13,11 @@ void EnemyStateMachine::Transition(FieldEnemy& enemy, EnemyState state) const
     }
     enemy.ai.state = state;
     enemy.stateTime = 0.f;
-    if (state != EnemyState::Chase)
-    {
-        enemy.ai.path.clear();
-        enemy.ai.waypoint = 0;
-        enemy.ai.repathTimer = 0.f;
-    }
+    // A changed state has a changed destination (especially chase -> return).
+    // Same-state updates return above and retain their cached path.
+    enemy.ai.path.clear();
+    enemy.ai.waypoint = 0;
+    enemy.ai.repathTimer = 0.f;
     if (state != EnemyState::Windup && state != EnemyState::Heal)
     {
         enemy.windup = 0.f;
@@ -48,7 +48,7 @@ void EnemyStateMachine::Chase(
         m_Pathfinder.FindPath(enemy.position, player, map, ai.path);
         ai.waypoint = 0;
         // Failed searches are also throttled; never fall back to walking through a wall.
-        ai.repathTimer = ai.path.empty() ? .8f : .45f;
+        ai.repathTimer = ai.path.empty() ? .8f : enemy.ai.state == EnemyState::Return ? 2.f : .45f;
     }
 
     const float speed = enemy.legInjured ? enemy.stats.injuredSpeed : enemy.stats.speed;
@@ -110,8 +110,7 @@ int EnemyStateMachine::Update(FieldEnemy& enemy,
     enemy.cooldown = (std::max)(0.f, enemy.cooldown - dt);
     const float dx = player.x - enemy.position.x;
     const float dy = player.y - enemy.position.y;
-    const float distance = std::sqrt(dx * dx + dy * dy);
-    enemy.faceLeft = dx < 0.f;
+    const float distanceSquared = dx * dx + dy * dy;
     if (!supportEnabled && (enemy.role == EnemyRole::Healer || enemy.role == EnemyRole::Ranged))
     {
         Transition(enemy, EnemyState::Disabled);
@@ -128,8 +127,8 @@ int EnemyStateMachine::Update(FieldEnemy& enemy,
         {
             return 0;
         }
-        const float range = enemy.role == EnemyRole::Ranged ? 240.f : 55.f;
-        const bool hit = distance < range && map.ClearPath(enemy.position, player);
+        const float range = enemy.AttackRange();
+        const bool hit = distanceSquared < range * range && map.ClearPath(enemy.position, player);
         enemy.cooldown = enemy.role == EnemyRole::Ranged ? 2.4f : 1.4f;
         Transition(enemy, EnemyState::Recovery);
         return hit ? enemy.stats.damage : 0;
@@ -181,20 +180,47 @@ int EnemyStateMachine::Update(FieldEnemy& enemy,
         return 0;
     }
 
-    const float detectionRange = enemy.stats.detectionRange;
-    if (distance >= detectionRange)
+    if (enemy.role != EnemyRole::Boss)
+    {
+        if (!EnemyPatrol::Detect(enemy, player, dt, map))
+        {
+            if (enemy.ai.returning)
+            {
+                if (EnemyPatrol::DistanceSquared(enemy.position, enemy.ai.home) <= 16.f)
+                {
+                    enemy.ai.returning = false;
+                    enemy.ai.patrolTarget = enemy.position;
+                    Transition(enemy, EnemyState::Patrol);
+                }
+                else
+                {
+                    Transition(enemy, EnemyState::Return);
+                    Chase(enemy, dt, enemy.ai.home, map, searchBudget);
+                }
+            }
+            else
+            {
+                Transition(enemy, EnemyState::Patrol);
+                EnemyPatrol::Update(enemy, dt, map);
+            }
+            return 0;
+        }
+    }
+    else if (distanceSquared >= enemy.stats.detectionRange * enemy.stats.detectionRange)
     {
         Transition(enemy, EnemyState::Idle);
         return 0;
     }
-    const float range = enemy.role == EnemyRole::Ranged ? 240.f : 55.f;
-    const bool canAttack = distance < range - 8.f && map.ClearPath(enemy.position, player);
+    enemy.faceLeft = dx < 0.f;
+    const float range = enemy.AttackRange();
+    const bool canAttack =
+        distanceSquared < (range - 8.f) * (range - 8.f) && map.ClearPath(enemy.position, player);
     if (canAttack)
     {
         if (enemy.cooldown <= 0.f)
         {
             Transition(enemy, EnemyState::Windup);
-            enemy.windup = enemy.role == EnemyRole::Ranged ? 1.2f : .7f;
+            enemy.windup = enemy.AttackWindupDuration();
         }
         else
         {
@@ -204,7 +230,11 @@ int EnemyStateMachine::Update(FieldEnemy& enemy,
     else
     {
         Transition(enemy, EnemyState::Chase);
-        Chase(enemy, dt, player, map, searchBudget);
+        Chase(enemy,
+              dt,
+              enemy.role == EnemyRole::Boss ? player : enemy.ai.lastSeen,
+              map,
+              searchBudget);
     }
     return 0;
 }

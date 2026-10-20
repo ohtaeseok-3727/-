@@ -34,7 +34,8 @@ MapDefinition Chapter2::GraywallMap()
 {
     MapDefinition map;
     map.id = Chapter2Maps::Graywall;
-    map.title = "MAP-004 · 회색벽 요새와 전면 방어선";
+    map.fieldEnemyHealth = LevelTuning::OrcHealth;
+    map.title = "회색벽 요새와 전면 방어선";
     // Coordinates and corridor widths are provisional implementation values, not canon.
     map.areas = {{MapRegion::Village, "회색벽 진입", {0, 100}, 500, 340},
                  {MapRegion::Outpost, "ZONE-01 작전실", {0, -450}, 250, 210},
@@ -91,7 +92,8 @@ MapDefinition Chapter2::CanyonMap()
 {
     MapDefinition map;
     map.id = Chapter2Maps::Canyon;
-    map.title = "MAP-005 · 왕의 협곡 작전 구역";
+    map.fieldEnemyHealth = LevelTuning::OrcHealth;
+    map.title = "왕의 협곡 작전 구역";
     map.areas = {{MapRegion::Outpost, "ZONE-06 관측소·작전 지도", {0, 0}, 560, 400},
                  {MapRegion::Outpost, "ZONE-07 봉화탑", {0, -1250}, 330, 300},
                  {MapRegion::Battlefield, "ZONE-08 공성 작업장", {-1100, -350}, 340, 300},
@@ -185,7 +187,8 @@ MapDefinition Chapter2::FortressMap()
 {
     MapDefinition map;
     map.id = Chapter2Maps::OldFortress;
-    map.title = "MAP-006 · 옛 인간 성채";
+    map.fieldEnemyHealth = LevelTuning::OrcHealth;
+    map.title = "옛 인간 성채";
     map.areas = {{MapRegion::Outpost, "ZONE-12 진입 분기", {0, 0}, 850, 400},
                  {MapRegion::GuardTunnel, "급수로", {-650, -700}, 210, 210},
                  {MapRegion::CommandHall, "예배당 진입", {0, -700}, 210, 210},
@@ -208,6 +211,9 @@ MapDefinition Chapter2::FortressMap()
                  {{-500, -2100}, {0, -2900}, 100},
                  {{450, -2100}, {0, -2900}, 100},
                  {{0, -2900}, {0, -3550}, 100}};
+    // The signal stands between the two diagonal approaches, outside the boss arena.
+    // Join both approaches with real floor so the A* goal is traversable.
+    map.roads.push_back({{-300, -2500}, {300, -2500}, 100.f});
     map.interior = MapRectangle{{0, -1550}, 1100, 2300};
     map.wallName = "옛 성채 벽면";
     map.landmarks = {

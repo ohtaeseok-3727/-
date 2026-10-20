@@ -28,6 +28,9 @@ uniform float bloomStrength;
 uniform float bloomRadius;
 uniform float vignetteStrength;
 uniform float edgeStrength;
+uniform vec4 cutLine;
+uniform vec2 cutMotion;
+uniform vec4 arcaneShock; // center in pixels, explosion age, displacement strength
 
 vec3 extractBright(vec3 color)
 {
@@ -68,12 +71,40 @@ void main()
         outScene = vec4(color, 1.0);
         outBloom = vec4(bright, 1.0);
     } else {
-        vec3 color = texture(sourceScene, uv).rgb;
+        vec2 sceneUV = uv;
+        if (cutMotion.x > 0.001) {
+            vec2 size = vec2(textureSize(sourceScene, 0));
+            vec2 pixel = vec2(uv.x, 1.0 - uv.y) * size;
+            vec2 axis = cutLine.zw - cutLine.xy;
+            float len = max(length(axis), 1.0);
+            vec2 tangent = axis / len;
+            vec2 normal = vec2(-tangent.y, tangent.x);
+            vec2 delta = pixel - cutLine.xy;
+            float along = dot(delta, tangent) / len;
+            float edge = 3.0 * (0.65*sin(along*97.0) + 0.35*sin(along*173.0+1.3));
+            float side = dot(delta, normal) - edge;
+            float spread = 1.0 - smoothstep(cutMotion.y, cutMotion.y + 0.09, along);
+            vec2 shift = (normal + tangent*0.22) * sign(side) * cutMotion.x * spread;
+            sceneUV -= vec2(shift.x, -shift.y) / size;
+            sceneUV = clamp(sceneUV, 0.5/size, 1.0-0.5/size);
+        }
+        if(arcaneShock.w>0.001) {
+            vec2 size=vec2(textureSize(sourceScene,0));
+            vec2 pixel=vec2(uv.x,1.0-uv.y)*size;
+            vec2 delta=(pixel-arcaneShock.xy)/vec2(1.0,.58);
+            float radius=length(delta);
+            float front=300.0*(.06+(1.0-exp(-arcaneShock.z*7.0))*1.32);
+            float envelope=exp(-pow((radius-front)/16.0,2.0));
+            vec2 displacement=delta/max(radius,1.0)*vec2(1.0,.58)*envelope*arcaneShock.w;
+            sceneUV-=vec2(displacement.x,-displacement.y)/size;
+            sceneUV=clamp(sceneUV,.5/size,1.0-.5/size);
+        }
+        vec3 color = texture(sourceScene, sceneUV).rgb;
         if (enabled) {
             vec2 centered = abs(uv*2.0-1.0);
             float edge = smoothstep(0.62, 0.98, max(centered.x, centered.y));
-            color = mix(color, texture(sourceBlur, uv).rgb, edge*edgeStrength);
-            color += texture(sourceBloom, uv).rgb * bloomStrength;
+            color = mix(color, texture(sourceBlur, sceneUV).rgb, edge*edgeStrength);
+            color += texture(sourceBloom, sceneUV).rgb * bloomStrength;
             // Exposure followed by exponential tone mapping; floating highlights compress smoothly.
             color = vec3(1.0) - exp(-max(color, vec3(0.0))*exposure);
             float vignette = smoothstep(0.30, 1.0, length(centered)*0.70710678);

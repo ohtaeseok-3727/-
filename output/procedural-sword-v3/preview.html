@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>기사의 검 · 거친 금빛 궤적 v3</title>
+    <link rel="stylesheet" href="preview.css">
+</head>
+<body>
+<main>
+    <header>
+        <div><p class="eyebrow">KNIGHT / EFFECT STUDY 03</p><h1>거친 검격<span>묵직하게, 단숨에.</span></h1></div>
+        <div class="badge"><i></i> 기존 기사 모션 기반</div>
+    </header>
+    <section class="studio" aria-label="검 이펙트 미리보기">
+        <div class="toolbar">
+            <div class="tabs" aria-label="공격 종류">
+                <button data-attack="slash" class="active" aria-pressed="true">가로 베기</button>
+                <button data-attack="chop" aria-pressed="false">내려베기</button>
+            </div>
+            <label>표현 <select id="render-mode"><option value="new">새 코드 이펙트</option><option value="original">기존 스프라이트 효과</option><option value="none">캐릭터만</option></select></label>
+        </div>
+        <div class="stage-wrap">
+            <canvas id="stage" width="1200" height="650" aria-label="기존 기사 공격 모션에 연결한 검 오라와 금빛 잔상"></canvas>
+            <div class="stage-label"><span id="attack-name">HORIZONTAL SLASH</span><small id="phase">준비</small></div>
+            <div class="stage-note">원본 캐릭터 · 거친 도트 검기</div>
+            <div id="loading" role="status">기사 스프라이트를 불러오는 중…</div>
+        </div>
+        <div class="transport">
+            <button id="play" class="primary" disabled>일시정지</button>
+            <button id="replay" disabled>다시 베기</button>
+            <button id="peak" disabled>궤적 자세히</button>
+            <label class="speed">속도 <select id="speed"><option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1" selected>1×</option></select></label>
+            <span id="time-readout">0.00 s</span>
+        </div>
+        <div class="scrubber"><input id="timeline" aria-label="재생 위치" type="range" min="0" max="1800" step="1" value="0"><div><span>준비</span><span>휘두름 / 잔광</span><span>회복</span></div></div>
+    </section>
+    <section class="details">
+        <div><p class="eyebrow">01 / FORM</p><h2>단단하게 이어지는 검격</h2><p>넓은 흰색 중심과 황금색 테두리가 하나의 궤적으로 이어집니다. 가장자리의 불규칙한 굴곡으로 투박한 단면을 표현했습니다.</p></div>
+        <div><p class="eyebrow">02 / IMPACT</p><h2>두꺼운 단면, 짧은 섬광</h2><p>단숨에 뻗는 검격과 빠르게 사라지는 잔상. 궤적의 두께와 대비로 베는 순간의 힘을 강조했습니다.</p></div>
+        <div class="settings"><p class="eyebrow">03 / TUNE</p><label>검기 색상 <select id="palette"><option value="gold">원본 금빛</option><option value="silver">은백색</option><option value="ice">서리빛</option></select></label><label><input type="checkbox" id="aura" checked> 검날 오라</label></div>
+    </section>
+    <footer>기존 기사 공격·효과 시트 참조 · 게임 적용 전 시안 <a href="../procedural-sword-v2/preview.html">부드러운 v2와 비교 ↗</a></footer>
+</main>
+<script type="module" src="preview.js"></script>
+</body>
+</html>

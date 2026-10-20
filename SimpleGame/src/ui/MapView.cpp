@@ -6,6 +6,46 @@
 
 void MapView::DrawTile(Renderer& r, const LevelMap& map, int x, int y, Point p) const
 {
+    r.DrawGeometry(GroundGeometry(map, x, y), p);
+}
+
+const GeometryCache::Mesh& MapView::GroundGeometry(const LevelMap& map, int x, int y) const
+{
+    if (m_GroundMap != &map || m_GroundRevision != map.Revision() || m_GroundSeed != map.Seed())
+    {
+        m_GroundTiles.clear();
+        m_GroundMap = &map;
+        m_GroundRevision = map.Revision();
+        m_GroundSeed = map.Seed();
+    }
+    // Fixed toroidal slots bound memory even during unlimited exploration.
+    if (m_GroundTiles.empty())
+    {
+        m_GroundTiles.resize(4096);
+    }
+    const auto slot = (static_cast<unsigned>(y) & 63u) * 64u + (static_cast<unsigned>(x) & 63u);
+    auto& tile = m_GroundTiles[slot];
+    if (tile.valid && tile.x == x && tile.y == y)
+    {
+        return tile.mesh;
+    }
+    tile.valid = false;
+    tile.x = x;
+    tile.y = y;
+    tile.mesh.clear();
+    tile.mesh.reserve(288);
+    const auto rect = [&tile](float px, float py, float w, float h, Color color)
+    {
+        for (const Point point : {Point{px, py},
+                                  Point{px + w, py},
+                                  Point{px + w, py + h},
+                                  Point{px, py},
+                                  Point{px + w, py + h},
+                                  Point{px, py + h}})
+        {
+            tile.mesh.push_back({point.x, point.y, color.r, color.g, color.b, color.a, -1.f, -1.f});
+        }
+    };
     const auto& layout = map.Layout();
     const float shade = float(map.Hash(x, y) % 17) / 1000.f;
     // Small ground cells keep narrow mine passages and curved bridges visible.
@@ -17,7 +57,7 @@ void MapView::DrawTile(Renderer& r, const LevelMap& map, int x, int y, Point p) 
             const auto region = layout.RegionAt(world);
             const bool mine = layout.Interior(world);
             const bool water = layout.Water(world);
-            const bool road = map.IsRoad(world.x, world.y);
+            const bool road = region == MapRegion::Village || layout.OnRoad(world);
             Color color(.13f + shade, .18f + shade, .15f + shade);
             if (region == MapRegion::Farmland)
             {
@@ -49,25 +89,27 @@ void MapView::DrawTile(Renderer& r, const LevelMap& map, int x, int y, Point p) 
                             ? Color(.24f + shade, .23f + shade, .21f + shade)
                             : Color(.045f, .055f, .065f);
             }
-            const float px = p.x + col * 16.f;
-            const float py = p.y + row * 16.f * .8660254f;
-            r.Rect(px, py, 16.5f, 14.4f, color);
+            const float px = col * 16.f;
+            const float py = row * 16.f * .8660254f;
+            rect(px, py, 16.5f, 14.4f, color);
             if (!mine && region == MapRegion::Farmland && !road)
             {
-                r.Rect(px + 2, py + 4, 12, 2, Color(.16f, .19f, .10f));
-                r.Rect(px + 4, py + 3, 3, 3, Color(.43f, .44f, .19f));
+                rect(px + 2, py + 4, 12, 2, Color(.16f, .19f, .10f));
+                rect(px + 4, py + 3, 3, 3, Color(.43f, .44f, .19f));
             }
             if (water && road)
             {
-                r.Rect(px, py, 16, 2, Color(.47f, .36f, .23f));
+                rect(px, py, 16, 2, Color(.47f, .36f, .23f));
             }
             if (!mine && region == MapRegion::Battlefield && !road &&
                 map.Hash(x * 4 + col, y * 4 + row, 5) % 13 == 0)
             {
-                r.Rect(px + 2, py + 3, 12, 5, Color(.10f, .11f, .10f));
+                rect(px + 2, py + 3, 12, 5, Color(.10f, .11f, .10f));
             }
         }
     }
+    tile.valid = true;
+    return tile.mesh;
 }
 
 void MapView::DrawLandmark(Renderer& r, const MapLandmark& site, Point p, float animationTime) const

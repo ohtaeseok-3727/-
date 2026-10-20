@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "GameView.h"
+#include "HudTextLayout.h"
 #include <algorithm>
 #include <cmath>
 #include <sstream>
@@ -36,11 +37,12 @@ void GameView::DrawHud(
     r.Rect(0, 0, float(width), 116, Color(.025f, .04f, .045f, .96f));
     r.Text(20,
            23,
-           std::string(session.CurrentChapter().Title()) + " / " + region,
+           std::string(session.StoryChapter().Title()) + " / " + region,
            Color(.87f, .79f, .57f));
     std::ostringstream stats;
     stats << "레벨 " << progress.Level() << "   체력 " << progress.Health() << "/"
-          << progress.MaxHealth() << "   공격력 " << progress.Attack() + inventory.AttackBonus()
+          << progress.MaxHealth() << "   공격력 "
+          << static_cast<int>(std::lround(progress.EffectiveAttack(inventory.AttackBonus())))
           << "   마나 " << progress.Mana() << "/" << progress.MaxMana() << "   보유금 "
           << inventory.Gold() << "   장비 " << inventory.Items().size();
     r.Text(20, 44, stats.str(), Color(.83f, .85f, .78f));
@@ -57,11 +59,17 @@ void GameView::DrawHud(
            "경험치 " + std::to_string(progress.Experience()) + " / " +
                std::to_string(progress.RequiredExperience()),
            Color(.65f, .83f, .86f));
-    r.Text(20, 85, session.Objective(), Color(.84f, .80f, .64f));
+    r.Text(20,
+           85,
+           HudTextLayout::Fit(r, session.Objective(), float(width) - 40.f),
+           Color(.84f, .80f, .64f));
     r.Text(
         20,
         105,
-        "WASD 이동   Shift 달리기   Ctrl 연계 공격   Space 확인   M 지도   I 가방   P 일시정지   B 마을",
+        HudTextLayout::Fit(
+            r,
+            "방향키/WASD 이동 · Shift 달리기 · Ctrl 공격 · Space 확인 · M 지도 · J 기록 · I 가방 · K 스킬 · Esc 메뉴 · B 야영지",
+            float(width) - 40.f),
         Color(.57f, .65f, .61f));
     r.Rect(0, float(height - 42), float(width), 42, Color(.025f, .04f, .045f, .95f));
     r.Text(20, float(height - 17), session.Notice(), Color(.95f, .84f, .57f));

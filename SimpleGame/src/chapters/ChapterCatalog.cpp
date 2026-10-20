@@ -2,6 +2,7 @@
 #include "ChapterCatalog.h"
 #include "Chapter1.h"
 #include "Chapter2.h"
+#include "Chapter3.h"
 #include "GameSession.h"
 #include <memory>
 
@@ -16,6 +17,11 @@ void ChapterCatalog::Register(GameSession& session)
                             []
                             {
                                 return std::make_unique<Chapter2>();
+                            });
+    session.RegisterChapter("chapter3",
+                            []
+                            {
+                                return std::make_unique<Chapter3>();
                             });
 }
 

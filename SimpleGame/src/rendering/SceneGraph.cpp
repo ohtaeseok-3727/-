@@ -89,6 +89,7 @@ void SceneGraph::RebuildStaticOrder()
 
 void SceneGraph::BeginDynamicActors()
 {
+    m_DynamicOrigin = {};
     m_RenderQueue.clear();
     m_DynamicVisible.clear();
     m_DynamicActors.clear();
@@ -98,7 +99,10 @@ void SceneGraph::AddDynamicActor(const WorldProp& description)
 {
     m_RenderQueue.clear();
     m_DynamicVisible.clear();
-    m_DynamicActors.emplace_back(description);
+    auto world = description;
+    world.x += m_DynamicOrigin.x;
+    world.y += m_DynamicOrigin.y;
+    m_DynamicActors.emplace_back(world);
 }
 
 void SceneGraph::BuildRenderQueue(const SceneCamera& camera)
@@ -110,7 +114,10 @@ void SceneGraph::BuildRenderQueue(const SceneCamera& camera)
     {
         const auto& prop = actor.Description();
         const Point screen = camera.Project(prop.x, prop.y);
-        if (camera.IsVisible(screen))
+        // The ultimate blade/wave extends well above the ordinary actor bounds.
+        const bool tallEffect =
+            (prop.kind == 5 || prop.kind == 12) && camera.IsVisible({screen.x, screen.y - 180.f});
+        if (camera.IsVisible(screen) || tallEffect)
         {
             output.push_back({&actor, screen});
         }

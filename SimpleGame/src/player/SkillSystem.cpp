@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "SkillSystem.h"
 #include "PlayerProgression.h"
 #include <algorithm>
@@ -85,6 +85,14 @@ bool SkillSystem::TryUse(char key,
     }
     m_Cooldowns[skill->id] = skill->cooldown;
     m_LastRequest = BuildRequest(*skill, progression, attackBonus);
+    if (skill->id == "mage_sword_song")
+    {
+        notice = skill->name + " · 반경 300 · 4초간 40회 · 타격 " +
+                 std::to_string(static_cast<int>(std::lround(m_LastRequest.calculatedDamage))) +
+                 " · 합체 폭발 " +
+                 std::to_string(static_cast<int>(std::lround(m_LastRequest.calculatedBurstDamage)));
+        return true;
+    }
     notice = skill->name + " 사용 · 개별 피해 " +
              std::to_string(static_cast<int>(std::lround(m_LastRequest.calculatedDamage))) +
              " · 발사체 " + std::to_string(m_LastRequest.projectileCount) + "개";
@@ -99,8 +107,12 @@ SkillUseRequest SkillSystem::BuildRequest(const SkillData& skill,
     request.skillId = skill.id;
     const int stat = skill.profession == 0 ? progression.Intelligence() : progression.Strength();
     request.calculatedDamage =
-        (progression.Attack() + attackBonus) * (skill.attackRatio / 100.f) + stat * skill.statRatio;
+        progression.EffectiveAttack(attackBonus) * (skill.attackRatio / 100.f) +
+        stat * skill.statRatio;
     request.projectileCount = skill.projectileCount;
+    request.calculatedBurstDamage =
+        progression.EffectiveAttack(attackBonus) * (skill.burstAttackRatio / 100.f) +
+        stat * skill.burstStatRatio;
     if (skill.id == "mage_wind_blades")
     {
         request.projectileCount =
@@ -155,7 +167,7 @@ int SkillSystem::SlotAt(int x, int y, int width, int height) const
 int SkillSystem::IconAt(int x, int y, int width, int height, int level) const
 {
     const auto& skills = m_PlayerSkills.Available();
-    const SkillLayout layout = SkillLayout::Create(width, height);
+    const SkillLayout layout = SkillLayout::Create(width, height, static_cast<int>(skills.size()));
     if (!layout.canShowWindow)
     {
         return -1;

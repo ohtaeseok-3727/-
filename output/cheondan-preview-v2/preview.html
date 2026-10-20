@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>천단참 · 화면 균열 미리보기</title>
+<link rel="stylesheet" href="preview.css">
+</head>
+<body>
+<main>
+  <header><div><p class="eyebrow">KNIGHT / ULTIMATE STUDY 02</p><h1>천단참 <span>화면을 가르는 일격</span></h1></div><span class="badge">직접 그리는 이펙트</span></header>
+  <section class="stage"><canvas id="stage" width="1280" height="720" aria-label="천단참 사선 베기와 화면 균열 애니메이션"></canvas><div class="caption"><span id="phase">검기 응축</span><span id="clock">0.00 s</span></div></section>
+  <section class="panel">
+    <div class="controls"><button id="play">일시정지</button><button id="restart">다시 보기</button><label>속도 <select id="speed"><option value="0.25">0.25×</option><option value="0.5" selected>0.5×</option><option value="1">1×</option></select></label><label>방향 <select id="direction"><option value="1">오른쪽</option><option value="-1">왼쪽</option></select></label><label><input id="loop" type="checkbox" checked> 반복</label></div>
+    <input id="timeline" type="range" min="0" max="2.6" step="0.001" value="0" aria-label="연출 시간">
+    <div class="chapters"><button data-time="0.48"><b>01</b> 응축 · 검기 성장</button><button data-time="0.75"><b>02</b> 화면을 향해 사선 베기</button><button data-time="0.93"><b>03</b> 거대한 잔상</button><button data-time="1.30"><b>04</b> 잔상을 따라 화면 균열</button></div>
+  </section>
+  <footer><p>Lv.20 · MP 30 · 재사용 60초 · 공격력 500% + STR × 5.0</p><p>게임 연출을 옮긴 Canvas 미리보기입니다. 배경은 균열 확인용이며 게임의 조명·후처리와는 차이가 있습니다.<br>새 이펙트는 모두 도형으로 그립니다. 캐릭터에는 기존 기사 동작 이미지만 사용합니다.</p><p id="status" role="status">기존 기사 동작을 불러오는 중…</p></footer>
+</main>
+<script src="preview.js"></script>
+</body></html>

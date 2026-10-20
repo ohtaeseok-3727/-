@@ -16,6 +16,7 @@ struct SkillUseRequest
     std::string skillId;
     float calculatedDamage = 0.f;
     int projectileCount = 1;
+    float calculatedBurstDamage = 0.f;
 };
 
 class SkillSystem

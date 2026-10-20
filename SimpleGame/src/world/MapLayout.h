@@ -71,6 +71,7 @@ struct MapLandmark
     std::string description;
     float radius;
     ObjectId object = 0;
+    int worldRegion = -1;
 };
 
 // Geometry and presentation metadata travel together; no chapter-specific switches here.
@@ -94,6 +95,9 @@ struct MapDefinition
     std::vector<MapRectangle> water;
     std::optional<MapRectangle> interior;
     std::string wallName = "벽면";
+    bool openWorld = false;
+    std::vector<MapRectangle> interiors;
+    int fieldEnemyHealth = LevelTuning::EnemyHealth;
 };
 
 class MapLayout

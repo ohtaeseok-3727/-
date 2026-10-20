@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "Chapter1.h"
+#include "SceneCamera.h"
+#include <limits>
 #include <algorithm>
 #include <cmath>
 
@@ -64,9 +66,13 @@ void Chapter1::Update(float dt,
                       EnemySystem& enemies,
                       PlayerProgression& progress)
 {
+    if (Complete())
+    {
+        return;
+    }
     if (ControlLocked())
     {
-        Payoff(dt, enemies, progress);
+        Payoff(dt * (ContinuousWorld() && interactionHeld ? 4.f : 1.f), enemies, progress);
         return;
     }
     switch (m_State.map)
@@ -111,6 +117,10 @@ void Chapter1::Village(float dt, WorldPosition, const LevelMap& map, EnemySystem
 
 void Chapter1::Forest(float dt, WorldPosition player, const LevelMap& map, EnemySystem& enemies)
 {
+    if (ContinuousWorld() && !m_State.northTrailUnlocked)
+    {
+        return;
+    }
     Fire(10, "선명한 자국과 깊은 자국이 갈린다. 비에 남은 물리적 흔적을 비교하자.");
     if (Near(player, Position(map, Chapter1Objects::LightTracks), 100.f))
     {
@@ -134,6 +144,11 @@ void Chapter1::Forest(float dt, WorldPosition player, const LevelMap& map, Enemy
         m_ConvoyTime += dt;
         m_State.suppliesPreserved = (std::max)(25, 100 - static_cast<int>(m_ConvoyTime / 3.f));
     }
+    if (m_State.convoySpotted && !m_State.prisonersReleased)
+    {
+        StartEncounter(
+            Chapter1Encounter::Convoy, Position(map, Chapter1Objects::Wagon), 4, enemies, map);
+    }
 }
 
 void Chapter1::Mine(float dt,
@@ -143,7 +158,7 @@ void Chapter1::Mine(float dt,
                     EnemySystem& enemies,
                     PlayerProgression& progress)
 {
-    if (m_State.grumaDefeated)
+    if (m_State.grumaDefeated || (ContinuousWorld() && !m_State.mineEvidenceAcquired))
     {
         return;
     }
@@ -309,7 +324,8 @@ void Chapter1::Payoff(float dt, EnemySystem& enemies, PlayerProgression& progres
     }
 }
 
-void Chapter1::StrikeObjects(WorldPosition player, bool faceLeft, int damage, const LevelMap& map)
+void Chapter1::StrikeObjects(
+    WorldPosition player, bool faceLeft, int damage, const LevelMap& map, float rangeScale)
 {
     if (m_State.phase != Chapter1Phase::ArmyCommand)
     {
@@ -322,7 +338,9 @@ void Chapter1::StrikeObjects(WorldPosition player, bool faceLeft, int damage, co
         const auto p = Position(map, bells[i]);
         const float dx = (p.x - player.x) * (faceLeft ? -1.f : 1.f);
         const float dy = p.y - player.y;
-        if (m_State.bellHealth[i] > 0 && dx >= -18 && dx * dx + dy * dy * 2 <= 95.f * 95.f &&
+        if (m_State.bellHealth[i] > 0 && dx >= -18.f * rangeScale &&
+            dx * dx + dy * dy * 2 <=
+                LevelTuning::HitRange * LevelTuning::HitRange * rangeScale * rangeScale &&
             map.ClearPath(player, p))
         {
             m_State.bellHealth[i] = (std::max)(0, m_State.bellHealth[i] - damage);
@@ -334,6 +352,48 @@ void Chapter1::StrikeObjects(WorldPosition player, bool faceLeft, int damage, co
                      : i == 1 ? "둘째 종 파괴: 고지대 지원과 치료 신호 중단."
                               : "셋째 종 파괴: 새 증원 호출 중단. 입구 쪽에서 전투 소리가 들린다.");
             }
+        }
+    }
+}
+
+void Chapter1::StrikeProjectileObjects(WorldPosition from,
+                                       WorldPosition to,
+                                       float radiusX,
+                                       float radiusY,
+                                       int damage,
+                                       const LevelMap& map,
+                                       float height,
+                                       std::unordered_set<std::uint64_t>* hitObjects,
+                                       std::optional<WorldPosition> sightOrigin)
+{
+    if (m_State.phase != Chapter1Phase::ArmyCommand || !hitObjects || !sightOrigin || damage <= 0)
+    {
+        return;
+    }
+    const ObjectId bells[] = {
+        Chapter1Objects::BellA, Chapter1Objects::BellB, Chapter1Objects::BellC};
+    for (int i = 0; i < 3; ++i)
+    {
+        const auto target = Position(map, bells[i]);
+        const auto id = (std::numeric_limits<std::uint64_t>::max)() - static_cast<std::uint64_t>(i);
+        const float x = std::clamp(target.x, (std::min)(from.x, to.x), (std::max)(from.x, to.x));
+        if (m_State.bellHealth[i] <= 0 || hitObjects->count(id) ||
+            std::abs(target.x - x) > radiusX + 16.f ||
+            std::abs((target.y - to.y) * SceneCamera::GroundDepthScale() + height - 35.f) >
+                radiusY + 25.f ||
+            !map.ClearPath(*sightOrigin, target))
+        {
+            continue;
+        }
+        hitObjects->insert(id);
+        m_State.bellHealth[i] = (std::max)(0, m_State.bellHealth[i] - damage);
+        if (m_State.bellHealth[i] == 0)
+        {
+            ++m_State.commandBellsDestroyed;
+            Fire(27 + i,
+                 i == 0   ? "첫 종 파괴: 근접 증원 간격 증가."
+                 : i == 1 ? "둘째 종 파괴: 고지대 지원과 치료 신호 중단."
+                          : "셋째 종 파괴: 새 증원 호출 중단. 입구 쪽에서 전투 소리가 들린다.");
         }
     }
 }
@@ -384,7 +444,10 @@ std::string Chapter1::VillageInteraction(ObjectId object, PlayerInventory& inven
             return "농가 세 곳에서 무엇이 사라졌는지 조사해야 한다.";
         }
         Fire(6, "무거운 수레 자국을 따라 북쪽 숲길로 이동한다.");
-        Travel(Chapter1Maps::Forest);
+        if (!ContinuousWorld())
+        {
+            Travel(Chapter1Maps::Forest);
+        }
     }
     return {};
 }
@@ -445,7 +508,10 @@ std::string Chapter1::ForestInteraction(ObjectId object, const EnemySystem& enem
             return "주민을 구출하고 폐광 송장을 확보해야 한다.";
         }
         Fire(17, "송장에 기록된 폐광 기지로 이동한다.");
-        Travel(Chapter1Maps::Mine);
+        if (!ContinuousWorld())
+        {
+            Travel(Chapter1Maps::Mine);
+        }
     }
     return {};
 }
@@ -476,13 +542,20 @@ std::string Chapter1::MineInteraction(ObjectId object, const LevelMap& map)
     }
     if (object == Chapter1Objects::Lift)
     {
+        if (ContinuousWorld())
+        {
+            return "광차 선로 옆 갱도가 지휘 구역까지 이어진다. 북쪽으로 걸어 내려가자.";
+        }
         if (m_State.mineInvestigation.count() < 3)
         {
             return "조사 3개로 안전한 승강 경로를 찾을 수 있다. 조사 없이도 정면 갱도를 걸어 전진할 수 있다.";
         }
         auto destination = Arena();
         destination.y += 240.f;
-        RequestTravel({{}, m_State.map, destination});
+        if (!ContinuousWorld())
+        {
+            RequestTravel({{}, m_State.map, destination});
+        }
         Fire(22, "교대 주기에 맞춰 광차 승강로로 최심부에 접근한다.");
     }
     else if (object == Chapter1Objects::ReinforcementGate)
@@ -511,6 +584,11 @@ std::string Chapter1::MineInteraction(ObjectId object, const LevelMap& map)
             return "용사: 주민들이 가져온 군단 표식 덕분에 왔어. 네가 약한 게 아니라, 혼자 군단과 싸운 거야. 장부를 같이 보자.";
         }
         m_State.aftermathDialogueComplete = true;
+        if (ContinuousWorld())
+        {
+            m_State.chapter1Complete = true;
+            m_State.phase = Chapter1Phase::Complete;
+        }
         return "플레이어: 명령은 안 받아. 용사: 나도 줄 생각 없어. — 동등한 협력자로 회색벽 요새를 향한다.";
     }
     else if (object == Chapter1Objects::ChapterExit)
@@ -522,7 +600,10 @@ std::string Chapter1::MineInteraction(ObjectId object, const LevelMap& map)
         m_State.chapter1Complete = true;
         m_State.phase = Chapter1Phase::Complete;
         Fire(35, "Chapter 1 종료. 회색벽 요새로 향하는 길에 들어섰다.");
-        RequestTravel({"chapter2", std::nullopt, std::nullopt});
+        if (!ContinuousWorld())
+        {
+            RequestTravel({"chapter2", std::nullopt, std::nullopt});
+        }
     }
     return {};
 }
@@ -536,6 +617,12 @@ std::string Chapter1::Interact(const MapLandmark& site,
     if (ControlLocked())
     {
         return {};
+    }
+    if (ContinuousWorld() &&
+        ((m_State.map == Chapter1Maps::Forest && !m_State.northTrailUnlocked) ||
+         (m_State.map == Chapter1Maps::Mine && !m_State.mineEvidenceAcquired)))
+    {
+        return "현재 목표의 단서를 먼저 연결해야 한다. M 지도의 금빛 표식을 확인하자.";
     }
     const auto before = m_Message;
     std::string result;
@@ -562,7 +649,7 @@ std::string Chapter1::Interact(const MapLandmark& site,
 
 const char* Chapter1::Title() const
 {
-    return "Chapter 1";
+    return "챕터 1 · 새로 앉은 자";
 }
 
 MapId Chapter1::InitialMap() const
@@ -589,11 +676,33 @@ void Chapter1::EnterMap(MapId map) noexcept
 void Chapter1::Retry(EnemySystem& enemies)
 {
     ClearTravel();
-    enemies.Clear();
-    m_Started.reset();
-    m_State.gateProgress = 0;
-    if (!m_State.grumaDefeated)
+    if (!ContinuousWorld())
     {
+        m_Started.reset();
+    }
+    else
+    {
+        const int first = m_State.map == Chapter1Maps::Village  ? 1
+                          : m_State.map == Chapter1Maps::Forest ? 2
+                                                                : 4;
+        const int last = m_State.map == Chapter1Maps::Village  ? 1
+                         : m_State.map == Chapter1Maps::Forest ? 3
+                                                               : 8;
+        for (int id = first; id <= last; ++id)
+        {
+            if (enemies.Alive(static_cast<std::size_t>(id)))
+            {
+                m_Started.reset(id);
+            }
+        }
+    }
+    enemies.Clear();
+    m_State.gateProgress = 0;
+    if (!m_State.grumaDefeated && (!ContinuousWorld() || m_State.map == Chapter1Maps::Mine))
+    {
+        m_Started.reset(static_cast<std::size_t>(Chapter1Encounter::GrumaDuel));
+        m_Started.reset(static_cast<std::size_t>(Chapter1Encounter::ArmyCommand));
+        m_Started.reset(static_cast<std::size_t>(Chapter1Encounter::HeroPayoff));
         m_State.phase = Chapter1Phase::Exploration;
         m_State.grumaDuelStarted = m_State.grumaArmorBroken = m_State.grumaLegInjured = false;
         m_State.commandBellsDestroyed = 0;
@@ -603,21 +712,23 @@ void Chapter1::Retry(EnemySystem& enemies)
             m_State.triggers.reset(i);
         }
     }
-    m_Message = "현재 지역 입구로 복귀했다. 조사·소지품은 유지하고 미완료 전투를 다시 시작한다.";
+    m_Message = "야영지로 복귀한다. 조사·소지품은 유지하고 미완료 전투를 다시 시작한다.";
 }
 
 std::string Chapter1::Objective() const
 {
+    const auto goal = Goal();
+    const auto objectiveMap = ContinuousWorld() && goal ? goal->map : m_State.map;
     if (m_State.chapter1Complete)
     {
         return "Chapter 1 완료 · 다음 목적지: 회색벽 요새 / 동등한 협력자로 동행";
     }
     if (ControlLocked())
     {
-        return m_State.heroArrived ? "용사 payoff — 플레이어가 만든 승리 조건의 결과"
+        return m_State.heroArrived ? "용사 합류 · 증원 차단으로 만든 승리 · Space 유지: 빠르게 보기"
                                    : "전략 임무 성공 — 그르마의 마지막 공격";
     }
-    if (m_State.map == Chapter1Maps::Village)
+    if (objectiveMap == Chapter1Maps::Village)
     {
         if (!m_State.rationInteractionComplete)
         {
@@ -628,9 +739,9 @@ std::string Chapter1::Objective() const
             return "가장 가까운 피해 농가에서 고블린 습격을 막기 [Ctrl]";
         }
         return "농가 증거 " + std::to_string(m_State.investigationEvidenceCount) +
-               "/3 · 완료 후 북쪽 출구 [Space]";
+               "/3 · 완료 후 북쪽 숲으로 탐험";
     }
-    if (m_State.map == Chapter1Maps::Forest)
+    if (objectiveMap == Chapter1Maps::Forest)
     {
         if (!m_State.realTrackFound)
         {
@@ -644,7 +755,7 @@ std::string Chapter1::Objective() const
         {
             return "수송대 호위병 처치 → 포로 결박 해제 [Space]";
         }
-        return "폐광 송장 확보 → 주민에게 보고 전달 → 폐광 길 [Space]";
+        return "폐광 송장 확보 → 주민에게 보고 전달 → 폐광으로 이어진 산길";
     }
     if (m_State.phase == Chapter1Phase::Duel)
     {
@@ -658,7 +769,7 @@ std::string Chapter1::Objective() const
     }
     if (m_State.grumaDefeated)
     {
-        return "장부 조사 → 용사와 대화 → 회색벽 요새로 출발 [Space]";
+        return "장부 조사 → 용사와 대화 → 회색벽 요새로 걸어서 출발";
     }
     return "정문/배수로 선택 · 폐광 조사 " + std::to_string(m_State.mineInvestigation.count()) +
            "/6 (선택) · 승강로 또는 정면 갱도로 최심부";

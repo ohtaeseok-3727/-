@@ -102,7 +102,7 @@ def expected_indexes() -> tuple[dict[Path, str], int]:
         "| --- | --- |",
         "| 게임 기획·설정 | [GAME_DESIGN.md](GAME_DESIGN.md)에서 주제를 고른다 |",
         "| 챕터 1 확정 스토리 | [CHAPTER_01_FINAL.md](_story_scene_production/05_final_chapters/CHAPTER_01_FINAL.md) |",
-        "| 챕터 구현 현황 | [챕터 1 점검](docs/implementation/CHAPTER_01_IMPLEMENTATION_AUDIT.md), [챕터 2 구현](docs/implementation/CHAPTER_02_IMPLEMENTATION.md) |",
+        "| 챕터 구현 현황 | [챕터 1 점검](docs/implementation/CHAPTER_01_IMPLEMENTATION_AUDIT.md), [챕터 2 구현](docs/implementation/CHAPTER_02_IMPLEMENTATION.md), [챕터 3 구현](docs/implementation/CHAPTER_03_IMPLEMENTATION.md) |",
         "| 성능·구조 변경 | [PERFORMANCE_ANALYSIS.md](docs/performance/PERFORMANCE_ANALYSIS.md) |",
         "| 현재 작업 기록·함수 사전 | [프로젝트 로컬 인덱스](.agents/projects/INDEX.md) |",
         "| 과거 협업 기록 | [WORK_LOG.md](docs/process/WORK_LOG.md) |",

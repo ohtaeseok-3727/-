@@ -1,4 +1,9 @@
 /.vs 
+/intermediate/
+/Win32/
+/x64/Debug/
+/output/development-settings-check.json
+**/__pycache__/
 /simplegame/x64 
 /.tmp.driveupload/
 /.local_knowledge/
@@ -16,3 +21,9 @@
 *.suo 
 *.db 
 
+
+/x64/Release/
+/output/stage-patrol-performance/
+
+/output/combat-guide-polish/
+/output/**/preview-verified.png

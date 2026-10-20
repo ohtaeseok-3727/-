@@ -4,6 +4,18 @@
 
 class FrameProfiler;
 
+// Transient, screen-space cut; pixel coordinates use a top-left origin.
+struct ScreenCut
+{
+    float ax = 0, ay = 0, bx = 1, by = 1;
+    float separation = 0, progress = 0;
+};
+
+struct ArcaneShock
+{
+    float x = 0, y = 0, age = 0, strength = 0;
+};
+
 struct PostSettings
 {
     bool enabled = true;
@@ -32,6 +44,8 @@ class PostProcessing
     void Composite();
     std::string Status() const;
     PostSettings settings;
+    ScreenCut screenCut;
+    ArcaneShock arcaneShock;
 
   private:
     bool MakeProgram();
@@ -47,5 +61,7 @@ class PostProcessing
     GLint m_Enabled = -1, m_Exposure = -1, m_BloomStrength = -1;
     GLint m_VignetteStrength = -1, m_EdgeStrength = -1;
     GLint m_BloomRadius = -1;
+    GLint m_CutLine = -1, m_CutMotion = -1;
+    GLint m_ArcaneShock = -1;
     FrameProfiler& m_Profiler;
 };

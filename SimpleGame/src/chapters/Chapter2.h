@@ -170,6 +170,8 @@ struct Chapter2Combat
     float heroCooldown = 0.f;
     float heroAttack = 0.f;
     float heroRepath = 0.f;
+    std::size_t heroWaypoint = 0;
+    bool heroFaceLeft = false;
     std::vector<WorldPosition> heroPath;
     float jumpCooldown = 0.f;
     float cryCooldown = 4.f;
@@ -186,6 +188,7 @@ struct Chapter2Combat
     WorldPosition bossTarget{};
     EnemyAction bossAction = EnemyAction::None;
     float bossProgress = 0.f;
+    float bossHealthRatio = 1.f;
 };
 
 // One chapter owns story, encounters and companion/boss behavior.
@@ -196,7 +199,13 @@ class Chapter2 final : public Chapter
     MapId InitialMap() const override;
     MapDefinition BuildMap(MapId map) const override;
     void Reset() override;
+    bool CanSkipFieldStory() const;
+    bool SkipFieldStory();
     void EnterMap(MapId map) noexcept override;
+    void VisitMap(MapId map) override;
+    void PlayerArrived(WorldPosition player, const LevelMap& map) override;
+    std::optional<ChapterGoal> Goal() const override;
+    std::string InteractionPrompt(const MapLandmark& site) const override;
     void Update(float dt,
                 WorldPosition player,
                 bool interactionHeld,
@@ -212,13 +221,17 @@ class Chapter2 final : public Chapter
     void StrikeObjects(WorldPosition player,
                        bool faceLeft,
                        int damage,
-                       const LevelMap& map) override;
+                       const LevelMap& map,
+                       float rangeScale = 1.f) override;
     void StrikeProjectileObjects(WorldPosition from,
                                  WorldPosition to,
                                  float radiusX,
                                  float radiusY,
                                  int damage,
-                                 const LevelMap& map) override;
+                                 const LevelMap& map,
+                                 float height = LevelTuning::ProjectileHeight,
+                                 std::unordered_set<std::uint64_t>* hitObjects = nullptr,
+                                 std::optional<WorldPosition> sightOrigin = std::nullopt) override;
     ChapterImpact ConsumeImpact() override;
     bool BlocksMovement(WorldPosition p) const override;
     bool EnemyVisible(const FieldEnemy& enemy) const override;
@@ -238,6 +251,7 @@ class Chapter2 final : public Chapter
 
     const Chapter2State& State() const;
     const Chapter2Combat& Combat() const;
+    MonitorObservation ObserveMap(const MapDefinition& map, WorldPosition player) const override;
     bool RecordEvent(Chapter2Event event);
     bool ChooseTarget(Chapter2Target target);
     bool ResolveTarget(Chapter2Target target);
@@ -276,6 +290,7 @@ class Chapter2 final : public Chapter
     Chapter2State m_State;
     std::string m_Message;
     Chapter2Combat m_Combat;
+    std::array<Chapter2Combat, 3> m_RegionCombat;
     ChapterImpact m_Impact;
     EnemyPathfinder m_HeroPathfinder;
     mutable Chapter2Sprites m_Sprites;

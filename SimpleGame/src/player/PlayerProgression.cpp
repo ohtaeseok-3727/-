@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "PlayerProgression.h"
+#include "KnightSkillData.h"
 #include <algorithm>
 
 void PlayerProgression::Reset(int profession)
@@ -41,6 +42,12 @@ int PlayerProgression::AddExperience(int amount)
 void PlayerProgression::Heal(int amount)
 {
     m_Health = (std::min)(MaxHealth(), m_Health + (std::max)(0, amount));
+}
+
+void PlayerProgression::Restore()
+{
+    m_Health = MaxHealth();
+    m_Mana = MaxMana();
 }
 
 void PlayerProgression::Damage(int amount)
@@ -106,4 +113,20 @@ int PlayerProgression::Intelligence() const
 int PlayerProgression::Attack() const
 {
     return 13 + (m_Profession == 0 ? Intelligence() : Strength());
+}
+
+bool PlayerProgression::KnightAuraActive() const
+{
+    return m_Profession == 1 && m_Level >= KnightSkillData::AuraLevel;
+}
+
+float PlayerProgression::EffectiveAttack(int equipmentBonus) const
+{
+    return (Attack() + equipmentBonus) *
+           (KnightAuraActive() ? KnightSkillData::AttackMultiplier : 1.f);
+}
+
+float PlayerProgression::AttackRangeScale() const
+{
+    return KnightAuraActive() ? KnightSkillData::RangeMultiplier : 1.f;
 }

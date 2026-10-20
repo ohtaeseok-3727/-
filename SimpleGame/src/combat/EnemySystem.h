@@ -1,4 +1,5 @@
 #pragma once
+#include <optional>
 #include "LevelMap.h"
 #include "EnemyAIState.h"
 #include "EnemyStateMachine.h"
@@ -30,7 +31,7 @@ struct EnemyStats
     int damage = LevelTuning::EnemyDamage;
     float speed = 68.f;
     float injuredSpeed = 68.f;
-    float detectionRange = 430.f;
+    float detectionRange = 200.f;
     int minimumHealth = 0;
     bool preserveCorpse = false;
     int appearance = 0; // Chapter-local visual/archetype ID.
@@ -39,6 +40,23 @@ struct EnemyStats
 
 struct FieldEnemy
 {
+    static constexpr float DeathAnimationDuration = .8f;
+
+    float AttackRange() const
+    {
+        return role == EnemyRole::Ranged ? 240.f : 55.f;
+    }
+
+    float AttackWindupDuration() const
+    {
+        return role == EnemyRole::Ranged ? 1.2f : .7f;
+    }
+
+    bool DeathAnimationPlaying() const
+    {
+        return health <= 0 && (ai.state != EnemyState::Dead || stateTime < DeathAnimationDuration);
+    }
+
     std::uint64_t id = 0;
     EnemyAIState ai;
     WorldPosition position;
@@ -69,6 +87,12 @@ class EnemySystem
   public:
     void Reset(unsigned seed, const LevelMap& map);
     void Clear();
+
+    void SetIdentityBase(std::uint64_t base)
+    {
+        m_NextId = base;
+    }
+
     void Add(WorldPosition position,
              std::size_t encounter,
              EnemyRole role = EnemyRole::Melee,
@@ -77,21 +101,26 @@ class EnemySystem
     void RemoveEncounter(std::size_t encounter);
     FieldEnemy* Boss();
     bool DamageEnemy(std::uint64_t id, int damage);
+    std::vector<WorldPosition> StrikeArea(WorldPosition center, float radius, int damage);
     std::vector<WorldPosition> ConsumeScriptDefeats();
     void SetSupportEnabled(bool enabled);
-    int Update(float dt, WorldPosition player, const LevelMap& map);
+    int Update(float dt, WorldPosition player, const LevelMap& map, float simulationRadius = 0.f);
     std::vector<WorldPosition> Strike(WorldPosition player,
                                       bool faceLeft,
                                       int damage,
-                                      const LevelMap& map);
+                                      const LevelMap& map,
+                                      float rangeScale = 1.f);
     const std::vector<FieldEnemy>& Enemies() const;
-    std::vector<WorldPosition> StrikeProjectile(WorldPosition from,
-                                                WorldPosition to,
-                                                float radiusX,
-                                                float radiusY,
-                                                int damage,
-                                                std::unordered_set<std::uint64_t>& hitTargets,
-                                                const LevelMap& map);
+    std::vector<WorldPosition> StrikeProjectile(
+        WorldPosition from,
+        WorldPosition to,
+        float radiusX,
+        float radiusY,
+        int damage,
+        std::unordered_set<std::uint64_t>& hitTargets,
+        const LevelMap& map,
+        float height = LevelTuning::ProjectileHeight,
+        std::optional<WorldPosition> sightOrigin = std::nullopt);
 
   private:
     EnemyStateMachine m_StateMachine;

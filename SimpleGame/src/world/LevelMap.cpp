@@ -5,12 +5,15 @@
 
 void LevelMap::Generate(std::uint32_t seed)
 {
+    m_PropCells.clear();
     m_Seed = seed;
     ++m_Revision;
 }
 
 void LevelMap::Load(std::string chapter, MapDefinition definition)
 {
+    m_PropCells.clear();
+    m_WorldGeometry = nullptr;
     m_Layout.Load(std::move(definition));
     m_ChapterId = std::move(chapter);
     ++m_Revision; // Also invalidates paths when two chapters use the same local map ID.
@@ -50,6 +53,25 @@ bool LevelMap::IsRoad(float x, float y) const
 }
 
 bool LevelMap::CellProp(int x, int y, WorldProp& prop) const
+{
+    if (m_PropCells.empty())
+    {
+        m_PropCells.resize(4096);
+    }
+    const auto slot = (static_cast<unsigned>(y) & 63u) * 64u + (static_cast<unsigned>(x) & 63u);
+    auto& cell = m_PropCells[slot];
+    if (!cell.valid || cell.x != x || cell.y != y)
+    {
+        cell.x = x;
+        cell.y = y;
+        cell.occupied = GenerateCellProp(x, y, cell.prop);
+        cell.valid = true;
+    }
+    prop = cell.prop;
+    return cell.occupied;
+}
+
+bool LevelMap::GenerateCellProp(int x, int y, WorldProp& prop) const
 {
     const auto h = Hash(x, y);
     if (h % 100 < 30)
@@ -106,6 +128,10 @@ std::vector<WorldProp> LevelMap::ChunkObjects(int x, int y) const
 
 bool LevelMap::Blocked(float x, float y) const
 {
+    if (m_WorldGeometry)
+    {
+        return m_WorldGeometry->Blocked(x + m_WorldOrigin.x, y + m_WorldOrigin.y);
+    }
     const WorldPosition p{x, y};
     // Every map is an authored, bounded walkable topology. Water and mine walls are extra terrain limits.
     if (!m_Layout.Walkable(p, 11.f) || (m_Layout.Water(p, 11.f) && !m_Layout.OnRoad(p, -11.f)) ||
@@ -151,6 +177,12 @@ bool LevelMap::Blocked(float x, float y) const
     }
 
     return false;
+}
+
+void LevelMap::UseWorldGeometry(const LevelMap& world, WorldPosition origin)
+{
+    m_WorldGeometry = &world;
+    m_WorldOrigin = origin;
 }
 
 bool LevelMap::ClearPath(WorldPosition from, WorldPosition to) const

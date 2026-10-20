@@ -96,6 +96,9 @@ bool PostProcessing::MakeProgram()
     m_BloomRadius = glGetUniformLocation(m_Program, "bloomRadius");
     m_VignetteStrength = glGetUniformLocation(m_Program, "vignetteStrength");
     m_EdgeStrength = glGetUniformLocation(m_Program, "edgeStrength");
+    m_CutLine = glGetUniformLocation(m_Program, "cutLine");
+    m_CutMotion = glGetUniformLocation(m_Program, "cutMotion");
+    m_ArcaneShock = glGetUniformLocation(m_Program, "arcaneShock");
     return true;
 }
 
@@ -246,6 +249,14 @@ void PostProcessing::Composite()
                 settings.vignette ? Clamp(settings.vignetteStrength, 0.f, .95f) : 0.f);
     glUniform1f(m_EdgeStrength,
                 settings.edgeBlur ? Clamp(settings.edgeBlurStrength, 0.f, 1.f) : 0.f);
+    glUniform4f(m_CutLine, screenCut.ax, screenCut.ay, screenCut.bx, screenCut.by);
+    glUniform2f(
+        m_CutMotion, Clamp(screenCut.separation, 0.f, 32.f), Clamp(screenCut.progress, 0.f, 1.f));
+    glUniform4f(m_ArcaneShock,
+                arcaneShock.x,
+                arcaneShock.y,
+                Clamp(arcaneShock.age, 0.f, .55f),
+                Clamp(arcaneShock.strength, 0.f, 12.f));
     DrawPass(2);
     for (int unit = 2; unit >= 0; --unit)
     {

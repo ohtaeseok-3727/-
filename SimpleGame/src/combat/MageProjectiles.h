@@ -31,7 +31,7 @@ class MageProjectiles
     static constexpr float CharacterScale = .35f;
     // CombatVisualData's mage body already carries a .42 source-pixel scale.
     static constexpr float PlayerScale = CharacterScale * .42f;
-    static constexpr float Height = 140.f * PlayerScale;
+    static constexpr float Height = LevelTuning::ProjectileHeight;
     void Reset();
     void Cast(const SkillUseRequest& request, WorldPosition player, bool faceLeft);
     void Update(float dt, GameSession& level, const LevelMap& map);

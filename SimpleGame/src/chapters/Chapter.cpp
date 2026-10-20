@@ -8,7 +8,7 @@ ChapterFlags Chapter::ExportFlags() const
     return {};
 }
 
-void Chapter::StrikeObjects(WorldPosition, bool, int, const LevelMap&)
+void Chapter::StrikeObjects(WorldPosition, bool, int, const LevelMap&, float)
 {
 }
 

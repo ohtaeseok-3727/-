@@ -8,7 +8,7 @@
 namespace
 {
     // Tuning assumptions, not newly confirmed game-design values.
-    constexpr int OrcHealth = 70, EliteHealth = 140, BarkanHealth = 900;
+    constexpr int OrcHealth = LevelTuning::OrcHealth, EliteHealth = 140, BarkanHealth = 900;
     constexpr float JumpDistance = 210.f, JumpCooldown = 6.f, CryCooldown = 11.f;
     constexpr float CryRadius = 185.f, CryBuffSeconds = 6.f, CrySpeed = 1.65f;
 
@@ -89,7 +89,7 @@ void Chapter2::SpawnOrcs(EnemySystem& enemies,
         stats.health = elite ? EliteHealth : OrcHealth;
         stats.damage = elite ? 13 : 8;
         stats.speed = elite ? 78.f : 87.f;
-        stats.detectionRange = 600.f;
+        stats.detectionRange = 200.f;
         stats.appearance = elite ? 1 : 0;
         stats.preserveCorpse = true;
         if (group == 229)
@@ -186,6 +186,22 @@ void Chapter2::Update(float dt,
     }
     dt = (std::min)(dt, .1f);
     m_Impact = {};
+    if (ContinuousWorld() && m_State.map == Chapter2Maps::Canyon &&
+        m_State.phase == Chapter2Phase::Priorities && !m_State.activeTarget)
+    {
+        for (int index = 0; index < 3; ++index)
+        {
+            const auto target = static_cast<Chapter2Target>(index);
+            if (!m_State.resolved.test(index) &&
+                Distance(player, DevicePosition(target, 0)) < 420.f)
+            {
+                ChooseTarget(target);
+                m_Message =
+                    std::string(TargetName(target)) + "에 접근했습니다. 이 지역 대응을 시작합니다.";
+                break;
+            }
+        }
+    }
     if (!m_Combat.heroPresent)
     {
         m_Combat.heroPresent = true;
@@ -379,6 +395,7 @@ void Chapter2::Update(float dt,
     if (const auto* boss = enemies.Boss())
     {
         m_Combat.bossPosition = boss->position;
+        m_Combat.bossHealthRatio = float(boss->health) / (std::max)(1, boss->maxHealth);
         m_Combat.bossTarget = boss->actionTarget;
         m_Combat.bossAction = boss->health > 0 ? boss->action : EnemyAction::None;
         m_Combat.bossProgress = boss->actionTime / boss->actionDuration;
@@ -395,8 +412,10 @@ void Chapter2::UpdateHero(float dt, WorldPosition player, const LevelMap& map, E
     combat.heroCooldown = (std::max)(0.f, combat.heroCooldown - dt);
     combat.heroAttack = (std::max)(0.f, combat.heroAttack - dt);
     combat.heroRepath = (std::max)(0.f, combat.heroRepath - dt);
-    const bool holding = m_State.phase == Chapter2Phase::Reunion && !combat.reunionRequested;
-    const bool rejoining = m_State.phase == Chapter2Phase::Reunion && combat.reunionRequested;
+    const bool holding = m_State.map == Chapter2Maps::OldFortress &&
+                         m_State.phase == Chapter2Phase::Reunion && !combat.reunionRequested;
+    const bool rejoining = m_State.map == Chapter2Maps::OldFortress &&
+                           m_State.phase == Chapter2Phase::Reunion && combat.reunionRequested;
     WorldPosition goal = holding     ? WorldPosition{-500, -2100}
                          : rejoining ? WorldPosition{0, -2470}
                                      : SafeSpawn(player, -55, 20, map);
@@ -438,28 +457,43 @@ void Chapter2::UpdateHero(float dt, WorldPosition player, const LevelMap& map, E
     }
     else if (Distance(combat.hero, goal) > 35.f)
     {
-        WorldPosition next = Toward(combat.hero, goal, 175.f * dt);
-        if (!map.ClearPath(combat.hero, goal))
+        if (combat.heroRepath <= 0.f)
         {
-            if (combat.heroRepath <= 0.f)
-            {
-                m_HeroPathfinder.FindPath(combat.hero, goal, map, combat.heroPath);
-                combat.heroRepath = .6f;
-            }
-            while (!combat.heroPath.empty() && Distance(combat.hero, combat.heroPath.front()) < 6.f)
-            {
-                combat.heroPath.erase(combat.heroPath.begin());
-            }
-            if (!combat.heroPath.empty())
-            {
-                next = Toward(combat.hero, combat.heroPath.front(), 175.f * dt);
-            }
+            m_HeroPathfinder.FindPath(combat.hero, goal, map, combat.heroPath);
+            combat.heroWaypoint = 0;
+            combat.heroRepath = combat.heroPath.empty() ? .8f : .6f;
         }
-        if (map.ClearPath(combat.hero, next))
+        float remaining = 175.f * dt;
+        while (remaining > 0.f && combat.heroWaypoint < combat.heroPath.size())
         {
+            const auto waypoint = combat.heroPath[combat.heroWaypoint];
+            const float distance = Distance(combat.hero, waypoint);
+            if (distance < .001f)
+            {
+                ++combat.heroWaypoint;
+                continue;
+            }
+            const float step = (std::min)(remaining, distance);
+            const auto next = Toward(combat.hero, waypoint, step);
+            if (!map.ClearPath(combat.hero, next))
+            {
+                combat.heroPath.clear();
+                combat.heroWaypoint = 0;
+                break;
+            }
+            if (std::abs(next.x - combat.hero.x) > .001f)
+            {
+                combat.heroFaceLeft = next.x < combat.hero.x;
+            }
             combat.hero = next;
+            remaining -= step;
+            if (step >= distance)
+            {
+                ++combat.heroWaypoint;
+            }
         }
     }
+
     if (rejoining && Distance(combat.hero, {0, -2470}) < 65.f)
     {
         // Leave the surviving opposing line behind when the hero disengages.
@@ -657,13 +691,16 @@ void Chapter2::DestroyCommandTarget()
     }
 }
 
-void Chapter2::StrikeObjects(WorldPosition player, bool faceLeft, int damage, const LevelMap& map)
+void Chapter2::StrikeObjects(
+    WorldPosition player, bool faceLeft, int damage, const LevelMap& map, float rangeScale)
 {
     const WorldPosition target{340, -2830};
     const float dx = (target.x - player.x) * (faceLeft ? -1.f : 1.f);
     const float dy = target.y - player.y;
-    if (damage > 0 && Has(Chapter2Event::ArmorBroken) && dx >= -18.f &&
-        dx * dx + dy * dy * 2.f <= LevelTuning::HitRange * LevelTuning::HitRange &&
+    if (m_State.map == Chapter2Maps::OldFortress && damage > 0 && Has(Chapter2Event::ArmorBroken) &&
+        dx >= -18.f * rangeScale &&
+        dx * dx + dy * dy * 2.f <=
+            LevelTuning::HitRange * LevelTuning::HitRange * rangeScale * rangeScale &&
         map.ClearPath(player, target))
     {
         DestroyCommandTarget();
@@ -675,14 +712,18 @@ void Chapter2::StrikeProjectileObjects(WorldPosition from,
                                        float radiusX,
                                        float radiusY,
                                        int damage,
-                                       const LevelMap& map)
+                                       const LevelMap& map,
+                                       float height,
+                                       std::unordered_set<std::uint64_t>*,
+                                       std::optional<WorldPosition> sightOrigin)
 {
     const WorldPosition target{340, -2830};
     const float x = std::clamp(target.x, (std::min)(from.x, to.x), (std::max)(from.x, to.x));
-    if (damage > 0 && Has(Chapter2Event::ArmorBroken) && std::abs(x - target.x) <= radiusX + 20.f &&
-        std::abs((target.y - to.y) * SceneCamera::GroundDepthScale() + MageProjectiles::Height -
-                 35.f) <= radiusY + 35.f &&
-        map.ClearPath({x, to.y}, target))
+    if (m_State.map == Chapter2Maps::OldFortress && damage > 0 && Has(Chapter2Event::ArmorBroken) &&
+        std::abs(x - target.x) <= radiusX + 20.f &&
+        std::abs((target.y - to.y) * SceneCamera::GroundDepthScale() + height - 35.f) <=
+            radiusY + 35.f &&
+        map.ClearPath(sightOrigin.value_or(WorldPosition{x, to.y}), target))
     {
         DestroyCommandTarget();
     }
@@ -690,7 +731,7 @@ void Chapter2::StrikeProjectileObjects(WorldPosition from,
 
 bool Chapter2::BlocksMovement(WorldPosition p) const
 {
-    if (m_State.map != Chapter2Maps::OldFortress)
+    if (m_State.map != Chapter2Maps::OldFortress || (ContinuousWorld() && std::abs(p.x) > 1100.f))
     {
         return false;
     }

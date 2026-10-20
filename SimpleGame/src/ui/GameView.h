@@ -15,6 +15,12 @@ class GameView
                  int height) const;
     void ToggleInventory();
     void CloseInventory();
+
+    bool InventoryOpen() const
+    {
+        return m_InventoryView.IsOpen();
+    }
+
     void ChangePage(int direction, int itemCount);
 
   private:

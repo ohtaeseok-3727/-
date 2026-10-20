@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <ItemGroup>
     <Filter Include="소스 파일">
@@ -54,7 +54,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    </ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\stdafx.h">
       <Filter>src\core</Filter>
@@ -123,6 +124,9 @@
       <Filter>src\player</Filter>
     </ClInclude>
     <ClInclude Include="src\combat\EnemySystem.h">
+      <Filter>src\combat</Filter>
+    </ClInclude>
+    <ClInclude Include="src\combat\FieldPopulation.h">
       <Filter>src\combat</Filter>
     </ClInclude>
     <ClInclude Include="src\combat\LootSystem.h">
@@ -226,6 +230,9 @@
     <ClCompile Include="src\combat\EnemySystem.cpp">
       <Filter>src\combat</Filter>
     </ClCompile>
+    <ClCompile Include="src\combat\FieldPopulation.cpp">
+      <Filter>src\combat</Filter>
+    </ClCompile>
     <ClCompile Include="src\combat\LootSystem.cpp">
       <Filter>src\combat</Filter>
     </ClCompile>
@@ -312,6 +319,9 @@
     <ClInclude Include="src\combat\EnemyAIState.h">
       <Filter>src\combat</Filter>
     </ClInclude>
+    <ClInclude Include="src\combat\EnemyPatrol.h">
+      <Filter>src\combat</Filter>
+    </ClInclude>
     <ClInclude Include="src\combat\EnemyStateMachine.h">
       <Filter>src\combat</Filter>
     </ClInclude>
@@ -355,6 +365,27 @@
     <ClInclude Include="src\chapters\Chapter2.h">
       <Filter>src\chapters</Filter>
     </ClInclude>
+    <ClInclude Include="src\chapters\Chapter3.h">
+      <Filter>src\chapters</Filter>
+    </ClInclude>
+    <ClCompile Include="src\chapters\Chapter3.cpp">
+      <Filter>src\chapters</Filter>
+    </ClCompile>
+    <ClCompile Include="src\chapters\Chapter3Gameplay.cpp">
+      <Filter>src\chapters</Filter>
+    </ClCompile>
+    <ClCompile Include="src\chapters\Chapter3Map.cpp">
+      <Filter>src\chapters</Filter>
+    </ClCompile>
+    <ClCompile Include="src\chapters\Chapter3View.cpp">
+      <Filter>src\chapters</Filter>
+    </ClCompile>
+    <ClInclude Include="src\verification\Chapter3Verification.h">
+      <Filter>src\verification</Filter>
+    </ClInclude>
+    <ClCompile Include="src\verification\Chapter3Verification.cpp">
+      <Filter>src\verification</Filter>
+    </ClCompile>
     <ClCompile Include="src\chapters\Chapter2.cpp">
       <Filter>src\chapters</Filter>
     </ClCompile>
@@ -384,5 +415,114 @@
     <ClInclude Include="src\verification\Chapter1Verification.h">
       <Filter>src\verification</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\world\WorldAtlas.h">
+      <Filter>src\world</Filter>
+    </ClInclude>
+    <ClCompile Include="src\world\WorldAtlas.cpp">
+      <Filter>src\world</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\GameSessionWorld.cpp">
+      <Filter>src\app</Filter>
+    </ClCompile>
+    <ClCompile Include="src\chapters\ChapterGoals.cpp">
+      <Filter>src\chapters</Filter>
+    </ClCompile>
+    <ClInclude Include="src\ui\ExpeditionView.h">
+      <Filter>src\ui</Filter>
+    </ClInclude>
+    <ClCompile Include="src\ui\ExpeditionView.cpp">
+      <Filter>src\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\verification\OpenWorldVerification.cpp">
+      <Filter>src\verification</Filter>
+    </ClCompile>
+    <ClInclude Include="src\ui\SettingsMenu.h">
+      <Filter>src\ui</Filter>
+    </ClInclude>
+    <ClCompile Include="src\ui\SettingsMenu.cpp">
+      <Filter>src\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\GameSessionSkipping.cpp">
+      <Filter>src\app</Filter>
+    </ClCompile>
+    <ClCompile Include="src\chapters\ChapterSkipping.cpp">
+      <Filter>src\chapters</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\verification\VisualPlaytest.h">
+      <Filter>src\verification</Filter>
+    </ClInclude>
+    <ClCompile Include="src\verification\VisualPlaytest.cpp">
+      <Filter>src\verification</Filter>
+    </ClCompile>
+    <ClInclude Include="src\ui\CombatCueView.h">
+      <Filter>src\ui</Filter>
+    </ClInclude>
+    <ClCompile Include="src\ui\CombatCueView.cpp">
+      <Filter>src\ui</Filter>
+    </ClCompile>
+    <ClInclude Include="src\ui\HudTextLayout.h">
+      <Filter>src\ui</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\monitoring\MonitorSnapshot.h">
+      <Filter>src\monitoring</Filter>
+    </ClInclude>
+    <ClInclude Include="src\monitoring\MonitorPublisher.h">
+      <Filter>src\monitoring</Filter>
+    </ClInclude>
+    <ClCompile Include="src\monitoring\MonitorSnapshot.cpp">
+      <Filter>src\monitoring</Filter>
+    </ClCompile>
+    <ClCompile Include="src\monitoring\MonitorPublisher.cpp">
+      <Filter>src\monitoring</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\GameSessionMonitoring.cpp">
+      <Filter>src\app</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\PrototypeWorldMonitoring.cpp">
+      <Filter>src\app</Filter>
+    </ClCompile>
+    <ClCompile Include="src\chapters\ChapterMonitoring.cpp">
+      <Filter>src\chapters</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="src\monitoring">
+      <UniqueIdentifier>{1F243C43-125B-4705-8B28-4023E581D604}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\combat\KnightSkillData.h"><Filter>src\combat</Filter></ClInclude>
+    <ClInclude Include="src\combat\KnightSkills.h"><Filter>src\combat</Filter></ClInclude>
+    <ClInclude Include="src\ui\KnightSkillView.h"><Filter>src\ui</Filter></ClInclude>
+    <ClCompile Include="src\combat\KnightSkills.cpp"><Filter>src\combat</Filter></ClCompile>
+    <ClCompile Include="src\ui\KnightSkillView.cpp"><Filter>src\ui</Filter></ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\verification\KnightSkillVerification.h"><Filter>src\verification</Filter></ClInclude>
+    <ClCompile Include="src\verification\KnightSkillVerification.cpp"><Filter>src\verification</Filter></ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\ui\CheondanView.h"><Filter>src\ui</Filter></ClInclude>
+    <ClCompile Include="src\ui\CheondanView.cpp"><Filter>src\ui</Filter></ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\rendering\ArcaneEffect.h"><Filter>src\rendering</Filter></ClInclude>
+    <ClInclude Include="src\rendering\ArcaneEffectShaders.h"><Filter>src\rendering</Filter></ClInclude>
+    <ClCompile Include="src\rendering\ArcaneEffect.cpp"><Filter>src\rendering</Filter></ClCompile>
+    <ClCompile Include="src\rendering\RendererArcane.cpp"><Filter>src\rendering</Filter></ClCompile>
+    <ClInclude Include="src\combat\MageUltimate.h"><Filter>src\combat</Filter></ClInclude>
+    <ClInclude Include="src\ui\MageUltimateView.h"><Filter>src\ui</Filter></ClInclude>
+    <ClInclude Include="src\verification\MageUltimateVerification.h"><Filter>src\verification</Filter></ClInclude>
+    <ClCompile Include="src\combat\MageUltimate.cpp"><Filter>src\combat</Filter></ClCompile>
+    <ClCompile Include="src\combat\EnemyAreaAttack.cpp"><Filter>src\combat</Filter></ClCompile>
+    <ClCompile Include="src\app\GameSessionAreaAttack.cpp"><Filter>src\app</Filter></ClCompile>
+    <ClCompile Include="src\ui\MageUltimateView.cpp"><Filter>src\ui</Filter></ClCompile>
+    <ClCompile Include="src\verification\MageUltimateVerification.cpp"><Filter>src\verification</Filter></ClCompile>
   </ItemGroup>
 </Project>

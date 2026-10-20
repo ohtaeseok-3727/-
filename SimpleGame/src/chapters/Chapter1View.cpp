@@ -1,7 +1,22 @@
 #include "stdafx.h"
 #include "Chapter1.h"
 #include "SceneGraph.h"
+#include "CombatCueView.h"
 #include <cmath>
+
+std::string Chapter1::InteractionPrompt(const MapLandmark& site) const
+{
+    if (site.object == Chapter1Objects::BellA || site.object == Chapter1Objects::BellB ||
+        site.object == Chapter1Objects::BellC)
+    {
+        return "[Ctrl] " + site.name + " 파괴";
+    }
+    if (site.object == Chapter1Objects::ReinforcementGate)
+    {
+        return "[Space 유지] " + site.name + " 차단";
+    }
+    return Chapter::InteractionPrompt(site);
+}
 
 void Chapter1::DrawHero(Renderer& r, Point p, float time) const
 {
@@ -35,6 +50,7 @@ void Chapter1::DrawEnemy(Renderer& r, const FieldEnemy& enemy, Point p) const
                 : enemy.windup > 0  ? 4 + frame
                                     : frame;
     }
+    CombatCueView::DrawEnemy(r, enemy, p, height);
     r.Ellipse(p.x, p.y, height * .3f, 7, Color(.02f, .03f, .02f, .5f));
     if (!m_Sprites.Draw(r, sprite, frame, p, height, enemy.faceLeft))
     {
@@ -66,12 +82,6 @@ void Chapter1::DrawEnemy(Renderer& r, const FieldEnemy& enemy, Point p) const
     else if (enemy.role == EnemyRole::Ranged)
     {
         r.Text(p.x - 20, p.y - height - 16, "투척병", Color(.8f, .7f, 1));
-    }
-    if (enemy.windup > 0 && enemy.role != EnemyRole::Healer)
-    {
-        r.Ellipse(
-            p.x, p.y, enemy.role == EnemyRole::Ranged ? 55 : 30, 12, Color(1, .35f, .1f, .4f));
-        r.Text(p.x - 3, p.y - height - 28, "!", Color(1, .5f, .1f));
     }
 }
 

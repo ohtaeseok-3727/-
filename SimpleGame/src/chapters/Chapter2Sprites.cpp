@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "CombatCueView.h"
 #include "Chapter2Sprites.h"
 #include "EnemySystem.h"
 #include "SpriteImage.h"
@@ -178,7 +179,7 @@ void Chapter2Sprites::DrawEnemy(Renderer& renderer, const FieldEnemy& enemy, Poi
     int frame = static_cast<int>(enemy.animationTime * 4.f) % 4;
     if (enemy.health <= 0)
     {
-        frame = (boss ? 8 : 12) + OnceFrame(enemy.stateTime, .8f);
+        frame = (boss ? 8 : 12) + OnceFrame(enemy.stateTime, FieldEnemy::DeathAnimationDuration);
     }
     else if (boss && enemy.action != EnemyAction::None)
     {
@@ -195,13 +196,15 @@ void Chapter2Sprites::DrawEnemy(Renderer& renderer, const FieldEnemy& enemy, Poi
     else if (enemy.ai.state == EnemyState::Windup)
     {
         sheet = boss ? Sheet::BarkanAttack : sheet;
-        frame = (boss ? 0 : 4) + OnceFrame(enemy.stateTime, .7f);
+        frame = (boss ? 0 : 4) + OnceFrame(enemy.stateTime, enemy.AttackWindupDuration());
     }
-    else if (enemy.ai.state == EnemyState::Chase)
+    else if (enemy.ai.state == EnemyState::Chase || enemy.ai.state == EnemyState::Patrol ||
+             enemy.ai.state == EnemyState::Return)
     {
         sheet = boss ? Sheet::BarkanWalk : appearance == 1 ? Sheet::EliteWalk : Sheet::CommonWalk;
         frame = static_cast<int>(enemy.animationTime * 8.f) % 8;
     }
+    CombatCueView::DrawEnemy(renderer, enemy, foot, height);
     renderer.Ellipse(foot.x, foot.y, height * .29f, 7.f, Color(.02f, .03f, .02f, .5f));
     if (!Draw(renderer, sheet, frame, foot, height, enemy.faceLeft))
     {
@@ -234,10 +237,11 @@ void Chapter2Sprites::DrawEnemy(Renderer& renderer, const FieldEnemy& enemy, Poi
     }
 }
 
-void Chapter2Sprites::DrawHero(Renderer& renderer, Point foot, float time, bool attacking) const
+void Chapter2Sprites::DrawHero(
+    Renderer& renderer, Point foot, float time, bool attacking, bool faceLeft) const
 {
     const int frame = attacking ? 1 + static_cast<int>(time * 5.f) % 2 : 0;
-    if (!Draw(renderer, Sheet::Hero, frame, foot, 52.f))
+    if (!Draw(renderer, Sheet::Hero, frame, foot, 52.f, faceLeft))
     {
         renderer.Rect(foot.x - 12.f, foot.y - 40.f, 24.f, 40.f, Color(.5f, .42f, .35f));
         renderer.Text(foot.x - 24.f, foot.y - 54.f, "용사(임시)", Color(1, .8f, .4f));

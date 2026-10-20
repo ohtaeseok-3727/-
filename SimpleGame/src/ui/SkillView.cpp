@@ -3,6 +3,7 @@
 #include "SkillSystem.h"
 #include "Renderer.h"
 #include "SkillLayout.h"
+#include "HudTextLayout.h"
 #include <cctype>
 #include <string>
 
@@ -31,7 +32,8 @@ namespace
 void SkillView::Draw(
     Renderer& renderer, const SkillSystem& skills, int width, int height, int level) const
 {
-    const SkillLayout layout = SkillLayout::Create(width, height);
+    const auto& list = skills.PlayerSkillsState().Available();
+    const SkillLayout layout = SkillLayout::Create(width, height, static_cast<int>(list.size()));
     const SkillDragController& drag = skills.Drag();
     const int hovered =
         drag.SkillIndex() >= 0 ? layout.SlotAt(float(drag.MouseX()), float(drag.MouseY())) : -1;
@@ -84,7 +86,6 @@ void SkillView::Draw(
     }
     renderer.Rect(
         layout.panelX, layout.panelY, layout.panelWidth, 330.f, Color(.025f, .045f, .06f, .97f));
-    const auto& list = skills.PlayerSkillsState().Available();
     const std::string profession =
         !list.empty() && list.front().profession == 0 ? "마법사" : "기사";
     renderer.Text(layout.panelX + 18.f,
@@ -93,7 +94,9 @@ void SkillView::Draw(
                   Color(.92f, .83f, .62f));
     renderer.Text(layout.panelX + 18.f,
                   layout.panelY + 55.f,
-                  "임시 데이터 · 액티브 아이콘을 슬롯으로 드래그",
+                  (profession == "기사"
+                       ? "액티브를 슬롯으로 드래그 · 검기 상인은 Lv.5부터 자동 적용"
+                       : "액티브를 슬롯으로 드래그 · 궁극기는 Lv.20부터 사용"),
                   Color(.58f, .72f, .75f));
     for (int i = 0; i < static_cast<int>(list.size()); ++i)
     {
@@ -112,13 +115,32 @@ void SkillView::Draw(
                       Color(.70f, .78f, .72f));
         renderer.Text(x + 46.f,
                       y + 45.f,
-                      skill.kind == SkillKind::Active ? "액티브" : "패시브",
+                      (skill.id == "knight_cheondan" || skill.id == "mage_sword_song") ? "궁극기"
+                      : skill.kind == SkillKind::Active                                ? "액티브"
+                      : available && skill.id == "knight_aura"                         ? "적용 중"
+                                                                                       : "패시브",
                       Color(.62f, .71f, .77f));
-        const std::string name = renderer.TextWidth(skill.name) <= layout.cardWidth - 20.f
-                                     ? skill.name
-                                     : "임시 스킬 " + std::to_string(skill.iconVariant + 1);
-        renderer.Text(
-            x + 6.f, y + 76.f, name, available ? Color(.84f, .89f, .88f) : Color(.39f, .43f, .43f));
+        if (skill.kind == SkillKind::Active)
+        {
+            renderer.Text(x + 6.f,
+                          y + 92.f,
+                          "MP " + std::to_string(skill.manaCost) + " / " +
+                              std::to_string(static_cast<int>(skill.cooldown)) + "초",
+                          Color(.66f, .74f, .76f));
+        }
+        const Color nameColor = available ? Color(.84f, .89f, .88f) : Color(.39f, .43f, .43f);
+        if (skill.id == "mage_sword_song")
+        {
+            renderer.Text(x + 6.f, y + 65.f, "마법과 검의", nameColor);
+            renderer.Text(x + 6.f, y + 79.f, "노래", nameColor);
+        }
+        else
+        {
+            renderer.Text(x + 6.f,
+                          y + 76.f,
+                          HudTextLayout::Fit(renderer, skill.name, layout.cardWidth - 20.f),
+                          nameColor);
+        }
     }
     if (drag.SkillIndex() >= 0)
     {

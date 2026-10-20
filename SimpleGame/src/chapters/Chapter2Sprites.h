@@ -14,7 +14,11 @@ class Chapter2Sprites
     Chapter2Sprites& operator=(const Chapter2Sprites&) = delete;
 
     void DrawEnemy(Renderer& renderer, const FieldEnemy& enemy, Point foot) const;
-    void DrawHero(Renderer& renderer, Point foot, float time, bool attacking = false) const;
+    void DrawHero(Renderer& renderer,
+                  Point foot,
+                  float time,
+                  bool attacking = false,
+                  bool faceLeft = false) const;
 
   private:
     enum class Sheet

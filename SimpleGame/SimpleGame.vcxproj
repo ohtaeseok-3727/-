@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -29,26 +29,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -183,6 +183,7 @@
     <ClInclude Include="src\ui\SkillView.h" />
     <ClInclude Include="src\player\SkillLayout.h" />
     <ClInclude Include="src\combat\EnemySystem.h" />
+    <ClInclude Include="src\combat\FieldPopulation.h" />
     <ClInclude Include="src\combat\LootSystem.h" />
     <ClInclude Include="src\app\GameSession.h" />
     <ClInclude Include="src\ui\GameView.h" />
@@ -218,6 +219,7 @@
     <ClCompile Include="src\player\SkillDragController.cpp" />
     <ClCompile Include="src\ui\SkillView.cpp" />
     <ClCompile Include="src\combat\EnemySystem.cpp" />
+    <ClCompile Include="src\combat\FieldPopulation.cpp" />
     <ClCompile Include="src\combat\LootSystem.cpp" />
     <ClCompile Include="src\app\GameSession.cpp" />
     <ClCompile Include="src\ui\GameView.cpp" />
@@ -248,6 +250,7 @@
     <None Include="Assets\Characters\Walk\mage-walk-sheet-v1.png" />
     <None Include="Assets\Characters\Walk\knight-walk-sheet-v1.png" />
   </ItemGroup>
+  <Import Project="Development.props" />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Target Name="CopyCharacterSprites" AfterTargets="Build">
     <ItemGroup>
@@ -263,6 +266,14 @@
     <Copy SourceFiles="@(RuntimeWalkSprite)" DestinationFolder="$(TargetDir)Assets\Characters\Walk" SkipUnchangedFiles="true" />
     <MakeDir Directories="$(TargetDir)Assets\Characters\NPC\VeteranMercenary" />
     <Copy SourceFiles="@(RuntimeNpcSprite)" DestinationFolder="$(TargetDir)Assets\Characters\NPC\VeteranMercenary" SkipUnchangedFiles="true" />
+  </Target>
+  <Target Name="CopyChapterSprites" AfterTargets="Build">
+    <ItemGroup>
+      <ChapterNpcSprite Include="$(ProjectDir)Assets\Characters\NPC\**\*.png" />
+      <ChapterMonsterSprite Include="$(ProjectDir)Assets\Monsters\**\*.png" />
+    </ItemGroup>
+    <Copy SourceFiles="@(ChapterNpcSprite)" DestinationFiles="@(ChapterNpcSprite->'$(TargetDir)Assets\Characters\NPC\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(ChapterMonsterSprite)" DestinationFiles="@(ChapterMonsterSprite->'$(TargetDir)Assets\Monsters\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
   </Target>
   <Import Project="PreparedCombatAssets.targets" />
   <ImportGroup Label="ExtensionTargets">
@@ -292,12 +303,12 @@
   </Target>
   <ItemGroup>
     <ClInclude Include="src\combat\EnemyAIState.h" />
+    <ClInclude Include="src\combat\EnemyPatrol.h" />
     <ClInclude Include="src\combat\EnemyStateMachine.h" />
     <ClCompile Include="src\combat\EnemyStateMachine.cpp" />
     <ClInclude Include="src\combat\EnemyPathfinder.h" />
     <ClCompile Include="src\combat\EnemyPathfinder.cpp" />
   </ItemGroup>
-
   <ItemGroup>
     <ClInclude Include="src\chapters\Chapter.h" />
     <ClCompile Include="src\chapters\Chapter.cpp" />
@@ -310,6 +321,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\chapters\Chapter2.h" />
+    <ClInclude Include="src\chapters\Chapter3.h" />
+    <ClCompile Include="src\chapters\Chapter3.cpp" />
+    <ClCompile Include="src\chapters\Chapter3Gameplay.cpp" />
+    <ClCompile Include="src\chapters\Chapter3Map.cpp" />
+    <ClCompile Include="src\chapters\Chapter3View.cpp" />
+    <ClInclude Include="src\verification\Chapter3Verification.h" />
+    <ClCompile Include="src\verification\Chapter3Verification.cpp" />
     <ClCompile Include="src\chapters\Chapter2.cpp" />
     <ClCompile Include="src\chapters\Chapter2Combat.cpp" />
     <ClCompile Include="src\chapters\Chapter2Map.cpp" />
@@ -321,5 +339,65 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\verification\Chapter1Verification.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\world\WorldAtlas.h" />
+    <ClCompile Include="src\world\WorldAtlas.cpp" />
+    <ClCompile Include="src\app\GameSessionWorld.cpp" />
+    <ClCompile Include="src\chapters\ChapterGoals.cpp" />
+    <ClInclude Include="src\ui\ExpeditionView.h" />
+    <ClCompile Include="src\ui\ExpeditionView.cpp" />
+    <ClCompile Include="src\verification\OpenWorldVerification.cpp" />
+    <ClInclude Include="src\ui\SettingsMenu.h" />
+    <ClCompile Include="src\ui\SettingsMenu.cpp" />
+    <ClCompile Include="src\app\GameSessionSkipping.cpp" />
+    <ClCompile Include="src\chapters\ChapterSkipping.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\verification\VisualPlaytest.h" />
+    <ClCompile Include="src\verification\VisualPlaytest.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\ui\CombatCueView.h" />
+    <ClCompile Include="src\ui\CombatCueView.cpp" />
+    <ClInclude Include="src\ui\HudTextLayout.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\monitoring\MonitorSnapshot.h" />
+    <ClInclude Include="src\monitoring\MonitorPublisher.h" />
+    <ClCompile Include="src\monitoring\MonitorSnapshot.cpp" />
+    <ClCompile Include="src\monitoring\MonitorPublisher.cpp" />
+    <ClCompile Include="src\app\GameSessionMonitoring.cpp" />
+    <ClCompile Include="src\app\PrototypeWorldMonitoring.cpp" />
+    <ClCompile Include="src\chapters\ChapterMonitoring.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\combat\KnightSkillData.h" />
+    <ClInclude Include="src\combat\KnightSkills.h" />
+    <ClInclude Include="src\ui\KnightSkillView.h" />
+    <ClCompile Include="src\combat\KnightSkills.cpp" />
+    <ClCompile Include="src\ui\KnightSkillView.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\verification\KnightSkillVerification.h"></ClInclude>
+    <ClCompile Include="src\verification\KnightSkillVerification.cpp"></ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\ui\CheondanView.h"></ClInclude>
+    <ClCompile Include="src\ui\CheondanView.cpp"></ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\rendering\ArcaneEffect.h" />
+    <ClInclude Include="src\rendering\ArcaneEffectShaders.h" />
+    <ClCompile Include="src\rendering\ArcaneEffect.cpp" />
+    <ClCompile Include="src\rendering\RendererArcane.cpp" />
+    <ClInclude Include="src\combat\MageUltimate.h"></ClInclude>
+    <ClInclude Include="src\ui\MageUltimateView.h"></ClInclude>
+    <ClInclude Include="src\verification\MageUltimateVerification.h"></ClInclude>
+    <ClCompile Include="src\combat\MageUltimate.cpp"></ClCompile>
+    <ClCompile Include="src\combat\EnemyAreaAttack.cpp"></ClCompile>
+    <ClCompile Include="src\app\GameSessionAreaAttack.cpp"></ClCompile>
+    <ClCompile Include="src\ui\MageUltimateView.cpp"></ClCompile>
+    <ClCompile Include="src\verification\MageUltimateVerification.cpp"></ClCompile>
   </ItemGroup>
 </Project>

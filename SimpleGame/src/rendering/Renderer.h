@@ -6,6 +6,7 @@
 #include "Dependencies/glew.h"
 #include "PostProcessing.h"
 #include "GeometryCache.h"
+#include "ArcaneEffect.h"
 
 class WindowsTextRenderer;
 class FrameProfiler;
@@ -49,13 +50,31 @@ class Renderer
         return m_Post.settings;
     }
 
+    ScreenCut& ScreenFracture()
+    {
+        return m_Post.screenCut;
+    }
+
+    ArcaneShock& ArcaneShockwave()
+    {
+        return m_Post.arcaneShock;
+    }
+
     std::string EffectStatus() const
     {
         return m_Post.Status();
     }
 
     void Flush();
+    bool DrawArcane(ArcaneEffect::Kind kind,
+                    Point center,
+                    float radius,
+                    float depth,
+                    float rotation,
+                    float age,
+                    Color color);
     bool CachedGeometry(int kind, float x, float y, float scale);
+    void DrawGeometry(const GeometryCache::Mesh& mesh, Point origin);
     void BeginGeometry();
     void EndGeometry(int kind, float x, float y, float scale);
     void Sprite(GLuint texture,
@@ -68,7 +87,14 @@ class Renderer
                 float u1,
                 float v1);
     void Triangle(Point a, Point b, Point c, Color color);
-    void ImageQuad(const std::wstring& path, Point a, Point b, Point c, Point d, float alpha = 1.f);
+    void ImageQuad(const std::wstring& path,
+                   Point a,
+                   Point b,
+                   Point c,
+                   Point d,
+                   float alpha = 1.f,
+                   Point uv0 = {0.f, 0.f},
+                   Point uv1 = {1.f, 1.f});
     void Quad(Point a, Point b, Point c, Point d, Color color);
     void Rect(float x, float y, float width, float height, Color color);
     void Ellipse(float x, float y, float rx, float ry, Color color);
@@ -80,14 +106,16 @@ class Renderer
                          float milliseconds,
                          float footX,
                          float footY,
-                         bool faceLeft);
+                         bool faceLeft,
+                         float effectScale = 1.f);
     bool CombatVisual(const char* clipId,
                       float milliseconds,
                       float footX,
                       float footY,
                       bool faceLeft = false,
                       float scale = 1.f,
-                      bool effects = true);
+                      bool effects = true,
+                      float effectScale = 1.f);
     void Character(int profession,
                    float footX,
                    float footY,
@@ -111,6 +139,7 @@ class Renderer
     GLint m_LinearOutput = -1;
     bool m_InLinearScene = false;
     PostProcessing m_Post;
+    ArcaneEffect m_Arcane;
     FrameProfiler& m_Profiler;
     std::unique_ptr<WindowsTextRenderer> m_TextRenderer;
     std::vector<GLuint> m_CombatTextures;

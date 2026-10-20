@@ -4,6 +4,8 @@
 
 class BasicAttack;
 class MageProjectiles;
+class MageUltimate;
+class KnightSkills;
 class LevelMap;
 class GameSession;
 class GameView;
@@ -15,6 +17,8 @@ struct SceneFrame
     const GameSession& level;
     const BasicAttack& attack;
     const MageProjectiles& mageProjectiles;
+    const MageUltimate& mageUltimate;
+    const KnightSkills& knightSkills;
     GameView& levelView;
     MapView& mapView;
     float time;

@@ -9,6 +9,7 @@ class PlayerSkills
     void Reset(int profession);
     const std::vector<SkillData>& Available() const;
     bool CanUse(const SkillData& skill, int level) const;
+    bool HasPassive(const std::string& id, int level) const;
     const SkillData* Find(const std::string& id) const;
 
   private:

@@ -137,6 +137,9 @@ class Chapter1 final : public Chapter
     MapId InitialMap() const override;
     MapDefinition BuildMap(MapId map) const override;
     void EnterMap(MapId map) noexcept override;
+    void VisitMap(MapId map) override;
+    std::optional<ChapterGoal> Goal() const override;
+    std::string InteractionPrompt(const MapLandmark& site) const override;
     bool Complete() const override;
     bool EnemyVisible(const FieldEnemy& enemy) const override;
     void AddActors(SceneGraph& scene, WorldPosition player) const override;
@@ -149,6 +152,7 @@ class Chapter1 final : public Chapter
     void DrawWeather(Renderer& renderer, float time, int width, int height) const override;
     static WorldPosition Arena();
     void Reset() override;
+    void SkipStory();
     void Update(float dt,
                 WorldPosition player,
                 bool interactionHeld,
@@ -163,10 +167,21 @@ class Chapter1 final : public Chapter
     void StrikeObjects(WorldPosition player,
                        bool faceLeft,
                        int damage,
-                       const LevelMap& map) override;
+                       const LevelMap& map,
+                       float rangeScale = 1.f) override;
+    void StrikeProjectileObjects(WorldPosition from,
+                                 WorldPosition to,
+                                 float radiusX,
+                                 float radiusY,
+                                 int damage,
+                                 const LevelMap& map,
+                                 float height = LevelTuning::ProjectileHeight,
+                                 std::unordered_set<std::uint64_t>* hitObjects = nullptr,
+                                 std::optional<WorldPosition> sightOrigin = std::nullopt) override;
     void Retry(EnemySystem& enemies) override;
     bool ControlLocked() const override;
     const Chapter1State& State() const;
+    MonitorObservation ObserveMap(const MapDefinition& map, WorldPosition player) const override;
     const std::string& Message() const override;
     std::string Objective() const override;
     static WorldPosition Position(const LevelMap& map, ObjectId object);

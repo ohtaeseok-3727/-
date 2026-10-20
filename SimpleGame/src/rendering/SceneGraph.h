@@ -29,6 +29,12 @@ class SceneGraph
     void Stream(const LevelMap& map, float x, float y, int width, int height);
     void BeginDynamicActors();
     void AddDynamicActor(const WorldProp& description);
+
+    void SetDynamicOrigin(WorldPosition origin)
+    {
+        m_DynamicOrigin = origin;
+    }
+
     // Queue items borrow actors until the next scene mutation. Build after all additions.
     void BuildRenderQueue(const SceneCamera& camera);
     const std::vector<SceneItem>& RenderQueue() const;
@@ -51,4 +57,5 @@ class SceneGraph
     int m_CenterY = 0;
     int m_RadiusX = -1;
     int m_RadiusY = -1;
+    WorldPosition m_DynamicOrigin{};
 };
