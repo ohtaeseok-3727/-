@@ -51,6 +51,8 @@ for r,name in enumerate(['왼손 정권지르기','마력칼날','양손 앞으�
         else:rect=[e%4*384,e//4*512,384,512];root=[[98,94,96,70,88,76,86,74][e],232 if e//4 else 262];s=.65
         fx.append(frame(t/[1,.8,1.2][r],sprite(mf[r],rect,-root[0]*s,-root[1]*s,s,0 if r==1 else 1)))
     add('mage-'+str(r+1),name,0,body,fx,[315,340,340][r],anchors)
+from pixel_restyle import PixelRestyle
+PixelRestyle(P).apply(assets, clips)
 data=dict(version=1,origin='feet; x right, y down; milliseconds',assets=assets,clips=clips)
 (P/'combat-visuals.json').write_text(json.dumps(data,ensure_ascii=False,indent=2),encoding='utf-8')
 (P/'combat-visuals.js').write_text('globalThis.COMBAT_VISUALS = '+json.dumps(data,ensure_ascii=False)+';\n',encoding='utf-8')
@@ -79,10 +81,12 @@ out+=['};','static const int assetCount = sizeof(assets)/sizeof(assets[0]);','st
 'inline int FrameAt(const Frame* frames,int count,float time) { if(time<0)return -1; for(int i=0;i<count;++i){if(time<frames[i].ms)return i;time-=frames[i].ms;}return -1; }',
 '// Returns up to two draw commands in foot-relative coordinates. Caller owns flip, scale, GL blending.',
 'inline int Sample(const Clip& clip,float ms,Sprite* output) { if(!output || ms<0 || ms>=clip.duration)return 0; int b=FrameAt(clip.body,clip.bodyCount,ms); if(b<0)b=clip.bodyCount-1; output[0]=clip.body[b].sprite; int e=FrameAt(clip.effect,clip.effectCount,ms-clip.effectStart); if(e<0)return 1; output[1]=clip.effect[e].sprite;output[1].dx+=clip.anchors[b].x;output[1].dy+=clip.anchors[b].y;return 2; }','}']
-(P.parent.parent/'CombatVisualData.h').write_text('\n'.join(out)+'\n',encoding='utf-8')
+(P.parent.parent/'src/generated/CombatVisualData.h').write_text('\n'.join(out)+'\n',encoding='utf-8')
 project=['<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">','<ItemGroup>']
 for a in assets:
     path=a['path'].replace('/','\\')
+    project.append('<PreparedCombatAsset Include="$(MSBuildThisFileDirectory)Assets\\Characters\\'+path+'"><RelativePath>'+path+'</RelativePath></PreparedCombatAsset>')
+for path in ['Skills\\wind-blade-01.png', 'Skills\\dash-trail.png']:
     project.append('<PreparedCombatAsset Include="$(MSBuildThisFileDirectory)Assets\\Characters\\'+path+'"><RelativePath>'+path+'</RelativePath></PreparedCombatAsset>')
 project+=['</ItemGroup>','<Target Name="CopyPreparedCombatAssets" AfterTargets="Build">','<Copy SourceFiles="@(PreparedCombatAsset)" DestinationFiles="@(PreparedCombatAsset->\'$(TargetDir)Assets\\Characters\\%(RelativePath)\')" SkipUnchangedFiles="true" />','</Target>','</Project>']
 (P.parent.parent/'PreparedCombatAssets.targets').write_text('\n'.join(project),encoding='utf-8')

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Chapter1Sprites.h"
+#include "PixelRestyleHeroData.h"
 #include "SpriteImage.h"
 #include <algorithm>
 
@@ -22,7 +23,7 @@ bool Chapter1Sprites::Load(ChapterSprite sprite, Atlas& atlas)
                               L"NPC\\Villager\\villager-v1.png",
                               L"..\\Monsters\\Goblin\\Healer\\healer-v1.png",
                               L"..\\Monsters\\Goblin\\LegionCommander\\legion-commander-v1.png",
-                              L"NPC\\Hero\\hero-v1.png"};
+                              PixelRestyleHero::path};
     SpriteImage image;
     if (!LoadRawSpriteSheet(paths[static_cast<int>(sprite)], image))
     {
@@ -34,12 +35,14 @@ bool Chapter1Sprites::Load(ChapterSprite sprite, Atlas& atlas)
         sprite == ChapterSprite::GoblinWalk || sprite == ChapterSprite::GoblinAttack ? 1 : 4;
     if (sprite == ChapterSprite::Hero)
     {
-        // Explicit regions: this existing sheet is NOT a uniform six-column first row.
-        if (image.width != 1122 || image.height != 1402)
+        if (image.width != PixelRestyleHero::width || image.height != PixelRestyleHero::height)
         {
             return false;
         }
-        atlas.frames = {{0, 0, 220, 330}, {750, 570, 935, 850}, {750, 850, 935, 1120}};
+        for (const auto& region : PixelRestyleHero::regions)
+        {
+            atlas.frames.push_back({region[0], region[1], region[2], region[3]});
+        }
     }
     else
     {

@@ -12,6 +12,7 @@
 | Attack | [문서 목록](Attack/INDEX.md) |
 | Concepts | [문서 목록](Concepts/INDEX.md) |
 | NPC | [문서 목록](NPC/INDEX.md) |
+| PixelRestyle-v2 | [문서 목록](PixelRestyle-v2/INDEX.md) |
 | Skills | [문서 목록](Skills/INDEX.md) |
 | SmallKnight | [문서 목록](SmallKnight/INDEX.md) |
 | SmallMage | [문서 목록](SmallMage/INDEX.md) |

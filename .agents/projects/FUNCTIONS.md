@@ -254,3 +254,12 @@ C++17 std::array는 고정 경로/시계, std::bitset은 조사 완료/중복 �
 ### Chapter3::DrawActor — 용사 스프라이트 복구 (2026-10-20)
 - actor 11은 Chapter1Sprites::Draw의 Hero 프레임 0을 사용한다. 기존 hero-v1.png를 높이 52, 발 위치 기준으로 표시하며 도형 인물로 대체하지 않는다. Chapter3가 보유한 캐시가 텍스처 수명을 관리한다.
 
+## 2026-10-20 용사·플레이어 인물 도트 v2
+
+- 위 용사 복구 기록의 자산 경로는 이번 재제작으로 갱신된다. C01/C02/C03 공통 용사는 생성 헤더가 지정한 `NPC/Hero/PixelRestyle-v2/hero-v2.png`를 사용한다. 캐시 수명과 발 기준 렌더링은 유지한다.
+- [pixel_restyle.py](../../SimpleGame/Assets/Characters/pixel_restyle.py)의 `SheetInspector.inspect/write`: PNG의 RGBA는 수정하지 않고 알파 실루엣·투명 간격·프레임 경계·발 피벗·행별 배율·마법사 장갑 위치를 추출해 `frames.json`과 용사/기사 앵커 공통 헤더를 만든다.
+- 같은 파일의 `PixelRestyle.apply`: 기존 8개 클립의 몸체만 새 시트에 대응하고 기존 몸체 시간·독립 효과를 유지한다. 마법 효과는 새 장갑 보석 위치를 따라간다. `export-combat-visuals.py`가 호출하여 게임·미리보기·배포 데이터를 갱신한다.
+- [KnightSkillView.cpp](../../SimpleGame/src/ui/KnightSkillView.cpp)의 `SkillBodyTime`: 기존 스킬 준비/타격/회복 시간을 새 기사 검격 4자세에 대응한다. `DrawBody`는 새 몸체를 사용하고 피해 로직은 유지한다.
+- 같은 파일의 `SpriteHilt`: 현재 이미지 경로·프레임 좌표를 새 픽셀 기준 칼자루 표와 대조하고 몸체 피벗·배율로 검 오라 위치·각도를 계산한다. 게임 화면 정밀 검증은 미실행이다.
+- [최종 자산·재제작·검토 범위](../../SimpleGame/Assets/Characters/PixelRestyle-v2/README.md). 미채택 v1은 로컬 제외 경로에 보관하며 게임에서 참조하지 않는다.
+

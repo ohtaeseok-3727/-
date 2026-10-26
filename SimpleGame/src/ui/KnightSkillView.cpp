@@ -5,10 +5,11 @@
 #include "KnightSkillData.h"
 #include "BasicAttack.h"
 #include "CombatVisualData.h"
+#include "PixelRestyleHeroData.h"
 #include <algorithm>
-#include <array>
 #include <cmath>
 #include <cstring>
+#include <cwchar>
 
 namespace
 {
@@ -49,6 +50,31 @@ namespace
     {
         return time < .130f ? 0 : time < .270f ? 1 : time < .480f ? 2 : 3;
     }
+
+    float SkillBodyTime(const KnightSkills& skills)
+    {
+        const int pose = skills.Kind() == KnightSkillKind::Thrust
+                             ? ThrustPose(skills.CastTime())
+                             : WavePose(skills.CastTime());
+        constexpr float times[] = {0.f, 280.f, 350.f, 520.f};
+        return times[pose];
+    }
+
+    void SpriteHilt(const CombatVisuals::Sprite& body, Point& hilt, float& angle)
+    {
+        for (const auto& anchor : PixelRestyleKnight::hilts)
+        {
+            if (body.x != anchor.x || body.y != anchor.y ||
+                std::wcscmp(CombatVisuals::assets[body.asset].path, anchor.path) != 0)
+            {
+                continue;
+            }
+            hilt = {(body.dx + anchor.rootX * body.scale) * .32f,
+                    (body.dy + anchor.rootY * body.scale) * .32f};
+            angle = anchor.angle;
+            return;
+        }
+    }
 }
 
 void KnightSkillView::DrawBody(Renderer& r, const KnightSkills& skills, Point feet)
@@ -58,28 +84,13 @@ void KnightSkillView::DrawBody(Renderer& r, const KnightSkills& skills, Point fe
         CheondanView::DrawCast(r, skills, feet);
         return;
     }
-    if (skills.Kind() == KnightSkillKind::Thrust)
-    {
-        Frame(r,
-              L"Skills/Knight/thrust.png",
-              KnightSkillData::ThrustBody[ThrustPose(skills.CastTime())],
-              2172,
-              724,
-              feet,
-              .44f * KnightSkillData::PreviewScale,
-              skills.FaceLeft());
-    }
-    else
-    {
-        Frame(r,
-              L"Skills/Knight/wave.png",
-              KnightSkillData::WaveBody[WavePose(skills.CastTime())],
-              1536,
-              1024,
-              feet,
-              KnightSkillData::PlayerScale,
-              skills.FaceLeft());
-    }
+    r.CombatVisual("knight-2",
+                   SkillBodyTime(skills),
+                   feet.x,
+                   feet.y,
+                   skills.FaceLeft(),
+                   .32f,
+                   false);
 }
 
 void KnightSkillView::DrawShot(Renderer& r, const KnightSkillShot& shot, Point ground)
@@ -134,82 +145,33 @@ void KnightSkillView::DrawAura(Renderer& r,
     {
         return; // The growing blade is the passive aura during the ultimate.
     }
-    Point hilt{-43.f * KnightSkillData::PlayerScale, -79.f * KnightSkillData::PlayerScale};
+    Point hilt{-6.f, -15.f};
     float angle = .733038f;
+    const char* id = "knight-walk";
+    float ms = walkFrame * 90.f;
     if (skills.Casting())
     {
         faceLeft = skills.FaceLeft();
-        if (skills.Kind() == KnightSkillKind::Thrust)
-        {
-            const int pose = ThrustPose(skills.CastTime());
-            const Point hilts[] = {{105, 464}, {151, 445}, {327, 390}, {122, 464}};
-            const auto& frame = KnightSkillData::ThrustBody[pose];
-            const float scale = .44f * KnightSkillData::PreviewScale;
-            hilt = {(hilts[pose].x - frame.pivotX) * scale, (hilts[pose].y - frame.pivotY) * scale};
-            angle = pose == 2 ? 0.f : .733038f;
-        }
-        else
-        {
-            const int pose = WavePose(skills.CastTime());
-            const Point hilts[] = {{146, 374}, {155, 335}, {213, 331}, {70, 374}};
-            const auto& frame = KnightSkillData::WaveBody[pose];
-            hilt = {(hilts[pose].x - frame.pivotX) * KnightSkillData::PlayerScale,
-                    (hilts[pose].y - frame.pivotY) * KnightSkillData::PlayerScale};
-            angle = pose == 2 ? 0.f : .733038f;
-        }
+        id = "knight-2";
+        ms = SkillBodyTime(skills);
     }
-    else
+    else if (attack.IsAttacking())
     {
-        const char* id = attack.IsAttacking() ? attack.ClipId() : "knight-walk";
-        const float ms = attack.IsAttacking() ? attack.ElapsedMilliseconds() : walkFrame * 90.f;
-        for (const auto& clip : CombatVisuals::clips)
+        id = attack.ClipId();
+        ms = attack.ElapsedMilliseconds();
+    }
+    for (const auto& clip : CombatVisuals::clips)
+    {
+        if (std::strcmp(clip.id, id) != 0)
         {
-            if (std::strcmp(clip.id, id) != 0)
-            {
-                continue;
-            }
-            CombatVisuals::Sprite sprites[2];
-            if (CombatVisuals::Sample(clip, ms, sprites) > 0)
-            {
-                const auto& body = sprites[0];
-                // Cell-local sword roots measured in the eight-frame walk sheet.
-                // The second row sits about 65 source pixels higher within its cells.
-                // Reusing frame 0's root there adds an artificial 9.36px downward jump.
-                static constexpr std::array<Point, 8> walkHilts{{{149, 374},
-                                                                 {149, 379},
-                                                                 {141, 373},
-                                                                 {116, 373},
-                                                                 {157, 307},
-                                                                 {154, 311},
-                                                                 {147, 311},
-                                                                 {115, 308}}};
-                const int walkPose = (body.y / 512) * 4 + body.x / 384;
-                Point source = walkHilts[std::clamp(walkPose, 0, 7)];
-                if (attack.IsAttacking())
-                {
-                    const int pose = (std::min)(5, body.x / 256);
-                    const Point slash[] = {
-                        {80, 239}, {64, 152}, {139, 195}, {177, 191}, {139, 207}, {80, 239}};
-                    const Point chop[] = {
-                        {83, 241}, {96, 94}, {81, 120}, {122, 257}, {119, 260}, {83, 241}};
-                    const Point thrust[] = {
-                        {80, 272}, {102, 219}, {149, 207}, {174, 207}, {149, 213}, {80, 272}};
-                    source = attack.Step() == 2   ? slash[pose]
-                             : attack.Step() == 3 ? chop[pose]
-                                                  : thrust[pose];
-                    const float angles[] = {.733038f, -2.35f, 0.f, 0.f, .25f, .733038f};
-                    angle = angles[pose];
-                    if (attack.Step() == 3 && (pose == 1 || pose == 2))
-                    {
-                        angle = -1.57f;
-                    }
-                }
-                // Use the exact sprite pivot/scale for each movement or attack frame.
-                hilt = {(body.dx + source.x * body.scale) * .32f,
-                        (body.dy + source.y * body.scale) * .32f};
-            }
-            break;
+            continue;
         }
+        CombatVisuals::Sprite sprites[2];
+        if (CombatVisuals::Sample(clip, ms, sprites) > 0)
+        {
+            SpriteHilt(sprites[0], hilt, angle);
+        }
+        break;
     }
     const Point pivot{feet.x + (faceLeft ? -hilt.x : hilt.x), feet.y + hilt.y};
     const int frame = static_cast<int>(time * 10.f) % 4;

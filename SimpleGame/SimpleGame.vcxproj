@@ -199,6 +199,7 @@
     <ClInclude Include="src\app\PrototypeWorld.h" />
     <ClInclude Include="src\rendering\SpriteImage.h" />
     <ClInclude Include="src\generated\CombatVisualData.h" />
+    <ClInclude Include="src\generated\PixelRestyleHeroData.h" />
     <ClInclude Include="src\rendering\PostProcessing.h" />
     <ClInclude Include="src\rendering\PostProcessingShaders.h" />
     <ClInclude Include="src\core\stdafx.h" />

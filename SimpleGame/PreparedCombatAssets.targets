@@ -10,6 +10,9 @@
 <PreparedCombatAsset Include="$(MSBuildThisFileDirectory)Assets\Characters\Attack\Mage\mage-melee-effects-v1.png"><RelativePath>Attack\Mage\mage-melee-effects-v1.png</RelativePath></PreparedCombatAsset>
 <PreparedCombatAsset Include="$(MSBuildThisFileDirectory)Assets\Characters\SmallMage\mana-blade-v1.png"><RelativePath>SmallMage\mana-blade-v1.png</RelativePath></PreparedCombatAsset>
 <PreparedCombatAsset Include="$(MSBuildThisFileDirectory)Assets\Characters\Attack\Mage\mage-burst-b-v2.png"><RelativePath>Attack\Mage\mage-burst-b-v2.png</RelativePath></PreparedCombatAsset>
+<PreparedCombatAsset Include="$(MSBuildThisFileDirectory)Assets\Characters\PixelRestyle-v2\knight-v2.png"><RelativePath>PixelRestyle-v2\knight-v2.png</RelativePath></PreparedCombatAsset>
+<PreparedCombatAsset Include="$(MSBuildThisFileDirectory)Assets\Characters\PixelRestyle-v2\mage-v2.png"><RelativePath>PixelRestyle-v2\mage-v2.png</RelativePath></PreparedCombatAsset>
+<PreparedCombatAsset Include="$(MSBuildThisFileDirectory)Assets\Characters\NPC\Hero\PixelRestyle-v2\hero-v2.png"><RelativePath>NPC\Hero\PixelRestyle-v2\hero-v2.png</RelativePath></PreparedCombatAsset>
 <PreparedCombatAsset Include="$(MSBuildThisFileDirectory)Assets\Characters\Skills\wind-blade-01.png"><RelativePath>Skills\wind-blade-01.png</RelativePath></PreparedCombatAsset>
 <PreparedCombatAsset Include="$(MSBuildThisFileDirectory)Assets\Characters\Skills\dash-trail.png"><RelativePath>Skills\dash-trail.png</RelativePath></PreparedCombatAsset>
 </ItemGroup>
