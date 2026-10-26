@@ -12,6 +12,7 @@
 | architecture | [문서 목록](architecture/INDEX.md) |
 | design | [문서 목록](design/INDEX.md) |
 | implementation | [문서 목록](implementation/INDEX.md) |
+| maintenance | [문서 목록](maintenance/INDEX.md) |
 | performance | [문서 목록](performance/INDEX.md) |
 | process | [문서 목록](process/INDEX.md) |
 | prompts | [문서 목록](prompts/INDEX.md) |

@@ -106,7 +106,7 @@ class ManaSwordPreview
         this.player = new MagePlayerMotion();
         this.swords = Array.from({ length: 5 }, (_, i) => new ManaSword(i));
         this.trail = new Image();
-        this.trail.src = 'dash-trail.png';
+        this.trail.src = '../../SimpleGame/Assets/Characters/Skills/dash-trail.png';
         this.elapsed = 780;
         this.frame = 0;
         this.running = false;

@@ -35,9 +35,9 @@ input { vertical-align: middle; }
 <h1>바람 칼날</h1>
 <p>칼날 앞면은 정면 유지 · 베기 면이 수직에서 수평으로 눕는 변화</p>
 <div class="gallery">
-<figure><img src="wind-blade-01.png" style="transform: scaleX(1.2)" alt="수직베기의 바람 칼날"><figcaption>01 · 수직베기</figcaption></figure>
-<figure><img src="wind-blade-01.png" style="transform: matrix(1.1, 0, -0.35, 0.72, 0, 0) scale(1.25)" alt="앞면은 정면을 유지하며 베기 면이 기울어진 칼날"><figcaption>02 · 기울어진 베기 면</figcaption></figure>
-<figure><img src="wind-blade-01.png" style="transform: matrix(1.2, 0, 0, 0.4, 0, 0) scale(1.25)" alt="마력칼날처럼 수평으로 누운 초승달 궤적"><figcaption>03 · 수평 마력칼날 궤적</figcaption></figure>
+<figure><img src="../../SimpleGame/Assets/Characters/Skills/wind-blade-01.png" style="transform: scaleX(1.2)" alt="수직베기의 바람 칼날"><figcaption>01 · 수직베기</figcaption></figure>
+<figure><img src="../../SimpleGame/Assets/Characters/Skills/wind-blade-01.png" style="transform: matrix(1.1, 0, -0.35, 0.72, 0, 0) scale(1.25)" alt="앞면은 정면을 유지하며 베기 면이 기울어진 칼날"><figcaption>02 · 기울어진 베기 면</figcaption></figure>
+<figure><img src="../../SimpleGame/Assets/Characters/Skills/wind-blade-01.png" style="transform: matrix(1.2, 0, 0, 0.4, 0, 0) scale(1.25)" alt="마력칼날처럼 수평으로 누운 초승달 궤적"><figcaption>03 · 수평 마력칼날 궤적</figcaption></figure>
 </div>
 <div class="controls">
 <label>성장 단계 <select id="level"><option value="1">습득 레벨 · 1개</option><option value="2">습득 +1레벨 · 2개</option><option value="3" selected>습득 +2레벨 이상 · 3개</option></select></label>
@@ -49,7 +49,7 @@ input { vertical-align: middle; }
 <div class="controls"><label>재생 위치 <input id="time" type="range" min="0" max="2300" step="1" value="500"> <output id="timeValue">0.50초</output></label><span id="status" aria-live="polite">이미지 불러오는 중</span></div>
 <p class="foot">모두 오른쪽으로 직진하며 초승달의 볼록한 앞면도 오른쪽을 유지합니다. 첫 칼날의 베기 면이 점점 누워 기존 마력칼날의 납작한 곡선 궤적이 되도록 원근 변형한 시안입니다. 변형 비율·속도·발사 간격은 임시값이며 게임에는 적용하지 않았습니다.</p>
 </main>
-<script src="player-motion.js"></script>
+<script src="../shared/mage-player-motion.js"></script>
 <script src="preview.js"></script>
 </body>
 </html>

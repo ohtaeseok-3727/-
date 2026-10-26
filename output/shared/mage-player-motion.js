@@ -3,7 +3,7 @@ class MagePlayerMotion
     constructor()
     {
         this.image = new Image();
-        this.image.src = 'player-motion.png';
+        this.image.src = '../../SimpleGame/Assets/Characters/SmallMage/mana-blade-motion-v1.png';
         this.ready = this.image.decode();
         this.durations = [140, 110, 90, 50, 60, 65, 90, 150];
     }

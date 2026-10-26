@@ -180,13 +180,7 @@ std::vector<WorldPosition> EnemySystem::Strike(
         {
             continue;
         }
-        enemy.health = (std::max)(enemy.stats.minimumHealth, enemy.health - damage);
-        enemy.hitFlash = .18f;
-        if (!enemy.stats.scriptedAI)
-        {
-            m_StateMachine.Interrupt(enemy);
-            enemy.cooldown = .8f;
-        }
+        ApplyHit(enemy, damage);
         if (enemy.health == 0)
         {
             defeated.push_back(enemy.position);
@@ -226,13 +220,43 @@ std::vector<WorldPosition> EnemySystem::StrikeProjectile(
             continue;
         }
         hitTargets.insert(enemy.id);
-        enemy.health = (std::max)(enemy.stats.minimumHealth, enemy.health - damage);
-        enemy.hitFlash = .18f;
-        if (!enemy.stats.scriptedAI)
+        ApplyHit(enemy, damage);
+        if (enemy.health == 0)
         {
-            m_StateMachine.Interrupt(enemy);
-            enemy.cooldown = .8f;
+            defeated.push_back(enemy.position);
         }
+    }
+    return defeated;
+}
+
+void EnemySystem::ApplyHit(FieldEnemy& enemy, int damage)
+{
+    enemy.health = (std::max)(enemy.stats.minimumHealth, enemy.health - damage);
+    enemy.hitFlash = .18f;
+    if (!enemy.stats.scriptedAI)
+    {
+        m_StateMachine.Interrupt(enemy);
+        enemy.cooldown = .8f;
+    }
+}
+
+std::vector<WorldPosition> EnemySystem::StrikeArea(WorldPosition center, float radius, int damage)
+{
+    std::vector<WorldPosition> defeated;
+    if (!std::isfinite(radius) || radius <= 0.f || damage <= 0)
+    {
+        return defeated;
+    }
+    const float radiusSquared = radius * radius;
+    for (auto& enemy : m_Enemies)
+    {
+        const float dx = enemy.position.x - center.x, dy = enemy.position.y - center.y;
+        if (enemy.health <= 0 || dx * dx + dy * dy > radiusSquared)
+        {
+            continue;
+        }
+        // Ground circle membership is sufficient: no sword, facing or sight-line test.
+        ApplyHit(enemy, damage);
         if (enemy.health == 0)
         {
             defeated.push_back(enemy.position);

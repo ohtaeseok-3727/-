@@ -1,0 +1,178 @@
+[
+  {
+    "path": "output/wind-blade-v1/preview.html",
+    "bytes": 3860
+  },
+  {
+    "path": "output/wind-blade-v1/preview.js",
+    "bytes": 4197
+  },
+  {
+    "path": "output/wind-blade-v1/wind-blade-01.png",
+    "bytes": 293551
+  },
+  {
+    "path": "output/wind-blade-v1/wind-blade-02.png",
+    "bytes": 263666
+  },
+  {
+    "path": "output/wind-blade-v1/wind-blade-03.png",
+    "bytes": 208457
+  },
+  {
+    "path": "output/wind-blade-v2/preview.html",
+    "bytes": 4011
+  },
+  {
+    "path": "output/wind-blade-v2/preview.js",
+    "bytes": 4259
+  },
+  {
+    "path": "output/wind-blade-v2/wind-blade-01.png",
+    "bytes": 293551
+  },
+  {
+    "path": "output/wind-blade-v3/preview.html",
+    "bytes": 4029
+  },
+  {
+    "path": "output/wind-blade-v3/preview.js",
+    "bytes": 4284
+  },
+  {
+    "path": "output/wind-blade-v3/wind-blade-01.png",
+    "bytes": 293551
+  },
+  {
+    "path": "output/procedural-effects-v1/drawing.js",
+    "bytes": 376
+  },
+  {
+    "path": "output/procedural-effects-v1/preview.html",
+    "bytes": 1654
+  },
+  {
+    "path": "output/procedural-effects-v1/preview.js",
+    "bytes": 1882
+  },
+  {
+    "path": "output/procedural-effects-v1/README.md",
+    "bytes": 1195
+  },
+  {
+    "path": "output/procedural-effects-v1/shockwave.js",
+    "bytes": 2477
+  },
+  {
+    "path": "output/procedural-effects-v1/sword-aura.js",
+    "bytes": 2217
+  },
+  {
+    "path": "output/procedural-sword-v2/arena.js",
+    "bytes": 3021
+  },
+  {
+    "path": "output/procedural-sword-v2/motion.js",
+    "bytes": 3788
+  },
+  {
+    "path": "output/procedural-sword-v2/preview-verified.png",
+    "bytes": 43564
+  },
+  {
+    "path": "output/procedural-sword-v2/preview.css",
+    "bytes": 4206
+  },
+  {
+    "path": "output/procedural-sword-v2/preview.html",
+    "bytes": 3462
+  },
+  {
+    "path": "output/procedural-sword-v2/preview.js",
+    "bytes": 4522
+  },
+  {
+    "path": "output/procedural-sword-v2/README.md",
+    "bytes": 3576
+  },
+  {
+    "path": "output/procedural-sword-v2/sword-effects.js",
+    "bytes": 7796
+  },
+  {
+    "path": "tools/__pycache__/audit_chapter2_assets.cpython-313.pyc",
+    "bytes": 8878
+  },
+  {
+    "path": "tools/__pycache__/prepare_chapter2_sprites.cpython-313.pyc",
+    "bytes": 10297
+  },
+  {
+    "path": "SimpleGame/Assets/Characters/__pycache__/walk_head_palette.cpython-312.pyc",
+    "bytes": 11169
+  },
+  {
+    "path": "tools/assets/__pycache__/chapter3_mini_people.cpython-313.pyc",
+    "bytes": 13926
+  },
+  {
+    "path": "tools/monitor/__pycache__/protocol.cpython-314.pyc",
+    "bytes": 11126
+  },
+  {
+    "path": "tools/effects/blender/__pycache__/build_cheondan.cpython-313.pyc",
+    "bytes": 11857
+  },
+  {
+    "path": "tools/effects/blender/__pycache__/mirror_geometry.cpython-312.pyc",
+    "bytes": 3239
+  },
+  {
+    "path": "tools/effects/blender/__pycache__/mirror_geometry.cpython-313.pyc",
+    "bytes": 3281
+  },
+  {
+    "path": "SimpleGame/src/combat/EnemyAreaAttack.cpp",
+    "bytes": 1030
+  },
+  {
+    "path": "output/knight-skills-v1/sword-aura-draft-v1.png",
+    "bytes": 397276
+  },
+  {
+    "path": "output/knight-skills-v1/sword-wave-draft-v1.png",
+    "bytes": 1340059
+  },
+  {
+    "path": "output/knight-skills-v1/thrust-draft-v1.png",
+    "bytes": 587063
+  },
+  {
+    "path": "output/knight-thrust-effect-v1/thrust-effect-v1.png",
+    "bytes": 1017285
+  },
+  {
+    "path": "output/mana-swords-v1/dash-trail.png",
+    "bytes": 147737
+  },
+  {
+    "path": "output/mana-swords-v1/player-motion.js",
+    "bytes": 1101
+  },
+  {
+    "path": "output/mana-swords-v1/player-motion.png",
+    "bytes": 1520953
+  },
+  {
+    "path": "output/wind-blade-v4/player-motion.js",
+    "bytes": 1101
+  },
+  {
+    "path": "output/wind-blade-v4/player-motion.png",
+    "bytes": 1520953
+  },
+  {
+    "path": "output/wind-blade-v4/wind-blade-01.png",
+    "bytes": 293551
+  }
+]

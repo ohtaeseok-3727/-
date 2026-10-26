@@ -22,7 +22,7 @@
 - `SkillPreview`: 스킬별 재생 시간, 입력, 동작과 효과의 결합을 관리.
 - 이미지 로딩 → 스킬별 카드 생성 → 독립 시간 진행 → 캐릭터와 효과 표시 순서다. 별도 게임 코드나 런타임을 실행하지 않는다.
 
-원본은 `thrust-draft-v1.png`, `sword-aura-draft-v1.png`, `sword-wave-draft-v1.png`, `../knight-thrust-effect-v1/thrust-effect-v1.png`, 기사 미니 이동 시트다. 삭제한 직접 픽셀 제작 v2는 사용하지 않는다.
+원본은 `../../SimpleGame/Assets/Characters/Skills/Knight/thrust.png`, `../../SimpleGame/Assets/Characters/Skills/Knight/aura.png`, `../../SimpleGame/Assets/Characters/Skills/Knight/wave.png`, `../../SimpleGame/Assets/Characters/Skills/Knight/thrust-effect.png`, 기사 미니 이동 시트다. 삭제한 직접 픽셀 제작 v2는 사용하지 않는다.
 
 ## 검증과 한계
 

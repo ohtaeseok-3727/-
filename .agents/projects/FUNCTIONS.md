@@ -111,10 +111,10 @@
 
 | 파일 | 함수 | 역할 |
 | --- | --- | --- |
-| [preview.js](../../output/procedural-effects-v1/preview.js) | `EffectsPreview::frame` | 재생 시계·UI와 두 효과의 그리기를 연결한다. |
-| [shockwave.js](../../output/procedural-effects-v1/shockwave.js) | `Shockwave::draw` | 원형 파동·균열·솟아오르는 파편을 그린다. |
-| [sword-aura.js](../../output/procedural-effects-v1/sword-aura.js) | `SwordAura::angle`, `blade`, `draw` | 검 각도·오라·과거 각도의 잔상을 그린다. |
-| [drawing.js](../../output/procedural-effects-v1/drawing.js) | `line`, `fade` | 공통 선과 투명도 계산을 제공한다. |
+| `preview.js` (2026-10-26 삭제) | `EffectsPreview::frame` | 재생 시계·UI와 두 효과의 그리기를 연결한다. |
+| `shockwave.js` (2026-10-26 삭제) | `Shockwave::draw` | 원형 파동·균열·솟아오르는 파편을 그린다. |
+| `sword-aura.js` (2026-10-26 삭제) | `SwordAura::angle`, `blade`, `draw` | 검 각도·오라·과거 각도의 잔상을 그린다. |
+| `drawing.js` (2026-10-26 삭제) | `line`, `fade` | 공통 선과 투명도 계산을 제공한다. |
 
 게임 연결 및 실행 검증은 수행하지 않았다.
 
@@ -122,10 +122,10 @@
 
 | 파일 | 함수 | 역할 |
 | --- | --- | --- |
-| [motion.js](../../output/procedural-sword-v2/motion.js) | `poseAt`, `KnightMotion::blade`, `draw`, `drawOriginal` | 원본 공격 시간·자세, 수동 검날 연결점, 원본 효과 비교 표시를 관리한다. |
-| [sword-effects.js](../../output/procedural-sword-v2/sword-effects.js) | `SwordEffects::point`, `ribbon`, `aura`, `groundLight`, `draw`, `particles`, `impact` | 기존 금빛 효과를 참고한 곡선 잔상·오라·입자·착지 섬광을 시간 기준으로 그린다. |
-| [arena.js](../../output/procedural-sword-v2/arena.js) | `Arena::draw` | 캐시한 배경과 캐릭터 그림자·주변 입자를 표시한다. |
-| [preview.js](../../output/procedural-sword-v2/preview.js) | `loadImage`, `SwordStudio::bindControls`, `draw`, `frame` | 이미지 로딩·비교 UI·재생 시계와 그리기를 연결한다. |
+| `motion.js` (2026-10-26 삭제) | `poseAt`, `KnightMotion::blade`, `draw`, `drawOriginal` | 원본 공격 시간·자세, 수동 검날 연결점, 원본 효과 비교 표시를 관리한다. |
+| `sword-effects.js` (2026-10-26 삭제) | `SwordEffects::point`, `ribbon`, `aura`, `groundLight`, `draw`, `particles`, `impact` | 기존 금빛 효과를 참고한 곡선 잔상·오라·입자·착지 섬광을 시간 기준으로 그린다. |
+| `arena.js` (2026-10-26 삭제) | `Arena::draw` | 캐시한 배경과 캐릭터 그림자·주변 입자를 표시한다. |
+| `preview.js` (2026-10-26 삭제) | `loadImage`, `SwordStudio::bindControls`, `draw`, `frame` | 이미지 로딩·비교 UI·재생 시계와 그리기를 연결한다. |
 
 JavaScript 4개 파일 구문 검사 및 브라우저에서 두 궤적·원본 비교·색상·오라 제어 확인. 게임 빌드·실행은 하지 않았다.
 
@@ -197,7 +197,7 @@ Python·JavaScript 구문, 프로젝트 XML·필터·파일 참조, 화면 ID �
 | 파일 | 함수 | 역할 |
 | --- | --- | --- |
 | [MageUltimate.cpp](../../SimpleGame/src/combat/MageUltimate.cpp) | `MageUltimate::Cast`, `Update`, `Reset`; `PulseTime` | 고정 중심·피해 스냅샷과 4초 40회 범위 타격, 합체 폭발 1회, 사망·제어 잠금 취소를 관리한다. double 시간과 정수 순번으로 지나간 타격 시점을 처리한다. |
-| [EnemyAreaAttack.cpp](../../SimpleGame/src/combat/EnemyAreaAttack.cpp) | `EnemySystem::StrikeArea` | 지면 원 안의 살아 있는 적을 타격하고 기존 최소 체력 보호를 적용하며 사망 위치를 한 번 반환한다. |
+| [EnemySystem.cpp](../../SimpleGame/src/combat/EnemySystem.cpp) | `EnemySystem::StrikeArea` | 지면 원 안의 살아 있는 적을 타격하고 기존 최소 체력 보호를 적용하며 사망 위치를 한 번 반환한다. |
 | [GameSessionAreaAttack.cpp](../../SimpleGame/src/app/GameSessionAreaAttack.cpp) | `GameSession::StrikeArea` | 활성·비활성 지역 좌표 변환과 기존 경험치·전리품 경로를 연결한다. |
 | [SkillSystem.cpp](../../SimpleGame/src/player/SkillSystem.cpp), [SkillLayout.h](../../SimpleGame/src/player/SkillLayout.h) | `BuildRequest`, `IconAt`; `SkillLayout::Create` | 검 세례·폭발 피해를 따로 계산하고 일곱 번째 마법사 스킬을 동일한 4열 카드 표시·입력 배치로 처리한다. |
 | [MageUltimateView.cpp](../../SimpleGame/src/ui/MageUltimateView.cpp) | `MageUltimateView::DrawFloor`, `DrawSky`, `DrawCaster` | 지면 마법진·실제 판정 경계, 상공 마법진·장식 검·합체·폭발, 기존 캐릭터 모션을 분리한다. 새 효과 실패 시 도형 대체 경로를 사용한다. |
@@ -289,3 +289,9 @@ C++17 std::array는 고정 경로/시계, std::bitset은 조사 완료/중복 �
 ### 천단참 즉시 파쇄 후속 교정 (2026-10-26)
 
 `MirrorCheondanStudio.shards`의 거울판 표시·정지 구간을 제거했다. 25프레임에 이미 분리·회전한 조각을 표시하며 45프레임까지 재생한다. `sweep` 자상은 24프레임에 끝난다. `build`와 `MirrorCheondanPacker.build`의 현재 출력은 50프레임이며 패커는 첫 파편 프레임의 불투명 점유율 80% 미만도 확인한다. 이전 설명의 60프레임은 교정 전 사양이다.
+
+## 2026-10-26 중복 피해 처리 통합
+
+EnemySystem::ApplyHit는 일반·발사체·범위 공격의 최소 체력 보호, 피격 표시, 일반 AI 중단과 회복 시간을 공통 처리한다. 각 공격의 피격 조건과 처치 위치 수집은 기존 경로에서 수행한다. 구현은 SimpleGame/src/combat/EnemySystem.cpp에 있다.
+
+공통 미리보기 모션: [mage-player-motion.js](../../output/shared/mage-player-motion.js)의 MagePlayerMotion은 마력검·바람 미리보기의 이미지 로딩, 8프레임 선택, 발 기준 그리기를 공통 처리한다.

@@ -22,7 +22,7 @@ class WindBladePreview
             node.hidden = true;
             const image = new Image();
             image.alt = ['수직베기', '사선베기', '가로베기'][index];
-            image.src = 'wind-blade-01.png';
+            image.src = '../../SimpleGame/Assets/Characters/Skills/wind-blade-01.png';
             // Keep the convex leading edge facing forward; project the cutting plane.
             image.style.transform = [
                 'matrix(1.2, 0, 0, 1, 0, 0)',

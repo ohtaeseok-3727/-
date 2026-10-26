@@ -1,10 +1,10 @@
 'use strict';
 window.KnightPreviewData = {
     images: {
-        thrust: 'thrust-draft-v1.png',
-        thrustFx: '../knight-thrust-effect-v1/thrust-effect-v1.png',
-        aura: 'sword-aura-draft-v1.png',
-        wave: 'sword-wave-draft-v1.png',
+        thrust: '../../SimpleGame/Assets/Characters/Skills/Knight/thrust.png',
+        thrustFx: '../../SimpleGame/Assets/Characters/Skills/Knight/thrust-effect.png',
+        aura: '../../SimpleGame/Assets/Characters/Skills/Knight/aura.png',
+        wave: '../../SimpleGame/Assets/Characters/Skills/Knight/wave.png',
         walk: '../../SimpleGame/Assets/Characters/SmallKnight/walk-transparent-v1.png'
     },
     thrust: [

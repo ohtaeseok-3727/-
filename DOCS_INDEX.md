@@ -50,7 +50,5 @@
 | [기사 찌르기 이펙트 v1](output/knight-thrust-effect-v1/README.md) | `output/knight-thrust-effect-v1/README.md` |
 | [마법과 검의 노래 — OpenGL 효과 v2 미리보기](output/mage-sword-song-v1/README.md) | `output/mage-sword-song-v1/README.md` |
 | [다중 마력검 미리보기](output/mana-swords-v1/README.md) | `output/mana-swords-v1/README.md` |
-| [코드 기반 이펙트 시안](output/procedural-effects-v1/README.md) | `output/procedural-effects-v1/README.md` |
-| [기사 스프라이트 기반 검 이펙트 v2](output/procedural-sword-v2/README.md) | `output/procedural-sword-v2/README.md` |
 | [거친 단면의 검 이펙트 v3](output/procedural-sword-v3/README.md) | `output/procedural-sword-v3/README.md` |
 | [플레이어 모션 연결](output/wind-blade-v4/PLAYER_MOTION.md) | `output/wind-blade-v4/PLAYER_MOTION.md` |

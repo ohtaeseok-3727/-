@@ -123,6 +123,8 @@ class EnemySystem
         std::optional<WorldPosition> sightOrigin = std::nullopt);
 
   private:
+    void ApplyHit(FieldEnemy& enemy, int damage);
+
     EnemyStateMachine m_StateMachine;
     std::size_t m_UpdateStart = 0;
     bool m_SupportEnabled = true;

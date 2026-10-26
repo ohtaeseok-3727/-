@@ -53,7 +53,7 @@
 | 파일 | 역할 |
 | --- | --- |
 | [MageUltimate.h](../../SimpleGame/src/combat/MageUltimate.h), [구현](../../SimpleGame/src/combat/MageUltimate.cpp) | 시전 시간, 고정 중심, 40회 타격 순번, 폭발·취소 상태 |
-| [EnemyAreaAttack.cpp](../../SimpleGame/src/combat/EnemyAreaAttack.cpp) | 원 내부 살아 있는 적 전원에게 타격, 사망 위치 반환 |
+| [EnemySystem.cpp](../../SimpleGame/src/combat/EnemySystem.cpp) | 원 내부 살아 있는 적 전원에게 타격, 사망 위치 반환 |
 | [GameSessionAreaAttack.cpp](../../SimpleGame/src/app/GameSessionAreaAttack.cpp) | 월드→지역 좌표 변환과 각 지역 적·보상·전리품 연결 |
 | [MageUltimateView.cpp](../../SimpleGame/src/ui/MageUltimateView.cpp) | 지면/상공 레이어, 검·룬·합체 폭발, 기존 시전자 동작 |
 | [ArcaneEffect.cpp](../../SimpleGame/src/rendering/ArcaneEffect.cpp), [셰이더](../../SimpleGame/src/rendering/ArcaneEffectShaders.h) | 효과 프로그램 수명·제한 영역·HDR 합성 및 마법진/응축/폭발 계산 |

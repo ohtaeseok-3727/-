@@ -1,6 +1,6 @@
 # 기사 찌르기 이펙트 v1
 
-2026-09-23. 내장 image_gen으로 제작. 파일: `thrust-effect-v1.png`.
+2026-09-23. 내장 image_gen으로 제작. 파일: `../../SimpleGame/Assets/Characters/Skills/Knight/thrust-effect.png`.
 
 - 캐릭터와 실물 검이 없는 은백색 찌르기 효과다. 이전 찌르기 모션에 중첩할 용도다.
 - 1536×1024 RGBA PNG, 2열×2행. 셀당 768×512.
