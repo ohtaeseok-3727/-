@@ -13,6 +13,7 @@
 <PreparedCombatAsset Include="$(MSBuildThisFileDirectory)Assets\Characters\PixelRestyle-v2\knight-v2.png"><RelativePath>PixelRestyle-v2\knight-v2.png</RelativePath></PreparedCombatAsset>
 <PreparedCombatAsset Include="$(MSBuildThisFileDirectory)Assets\Characters\PixelRestyle-v2\mage-v2.png"><RelativePath>PixelRestyle-v2\mage-v2.png</RelativePath></PreparedCombatAsset>
 <PreparedCombatAsset Include="$(MSBuildThisFileDirectory)Assets\Characters\NPC\Hero\PixelRestyle-v2\hero-v2.png"><RelativePath>NPC\Hero\PixelRestyle-v2\hero-v2.png</RelativePath></PreparedCombatAsset>
+<PreparedCombatAsset Include="$(MSBuildThisFileDirectory)Assets\Characters\Walk\Selected-v3\walk.png"><RelativePath>Walk\Selected-v3\walk.png</RelativePath></PreparedCombatAsset>
 <PreparedCombatAsset Include="$(MSBuildThisFileDirectory)Assets\Characters\Skills\wind-blade-01.png"><RelativePath>Skills\wind-blade-01.png</RelativePath></PreparedCombatAsset>
 <PreparedCombatAsset Include="$(MSBuildThisFileDirectory)Assets\Characters\Skills\dash-trail.png"><RelativePath>Skills\dash-trail.png</RelativePath></PreparedCombatAsset>
 </ItemGroup>

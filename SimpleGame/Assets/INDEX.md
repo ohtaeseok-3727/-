@@ -10,5 +10,6 @@
 | 묶음 | 위치 |
 | --- | --- |
 | Characters | [문서 목록](Characters/INDEX.md) |
+| Effects | [문서 목록](Effects/INDEX.md) |
 | Environment | [문서 목록](Environment/INDEX.md) |
 | Monsters | [문서 목록](Monsters/INDEX.md) |

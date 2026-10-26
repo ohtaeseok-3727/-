@@ -115,6 +115,10 @@ bool Chapter1Sprites::Load(ChapterSprite sprite, Atlas& atlas)
 bool Chapter1Sprites::Draw(
     Renderer& renderer, ChapterSprite sprite, int frame, Point foot, float height, bool flip)
 {
+    if (sprite == ChapterSprite::Hero && frame == 0)
+    {
+        return m_HeroWalk.Draw(renderer, foot, height, flip);
+    }
     auto& atlas = m_Atlases[static_cast<std::size_t>(sprite)];
     if (!atlas.attempted)
     {

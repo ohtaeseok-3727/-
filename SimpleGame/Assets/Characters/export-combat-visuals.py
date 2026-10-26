@@ -53,6 +53,8 @@ for r,name in enumerate(['왼손 정권지르기','마력칼날','양손 앞으�
     add('mage-'+str(r+1),name,0,body,fx,[315,340,340][r],anchors)
 from pixel_restyle import PixelRestyle
 PixelRestyle(P).apply(assets, clips)
+from selected_walk import SelectedWalk
+SelectedWalk(P).apply(assets, clips)
 data=dict(version=1,origin='feet; x right, y down; milliseconds',assets=assets,clips=clips)
 (P/'combat-visuals.json').write_text(json.dumps(data,ensure_ascii=False,indent=2),encoding='utf-8')
 (P/'combat-visuals.js').write_text('globalThis.COMBAT_VISUALS = '+json.dumps(data,ensure_ascii=False)+';\n',encoding='utf-8')

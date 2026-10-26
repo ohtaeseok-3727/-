@@ -1,5 +1,6 @@
 #pragma once
 #include "Renderer.h"
+#include "HeroWalkView.h"
 #include <array>
 
 enum class ChapterSprite
@@ -43,5 +44,6 @@ class Chapter1Sprites
     };
 
     bool Load(ChapterSprite sprite, Atlas& atlas);
+    HeroWalkView m_HeroWalk;
     std::array<Atlas, static_cast<std::size_t>(ChapterSprite::Count)> m_Atlases;
 };

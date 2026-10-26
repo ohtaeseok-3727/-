@@ -263,3 +263,29 @@ C++17 std::array는 고정 경로/시계, std::bitset은 조사 완료/중복 �
 - 같은 파일의 `SpriteHilt`: 현재 이미지 경로·프레임 좌표를 새 픽셀 기준 칼자루 표와 대조하고 몸체 피벗·배율로 검 오라 위치·각도를 계산한다. 게임 화면 정밀 검증은 미실행이다.
 - [최종 자산·재제작·검토 범위](../../SimpleGame/Assets/Characters/PixelRestyle-v2/README.md). 미채택 v1은 로컬 제외 경로에 보관하며 게임에서 참조하지 않는다.
 
+## 2026-10-26 사용자 선택 이동 시트 v3
+
+- [selected_walk.py](../../SimpleGame/Assets/Characters/selected_walk.py)의 `SelectedWalk.apply/write_header`: 승인된 투명 이동 시트와 수동 몸통 중심·발바닥 피벗을 읽고 기사·마법사 `*-walk`만 교체한다. 기존 8개 시간 슬롯을 4자세에 두 슬롯씩 대응하며 공격 6종은 수정하지 않는다. `export-combat-visuals.py`에서 v2 공격 연결 뒤 호출하고 용사 이동·기사 칼자루 공통 헤더를 생성한다.
+- [HeroWalkView](../../SimpleGame/src/rendering/HeroWalkView.h)의 `Load/Draw`: 이동 전용 텍스처 수명을 소유하고 고정 행 배율과 프레임별 피벗으로 용사를 표시한다. C01/C03 대기는 첫 자세, C02 경로 이동 중에는 180ms 간격으로 4자세를 사용한다. 공격은 기존 챕터 시트 호출을 유지한다.
+- `Chapter2::Update/UpdateHero`: 매 갱신의 `heroMoving`을 초기화하고 실제 경로 전진 때만 켜서 제자리 걸음을 막는다. 경로 탐색·이동 속도·공격 판정은 유지한다.
+- `KnightSkillView::SpriteHilt`: 새 이동 시트 경로와 좌표를 먼저 대조해 이동 중 검 오라가 기존 시트의 칼자루 좌표를 사용하지 않도록 한다. 기존 공격 칼자루 표는 유지한다.
+- 최종 경로와 검토 결과는 [이동 시트 문서](../../SimpleGame/Assets/Characters/Walk/Selected-v3/README.md)에 기록했다. 위 과거 기록의 미채택 v1 보관 폴더는 이번 사용자 정리 지시로 삭제했다.
+- 색감·도트 후속 수정: 사용자의 정정에 따라 RGB 0.85 배율과 런타임 팔레트 처리를 제거했다. imagegen으로 이동 PNG의 피부·머리색을 공격 시트 기준으로 바꾸고 픽셀 덩어리·계단형 윤곽을 강화했다. `Renderer::Sprite`는 기존 흰색 정점 색상을 사용하며 재생 중 색상 보정 코드는 없다. 새 픽셀 경계에 맞춘 12개 버클·지면 피벗을 생성 데이터로 다시 내보냈다.
+
+
+## 2026-10-26 천단참 Blender 리메이크
+
+- `tools/effects/blender/build_cheondan.py`: `CheondanStudio.build`가 응축·원호 참격·지연 잔상·연결 균열의 메시와 키프레임을 만들고 `.blend` 및 46장 투명 PNG를 저장한다. `material`은 조명 없는 발광 재질, `ribbon`은 테이퍼 메시, `visibility`는 프레임별 표시 구간을 담당한다.
+- `tools/effects/blender/pack_cheondan.py`: `CheondanPacker.build`가 기준 기사 시트의 6색으로 양자화·이진 알파 변환 후 320×180 셀 시트와 GIF·단계 비교·설정을 저장한다. RGB 팔레트 포함 관계와 알파·유효 프레임을 검사한다. 게임 실행·런타임 연결은 하지 않는다.
+- 제작물·출처·검토 범위: [천단참 Blender](../../SimpleGame/Assets/Effects/CheondanBlender-v1/README.md).
+
+## 2026-10-26 천단참 궤적 일치·거울 파쇄 v2
+
+- `tools/effects/blender/mirror_geometry.py`: `MirrorGeometry.tip`은 칼끝·잔상·자상의 공통 원호 좌표를 반환한다. `clip`은 다각형을 반평면으로 자르고 `cells`는 고정 난수 보로노이 거울판 69개를 반환한다. 셀 면적 합 144는 화면 면적과 일치한다.
+- `tools/effects/blender/build_cheondan_mirror.py`: `MirrorCheondanStudio.sweep`은 공통 표본에 날·참격·자상을 놓는다. `polygon`은 평면 메시를 만들고 `shards`는 두께·반사 무늬가 있는 판을 나누어 이동·회전·확대 키프레임을 만든다. `build`는 Blender 원본과 60장 투명 렌더를 저장한다. v1 `CheondanStudio`의 재질·리본·가시성 함수를 상속한다.
+- `tools/effects/blender/pack_cheondan_mirror.py`: `MirrorCheondanPacker.build`는 기사 기준 12색과 이진 알파의 480×270 셀 시트·GIF·단계 비교·설정을 저장하고 팔레트·알파·활성 구간을 검사한다.
+- 현재 자산·검토 한계: [거울 파쇄 v2](../../SimpleGame/Assets/Effects/CheondanMirror-v2/README.md). 게임 미적용, 빌드·실행 미수행.
+
+### 천단참 즉시 파쇄 후속 교정 (2026-10-26)
+
+`MirrorCheondanStudio.shards`의 거울판 표시·정지 구간을 제거했다. 25프레임에 이미 분리·회전한 조각을 표시하며 45프레임까지 재생한다. `sweep` 자상은 24프레임에 끝난다. `build`와 `MirrorCheondanPacker.build`의 현재 출력은 50프레임이며 패커는 첫 파편 프레임의 불투명 점유율 80% 미만도 확인한다. 이전 설명의 60프레임은 교정 전 사양이다.

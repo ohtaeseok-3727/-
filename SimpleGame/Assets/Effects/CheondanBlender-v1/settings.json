@@ -1,0 +1,68 @@
+{
+  "frames": 46,
+  "fps": 24,
+  "cell": [
+    320,
+    180
+  ],
+  "columns": 8,
+  "render": [
+    640,
+    360
+  ],
+  "filter": "nearest",
+  "alpha_threshold": 80,
+  "palette_reference": "../../Characters/SmallKnight/walk-transparent-v1.png",
+  "palette": [
+    [
+      18,
+      14,
+      27
+    ],
+    [
+      88,
+      48,
+      20
+    ],
+    [
+      159,
+      93,
+      35
+    ],
+    [
+      226,
+      157,
+      58
+    ],
+    [
+      253,
+      206,
+      133
+    ],
+    [
+      255,
+      245,
+      212
+    ]
+  ],
+  "duration_ms": 1917,
+  "game_integrated": false,
+  "phases": {
+    "charge": [
+      2,
+      15
+    ],
+    "slash": [
+      14,
+      28
+    ],
+    "wake": [
+      19,
+      31
+    ],
+    "fracture": [
+      23,
+      44
+    ]
+  }
+}

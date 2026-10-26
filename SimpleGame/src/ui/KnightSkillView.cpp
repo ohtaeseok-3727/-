@@ -6,6 +6,7 @@
 #include "BasicAttack.h"
 #include "CombatVisualData.h"
 #include "PixelRestyleHeroData.h"
+#include "SelectedWalkData.h"
 #include <algorithm>
 #include <cmath>
 #include <cstring>
@@ -62,6 +63,20 @@ namespace
 
     void SpriteHilt(const CombatVisuals::Sprite& body, Point& hilt, float& angle)
     {
+        if (std::wcscmp(CombatVisuals::assets[body.asset].path, SelectedWalk::path) == 0)
+        {
+            for (int i = 0; i < 4; ++i)
+            {
+                const auto& frame = SelectedWalk::frames[0][i];
+                if (body.x == frame.x && body.y == frame.y)
+                {
+                    hilt = {(body.dx + SelectedWalk::knightHilts[i][0] * body.scale) * .32f,
+                            (body.dy + SelectedWalk::knightHilts[i][1] * body.scale) * .32f};
+                    angle = .45f;
+                    return;
+                }
+            }
+        }
         for (const auto& anchor : PixelRestyleKnight::hilts)
         {
             if (body.x != anchor.x || body.y != anchor.y ||

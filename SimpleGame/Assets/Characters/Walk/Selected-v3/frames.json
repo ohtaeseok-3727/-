@@ -1,0 +1,288 @@
+{
+  "source": "walk.png",
+  "size": [
+    1536,
+    1024
+  ],
+  "cell": [
+    384,
+    342
+  ],
+  "target_pivot": [
+    224,
+    340
+  ],
+  "frames": [
+    [
+      {
+        "rect": [
+          0,
+          0,
+          405,
+          343
+        ],
+        "pivot": [
+          244,
+          337
+        ],
+        "offset": [
+          -20,
+          3
+        ],
+        "body_x_global": 244,
+        "ground_y_global": 337,
+        "scale": 1
+      },
+      {
+        "rect": [
+          405,
+          0,
+          356,
+          343
+        ],
+        "pivot": [
+          213,
+          337
+        ],
+        "offset": [
+          11,
+          3
+        ],
+        "body_x_global": 618,
+        "ground_y_global": 337,
+        "scale": 1
+      },
+      {
+        "rect": [
+          761,
+          0,
+          353,
+          343
+        ],
+        "pivot": [
+          215,
+          338
+        ],
+        "offset": [
+          9,
+          2
+        ],
+        "body_x_global": 976,
+        "ground_y_global": 338,
+        "scale": 1
+      },
+      {
+        "rect": [
+          1114,
+          0,
+          422,
+          343
+        ],
+        "pivot": [
+          205,
+          336
+        ],
+        "offset": [
+          19,
+          4
+        ],
+        "body_x_global": 1319,
+        "ground_y_global": 336,
+        "scale": 1
+      }
+    ],
+    [
+      {
+        "rect": [
+          0,
+          343,
+          403,
+          333
+        ],
+        "pivot": [
+          254,
+          331
+        ],
+        "offset": [
+          -30,
+          9
+        ],
+        "body_x_global": 254,
+        "ground_y_global": 674,
+        "scale": 1
+      },
+      {
+        "rect": [
+          403,
+          343,
+          356,
+          333
+        ],
+        "pivot": [
+          215,
+          326
+        ],
+        "offset": [
+          9,
+          14
+        ],
+        "body_x_global": 618,
+        "ground_y_global": 669,
+        "scale": 1
+      },
+      {
+        "rect": [
+          759,
+          343,
+          355,
+          333
+        ],
+        "pivot": [
+          218,
+          332
+        ],
+        "offset": [
+          6,
+          8
+        ],
+        "body_x_global": 977,
+        "ground_y_global": 675,
+        "scale": 1
+      },
+      {
+        "rect": [
+          1114,
+          343,
+          422,
+          333
+        ],
+        "pivot": [
+          206,
+          331
+        ],
+        "offset": [
+          18,
+          9
+        ],
+        "body_x_global": 1320,
+        "ground_y_global": 674,
+        "scale": 1
+      }
+    ],
+    [
+      {
+        "rect": [
+          0,
+          676,
+          410,
+          348
+        ],
+        "pivot": [
+          274,
+          334
+        ],
+        "offset": [
+          -50,
+          6
+        ],
+        "body_x_global": 274,
+        "ground_y_global": 1010,
+        "scale": 1
+      },
+      {
+        "rect": [
+          410,
+          676,
+          355,
+          348
+        ],
+        "pivot": [
+          221,
+          334
+        ],
+        "offset": [
+          3,
+          6
+        ],
+        "body_x_global": 631,
+        "ground_y_global": 1010,
+        "scale": 1
+      },
+      {
+        "rect": [
+          765,
+          676,
+          359,
+          348
+        ],
+        "pivot": [
+          225,
+          334
+        ],
+        "offset": [
+          -1,
+          6
+        ],
+        "body_x_global": 990,
+        "ground_y_global": 1010,
+        "scale": 1
+      },
+      {
+        "rect": [
+          1124,
+          676,
+          412,
+          348
+        ],
+        "pivot": [
+          214,
+          334
+        ],
+        "offset": [
+          10,
+          6
+        ],
+        "body_x_global": 1338,
+        "ground_y_global": 1010,
+        "scale": 1
+      }
+    ]
+  ],
+  "alignment": "body buckle X; lowest opaque boot Y; integer translation only; no resizing",
+  "alpha": {
+    "mode": "RGBA",
+    "min": 0,
+    "max": 254,
+    "fully_transparent_pixels": 729809
+  },
+  "reference_heights": [
+    328,
+    323,
+    327
+  ],
+  "knight_hilts": [
+    [
+      174,
+      249
+    ],
+    [
+      582,
+      249
+    ],
+    [
+      915,
+      249
+    ],
+    [
+      1280,
+      249
+    ]
+  ],
+  "timing_ms": [
+    180,
+    180,
+    180,
+    180
+  ],
+  "style": "imagegen edit: stepped pixel clusters and attack-reference hair/skin palette; no runtime color adjustment"
+}

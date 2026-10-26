@@ -1,0 +1,26 @@
+<!doctype html><html lang="ko"><meta charset="utf-8"><title>천단참 — 거울 파쇄 v2</title>
+<style>body{margin:28px auto;max-width:1100px;background:#11151e;color:#e8e6de;font:16px system-ui}canvas{width:100%;image-rendering:pixelated;border:1px solid #53576a}button,select,input{margin:12px 8px 12px 0;padding:8px;background:#292d37;color:#eee2ba;border:1px solid #636373}p{color:#bdc4d1}</style>
+<h1>천단참 · 즉시 파쇄</h1><p>칼끝이 지난 자리 그대로 자상 → 곧바로 터지는 파편. 거울판 변환·정지 구간을 제거했습니다. 모든 효과 동작은 Blender 렌더입니다.</p>
+<canvas id="view" width="960" height="540"></canvas><button id="play">일시정지</button><button id="restart">처음부터</button><button id="flip">좌우 전환</button>
+<select id="speed"><option value="1">정상 속도</option><option value="0.25">0.25배속</option><option value="0.5">0.5배속</option></select>
+<input id="scrub" type="range" min="0" max="49" value="0"><span id="label"></span>
+<p>제작 미리보기입니다. 거울 표면의 반사 무늬는 Blender에서 만든 도형이며 게임 화면 캡처가 아닙니다. 게임 미적용.</p>
+<script>
+const canvas=document.querySelector('#view'),ctx=canvas.getContext('2d'),atlas=new Image();
+const slider=document.querySelector('#scrub'),label=document.querySelector('#label');
+let playing=true,mirror=false,position=0,last=0;atlas.src='mirror-atlas.png';
+document.querySelector('#play').onclick=()=>{playing=!playing;document.querySelector('#play').textContent=playing?'일시정지':'재생'};
+document.querySelector('#restart').onclick=()=>{position=0};document.querySelector('#flip').onclick=()=>{mirror=!mirror};
+slider.oninput=()=>{position=Number(slider.value);playing=false;document.querySelector('#play').textContent='재생'};
+function paint(time){
+ if(playing&&last)position=(position+Math.min(100,time-last)/1000*24*Number(document.querySelector('#speed').value))%62;
+ last=time;const frame=Math.min(49,Math.floor(position));ctx.fillStyle='#171b24';ctx.fillRect(0,0,960,540);
+ ctx.save();if(mirror){ctx.translate(960,0);ctx.scale(-1,1)}ctx.strokeStyle='#252c38';
+ for(let x=0;x<960;x+=60){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,540);ctx.stroke()}
+ for(let y=0;y<540;y+=60){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(960,y);ctx.stroke()}
+ ctx.fillStyle='#333a48';ctx.fillRect(90,360,130,180);ctx.fillRect(680,300,140,240);
+ ctx.fillStyle='#787058';for(let x of [108,148,188,698,738,778])for(let y of [384,444,504])ctx.fillRect(x,y,14,24);
+ ctx.imageSmoothingEnabled=false;if(atlas.complete&&atlas.naturalWidth)ctx.drawImage(atlas,frame%8*480,Math.floor(frame/8)*270,480,270,0,0,960,540);
+ ctx.restore();slider.value=frame;label.textContent=`${frame+1}/50 · ${frame<10?'검기 응축':frame<24?'동일 궤적 베기·자상':'즉시 파쇄'}`;requestAnimationFrame(paint);
+}requestAnimationFrame(paint);
+</script></html>

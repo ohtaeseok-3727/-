@@ -226,7 +226,8 @@ void Chapter2::DrawActor(Renderer& r, int actor, Point p, float time) const
     }
     else if (actor == 0)
     {
-        m_Sprites.DrawHero(r, p, time, m_Combat.heroAttack > 0.f, m_Combat.heroFaceLeft);
+        m_Sprites.DrawHero(r, p, time, m_Combat.heroAttack > 0.f, m_Combat.heroFaceLeft,
+                           m_Combat.heroMoving);
     }
 }
 

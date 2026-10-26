@@ -75,6 +75,12 @@
     <ClInclude Include="src\rendering\SpriteImage.h">
       <Filter>src\rendering</Filter>
     </ClInclude>
+    <ClInclude Include="src\rendering\HeroWalkView.h">
+      <Filter>src\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\generated\SelectedWalkData.h">
+      <Filter>src\generated</Filter>
+    </ClInclude>
     <ClInclude Include="src\rendering\PostProcessing.h">
       <Filter>src\rendering</Filter>
     </ClInclude>
@@ -186,6 +192,9 @@
       <Filter>src\app</Filter>
     </ClCompile>
     <ClCompile Include="src\rendering\SpriteImage.cpp">
+      <Filter>src\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\HeroWalkView.cpp">
       <Filter>src\rendering</Filter>
     </ClCompile>
     <ClCompile Include="src\rendering\PostProcessing.cpp">

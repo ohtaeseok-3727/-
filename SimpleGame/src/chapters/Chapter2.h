@@ -172,6 +172,7 @@ struct Chapter2Combat
     float heroRepath = 0.f;
     std::size_t heroWaypoint = 0;
     bool heroFaceLeft = false;
+    bool heroMoving = false;
     std::vector<WorldPosition> heroPath;
     float jumpCooldown = 0.f;
     float cryCooldown = 4.f;

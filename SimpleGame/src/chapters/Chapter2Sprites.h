@@ -1,5 +1,6 @@
 #pragma once
 #include "Renderer.h"
+#include "HeroWalkView.h"
 #include <array>
 
 struct FieldEnemy;
@@ -18,7 +19,8 @@ class Chapter2Sprites
                   Point foot,
                   float time,
                   bool attacking = false,
-                  bool faceLeft = false) const;
+                  bool faceLeft = false,
+                  bool moving = false) const;
 
   private:
     enum class Sheet
@@ -58,4 +60,5 @@ class Chapter2Sprites
               bool flip = false) const;
 
     mutable std::array<Atlas, static_cast<std::size_t>(Sheet::Count)> m_Atlases;
+    mutable HeroWalkView m_HeroWalk;
 };

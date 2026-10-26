@@ -186,6 +186,7 @@ void Chapter2::Update(float dt,
     }
     dt = (std::min)(dt, .1f);
     m_Impact = {};
+    m_Combat.heroMoving = false;
     if (ContinuousWorld() && m_State.map == Chapter2Maps::Canyon &&
         m_State.phase == Chapter2Phase::Priorities && !m_State.activeTarget)
     {
@@ -485,6 +486,7 @@ void Chapter2::UpdateHero(float dt, WorldPosition player, const LevelMap& map, E
             {
                 combat.heroFaceLeft = next.x < combat.hero.x;
             }
+            combat.heroMoving = true;
             combat.hero = next;
             remaining -= step;
             if (step >= distance)

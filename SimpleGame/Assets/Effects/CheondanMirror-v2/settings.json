@@ -1,0 +1,100 @@
+{
+  "frames": 50,
+  "fps": 24,
+  "cell": [
+    480,
+    270
+  ],
+  "columns": 8,
+  "render": [
+    960,
+    540
+  ],
+  "alpha_threshold": 100,
+  "filter": "nearest",
+  "palette_reference": "../../Characters/SmallKnight/walk-transparent-v1.png",
+  "palette": [
+    [
+      16,
+      15,
+      25
+    ],
+    [
+      32,
+      36,
+      43
+    ],
+    [
+      53,
+      53,
+      65
+    ],
+    [
+      72,
+      74,
+      86
+    ],
+    [
+      96,
+      107,
+      111
+    ],
+    [
+      123,
+      136,
+      151
+    ],
+    [
+      168,
+      175,
+      188
+    ],
+    [
+      210,
+      217,
+      220
+    ],
+    [
+      245,
+      244,
+      239
+    ],
+    [
+      110,
+      54,
+      16
+    ],
+    [
+      198,
+      121,
+      31
+    ],
+    [
+      250,
+      183,
+      78
+    ],
+    [
+      253,
+      225,
+      173
+    ]
+  ],
+  "game_integrated": false,
+  "phases": {
+    "charge": [
+      3,
+      10
+    ],
+    "sweep_and_matching_scar": [
+      11,
+      24
+    ],
+    "explosion": [
+      25,
+      45
+    ]
+  },
+  "mirror_hold": false,
+  "first_shard_frame_coverage": 0.7432484567901234
+}

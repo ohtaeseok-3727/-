@@ -242,8 +242,12 @@ void Chapter2Sprites::DrawEnemy(Renderer& renderer, const FieldEnemy& enemy, Poi
 }
 
 void Chapter2Sprites::DrawHero(
-    Renderer& renderer, Point foot, float time, bool attacking, bool faceLeft) const
+    Renderer& renderer, Point foot, float time, bool attacking, bool faceLeft, bool moving) const
 {
+    if (!attacking && m_HeroWalk.Draw(renderer, foot, 52.f, faceLeft, time, moving))
+    {
+        return;
+    }
     const int frame = attacking ? 1 + static_cast<int>(time * 5.f) % 2 : 0;
     if (!Draw(renderer, Sheet::Hero, frame, foot, 52.f, faceLeft))
     {

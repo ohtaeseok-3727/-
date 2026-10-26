@@ -198,6 +198,8 @@
     <ClInclude Include="src\combat\BasicAttack.h" />
     <ClInclude Include="src\app\PrototypeWorld.h" />
     <ClInclude Include="src\rendering\SpriteImage.h" />
+    <ClInclude Include="src\rendering\HeroWalkView.h" />
+    <ClInclude Include="src\generated\SelectedWalkData.h" />
     <ClInclude Include="src\generated\CombatVisualData.h" />
     <ClInclude Include="src\generated\PixelRestyleHeroData.h" />
     <ClInclude Include="src\rendering\PostProcessing.h" />
@@ -234,6 +236,7 @@
     <ClCompile Include="src\verification\Chapter1Verification.cpp" />
     <ClCompile Include="src\app\PrototypeWorld.cpp" />
     <ClCompile Include="src\rendering\SpriteImage.cpp" />
+    <ClCompile Include="src\rendering\HeroWalkView.cpp" />
     <ClCompile Include="src\rendering\PostProcessing.cpp" />
     <ClCompile Include="src\app\SimpleGame.cpp" />
     <ClCompile Include="src\core\stdafx.cpp">
