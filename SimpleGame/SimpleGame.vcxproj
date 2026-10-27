@@ -279,9 +279,11 @@
     <ItemGroup>
       <ChapterNpcSprite Include="$(ProjectDir)Assets\Characters\NPC\**\*.png" />
       <ChapterMonsterSprite Include="$(ProjectDir)Assets\Monsters\**\*.png" />
+      <Chapter3Sprite Include="$(ProjectDir)Assets\Chapter3\**\*.png" />
     </ItemGroup>
     <Copy SourceFiles="@(ChapterNpcSprite)" DestinationFiles="@(ChapterNpcSprite->'$(TargetDir)Assets\Characters\NPC\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
     <Copy SourceFiles="@(ChapterMonsterSprite)" DestinationFiles="@(ChapterMonsterSprite->'$(TargetDir)Assets\Monsters\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(Chapter3Sprite)" DestinationFiles="@(Chapter3Sprite->'$(TargetDir)Assets\Chapter3\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
   </Target>
   <Import Project="PreparedCombatAssets.targets" />
   <ImportGroup Label="ExtensionTargets">

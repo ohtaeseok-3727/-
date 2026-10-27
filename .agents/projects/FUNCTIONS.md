@@ -295,3 +295,7 @@ C++17 std::array는 고정 경로/시계, std::bitset은 조사 완료/중복 �
 EnemySystem::ApplyHit는 일반·발사체·범위 공격의 최소 체력 보호, 피격 표시, 일반 AI 중단과 회복 시간을 공통 처리한다. 각 공격의 피격 조건과 처치 위치 수집은 기존 경로에서 수행한다. 구현은 SimpleGame/src/combat/EnemySystem.cpp에 있다.
 
 공통 미리보기 모션: [mage-player-motion.js](../../output/shared/mage-player-motion.js)의 MagePlayerMotion은 마력검·바람 미리보기의 이미지 로딩, 8프레임 선택, 발 기준 그리기를 공통 처리한다.
+
+### 2026-10-27 챕터 3 NPC 표시
+
+Chapter1Sprites::Load는 챕터 3 인물 시트의 다섯 대기 자세를 알파 경계로 읽는다. Chapter3::DrawActor와 DrawEnemy는 인물 역할에 대응하는 프레임을 표시하고 로드 실패 시 기존 도형을 사용한다.

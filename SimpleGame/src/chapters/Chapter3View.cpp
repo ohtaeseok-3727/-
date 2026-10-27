@@ -305,7 +305,16 @@ void Chapter3::DrawActor(Renderer& r, int actor, Point p, float) const
                             : actor == 10 ? "엘리안"
                             : actor == 12 ? "에드릭"
                                           : "공증 사본 운반자";
-        Person(r, p, Stone, label);
+        const int frame = actor == 10 ? 0 : actor == 12 ? 1 : actor == 5 ? 2
+                          : actor == 0 || actor >= 20 ? 3 : 4;
+        if (m_Sprites.Draw(r, ChapterSprite::Chapter3People, frame, p, 52.f))
+        {
+            r.Text(p.x - 35, p.y - 66, label, Paper);
+        }
+        else
+        {
+            Person(r, p, Stone, label);
+        }
         if (actor == 1)
         {
             r.Ellipse(p.x, p.y, 145, 125.5f, Color(.9f, .55f, .16f, .08f));
@@ -315,7 +324,14 @@ void Chapter3::DrawActor(Renderer& r, int actor, Point p, float) const
 
 void Chapter3::DrawEnemy(Renderer& r, const FieldEnemy& enemy, Point p) const
 {
-    Person(r, p, enemy.hitFlash > 0.f ? Paper : Color(.23f, .3f, .47f), "세라드 · 기력");
+    if (m_Sprites.Draw(r, ChapterSprite::Chapter3People, 2, p, 52.f))
+    {
+        r.Text(p.x - 35, p.y - 66, "세라드 · 기력", Paper);
+    }
+    else
+    {
+        Person(r, p, enemy.hitFlash > 0.f ? Paper : Color(.23f, .3f, .47f), "세라드 · 기력");
+    }
     r.Rect(p.x - 38, p.y - 78, 76, 5, Stone);
     r.Rect(p.x - 38,
            p.y - 78,

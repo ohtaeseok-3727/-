@@ -11,6 +11,7 @@ enum class ChapterSprite
     Healer,
     Commander,
     Hero,
+    Chapter3People,
     Count
 };
 

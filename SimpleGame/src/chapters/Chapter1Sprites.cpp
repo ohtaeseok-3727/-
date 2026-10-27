@@ -23,7 +23,8 @@ bool Chapter1Sprites::Load(ChapterSprite sprite, Atlas& atlas)
                               L"NPC\\Villager\\villager-v1.png",
                               L"..\\Monsters\\Goblin\\Healer\\healer-v1.png",
                               L"..\\Monsters\\Goblin\\LegionCommander\\legion-commander-v1.png",
-                              PixelRestyleHero::path};
+                              PixelRestyleHero::path,
+                              L"..\\Chapter3\\ImageGen-v1\\characters-v1.png"};
     SpriteImage image;
     if (!LoadRawSpriteSheet(paths[static_cast<int>(sprite)], image))
     {
@@ -33,7 +34,19 @@ bool Chapter1Sprites::Load(ChapterSprite sprite, Atlas& atlas)
     atlas.height = image.height;
     const int rows =
         sprite == ChapterSprite::GoblinWalk || sprite == ChapterSprite::GoblinAttack ? 1 : 4;
-    if (sprite == ChapterSprite::Hero)
+    if (sprite == ChapterSprite::Chapter3People)
+    {
+        if (image.width != 1374 || image.height != 1145)
+        {
+            return false;
+        }
+        const int boundaries[] = {0, 237, 468, 695, 905, 1145};
+        for (int row = 0; row < 5; ++row)
+        {
+            atlas.frames.push_back({0, boundaries[row], 229, boundaries[row + 1]});
+        }
+    }
+    else if (sprite == ChapterSprite::Hero)
     {
         if (image.width != PixelRestyleHero::width || image.height != PixelRestyleHero::height)
         {
