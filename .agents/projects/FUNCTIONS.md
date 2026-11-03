@@ -299,3 +299,10 @@ EnemySystem::ApplyHit는 일반·발사체·범위 공격의 최소 체력 보�
 ### 2026-10-27 챕터 3 NPC 표시
 
 Chapter1Sprites::Load는 챕터 3 인물 시트의 다섯 대기 자세를 알파 경계로 읽는다. Chapter3::DrawActor와 DrawEnemy는 인물 역할에 대응하는 프레임을 표시하고 로드 실패 시 기존 도형을 사용한다.
+
+## 2026-11-03 플레이어 행동 상태
+
+| 영역 | 선언·구현 | 함수 | 코드에서 확인한 역할 |
+| --- | --- | --- | --- |
+| 플레이어 상태 | [PlayerStateMachine.h](../../SimpleGame/src/player/PlayerStateMachine.h) | Update, IsIn, CanMove, CanAttack, CanUseSkill | 진행 상태를 계층으로 분류하고 행동 허용 여부를 제공한다. |
+| 월드 연결 | [PrototypeWorld.cpp](../../SimpleGame/src/app/PrototypeWorld.cpp) | UpdatePlayerState | 공격·시전·이동과 조작 제한을 상태 머신에 반영한다. |

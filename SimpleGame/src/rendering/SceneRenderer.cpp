@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "SceneRenderer.h"
 #include "BasicAttack.h"
+#include "PlayerStateMachine.h"
 #include "MageProjectiles.h"
 #include "MageProjectileView.h"
 #include "MageUltimate.h"
@@ -106,8 +107,10 @@ void SceneRenderer::DrawActor(Renderer& r, const SceneItem& item, const SceneFra
     }
     else if (o.kind == 5)
     {
-        const int walkFrame = frame.moving ? static_cast<int>(frame.walk) : 0;
-        if (frame.mageUltimate.Casting())
+        const int walkFrame = frame.playerState.Current() == PlayerStateMachine::State::Moving
+                                  ? static_cast<int>(frame.walk)
+                                  : 0;
+        if (frame.playerState.Current() == PlayerStateMachine::State::MageUltimate)
         {
             MageUltimateView::DrawCaster(r, frame.mageUltimate, p);
             return;
@@ -120,13 +123,13 @@ void SceneRenderer::DrawActor(Renderer& r, const SceneItem& item, const SceneFra
                     r, frame.knightSkills, frame.attack, p, frame.faceLeft, walkFrame, frame.time);
             }
         };
-        if (frame.knightSkills.Casting())
+        if (frame.playerState.Current() == PlayerStateMachine::State::KnightSkill)
         {
             KnightSkillView::DrawBody(r, frame.knightSkills, p);
             aura();
             return;
         }
-        if (frame.mageProjectiles.Casting() &&
+        if (frame.playerState.Current() == PlayerStateMachine::State::MageProjectile &&
             r.CombatVisual("mage-2",
                            frame.mageProjectiles.CastMilliseconds(),
                            x,
@@ -137,7 +140,7 @@ void SceneRenderer::DrawActor(Renderer& r, const SceneItem& item, const SceneFra
         {
             return;
         }
-        if (frame.attack.IsAttacking() &&
+        if (frame.playerState.Current() == PlayerStateMachine::State::BasicAttack &&
             r.CharacterAttack(frame.profession,
                               frame.attack.ClipId(),
                               frame.attack.ElapsedMilliseconds(),

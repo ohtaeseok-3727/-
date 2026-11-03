@@ -1,6 +1,7 @@
 #pragma once
 #include "Renderer.h"
 #include "BasicAttack.h"
+#include "PlayerStateMachine.h"
 #include "InteractionBubbleView.h"
 #include "LevelMap.h"
 #include "GameSession.h"
@@ -75,6 +76,7 @@ class PrototypeWorld
 
   private:
     friend class VisualPlaytest;
+    void UpdatePlayerState();
     void Stream();
     bool Blocked(float x, float y) const;
     Point Project(float x, float y) const;
@@ -87,6 +89,7 @@ class PrototypeWorld
     SceneGraph m_Scene;
     SceneRenderer m_SceneRenderer;
     BasicAttack m_Attack;
+    PlayerStateMachine m_PlayerState;
     LevelMap m_Map;
     GameSession m_Level;
     GameView m_LevelView;

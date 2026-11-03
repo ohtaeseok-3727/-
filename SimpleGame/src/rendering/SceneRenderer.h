@@ -2,6 +2,7 @@
 
 #include "SceneGraph.h"
 
+class PlayerStateMachine;
 class BasicAttack;
 class MageProjectiles;
 class MageUltimate;
@@ -19,12 +20,12 @@ struct SceneFrame
     const MageProjectiles& mageProjectiles;
     const MageUltimate& mageUltimate;
     const KnightSkills& knightSkills;
+    const PlayerStateMachine& playerState;
     GameView& levelView;
     MapView& mapView;
     float time;
     float walk;
     int profession;
-    bool moving;
     bool faceLeft;
     bool started;
     Point playerScreen;

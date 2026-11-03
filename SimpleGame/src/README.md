@@ -17,3 +17,7 @@
 | `world/` | 레벨 데이터, 지도 배치와 공통 좌표형 |
 
 진입점은 `app/`의 `SimpleGame.cpp`다. `PrototypeWorld`가 세션, 챕터, 전투, 플레이어 상태를 갱신하고 렌더링·UI 모듈에 표시 데이터를 전달한다. 각 모듈의 선언을 다른 폴더에서 사용하는 경우 헤더 검색 경로를 통해 연결한다. 새 C++ 파일을 추가하면 프로젝트 파일과 필터에 상대 경로를 등록한다.
+
+## 플레이어 행동 상태
+
+`player/PlayerStateMachine.h`는 행동을 Active 아래 Locomotion(Idle, Moving)과 Action(BasicAttack, Casting)으로 분류하고, Casting 아래에 세 시전 종류를 둔다. Defeated는 별도 상태다. 일시정지·메뉴·이벤트 조작 잠금은 독립적인 입력 제한으로 취급한다. `PrototypeWorld::UpdatePlayerState`가 공격·스킬 진행 상태와 이동 결과를 반영하며 입력 허용과 `SceneRenderer`의 표시 선택에 같은 상태를 사용한다. 공격 연계와 스킬 타이밍은 기존 담당 객체가 소유한다. 상태 갱신은 해당 객체의 현재 진행 상태를 기반으로 하며, 전환 시 진입·종료 콜백은 없다.

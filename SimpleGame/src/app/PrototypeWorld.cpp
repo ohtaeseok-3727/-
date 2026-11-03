@@ -124,16 +124,28 @@ void PrototypeWorld::ToggleSkills()
     }
 }
 
+void PrototypeWorld::UpdatePlayerState()
+{
+    PlayerStateMachine::Inputs inputs;
+    inputs.defeated = m_Level.IsDefeated();
+    inputs.controlLocked = !m_Started || m_Paused || MenuOpen() ||
+                           m_Level.CurrentChapter().ControlLocked();
+    inputs.moving = m_Moving;
+    inputs.attacking = m_Attack.IsAttacking();
+    inputs.mageProjectile = m_MageProjectiles.Casting();
+    inputs.mageUltimate = m_MageUltimate.Casting();
+    inputs.knightSkill = m_KnightSkills.Casting();
+    m_PlayerState.Update(inputs);
+}
+
 bool PrototypeWorld::HandleSkillKey(char key)
 {
     if (!m_Started)
     {
         return false;
     }
-    if (m_Skills.IsSlotBound(key) &&
-        (m_Paused || MenuOpen() || m_Level.CurrentChapter().ControlLocked() ||
-         m_Level.IsDefeated() || m_Attack.IsAttacking() || m_MageProjectiles.Casting() ||
-         m_MageUltimate.Casting() || m_KnightSkills.Casting()))
+    UpdatePlayerState();
+    if (m_Skills.IsSlotBound(key) && !m_PlayerState.CanUseSkill())
     {
         return true;
     }
@@ -151,6 +163,7 @@ bool PrototypeWorld::HandleSkillKey(char key)
             m_Attack.Reset();
         }
     }
+    UpdatePlayerState();
     if (!notice.empty())
     {
         m_Level.ShowSkillNotice(notice);
@@ -213,10 +226,12 @@ void PrototypeWorld::Update(
     float dt, float dx, float dy, bool sprint, bool attackPressed, bool interactionHeld)
 {
     Stream();
+    UpdatePlayerState();
     if (!m_Started || m_Paused || MenuOpen() || m_Level.IsDefeated())
     {
         m_Attack.Reset();
         m_Moving = false;
+        UpdatePlayerState();
         return;
     }
 
@@ -232,8 +247,8 @@ void PrototypeWorld::Update(
     }
     m_Time += dt;
     m_Skills.Update(dt);
-    const bool casting =
-        m_MageProjectiles.Casting() || m_MageUltimate.Casting() || m_KnightSkills.Casting();
+    UpdatePlayerState();
+    const bool wasCasting = m_PlayerState.IsIn(PlayerStateMachine::Branch::Casting);
     m_MageProjectiles.Update(dt, m_Level, m_Map);
     m_MageUltimate.Update(dt, m_Level);
     m_KnightSkills.Update(dt, m_Level, m_Map);
@@ -245,7 +260,8 @@ void PrototypeWorld::Update(
         m_Level.Strike(step, {m_X, m_Y}, m_FaceLeft, m_Map);
     }
 
-    if (attackPressed && !casting)
+    UpdatePlayerState();
+    if (attackPressed && !wasCasting && m_PlayerState.CanAttack())
     {
         // Pick the initial facing from movement, then hold it through the strike.
         if (!m_Attack.IsAttacking() && std::abs(dx) > 0.0001f)
@@ -257,7 +273,8 @@ void PrototypeWorld::Update(
     }
 
     // Implementation assumption: each strike keeps the player in place.
-    if (m_Attack.IsAttacking() || casting)
+    UpdatePlayerState();
+    if (wasCasting || !m_PlayerState.CanMove())
     {
         dx = 0.f;
         dy = 0.f;
@@ -349,6 +366,7 @@ void PrototypeWorld::Update(
         m_JournalOpen = true;
     }
 
+    UpdatePlayerState();
     Stream();
     float follow = 1.f - std::exp(-9.f * dt);
     m_CameraX += (m_X - m_CameraX) * follow;
@@ -409,18 +427,19 @@ void PrototypeWorld::Draw(Renderer& r, int width, int height)
         }
     }
     m_Scene.BuildRenderQueue(SceneCamera(m_CameraX, m_CameraY, width, height));
+    UpdatePlayerState();
     const SceneFrame frame{m_Map,
                            m_Level,
                            m_Attack,
                            m_MageProjectiles,
                            m_MageUltimate,
                            m_KnightSkills,
+                           m_PlayerState,
                            m_LevelView,
                            m_MapView,
                            m_Time,
                            m_Walk,
                            m_Class,
-                           m_Moving,
                            m_FaceLeft,
                            m_Started,
                            Project(m_X, m_Y),

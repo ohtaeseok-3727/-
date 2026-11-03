@@ -170,6 +170,7 @@
   <ItemGroup>
     <ClInclude Include="src\world\LevelMap.h" />
     <ClInclude Include="src\player\PlayerProgression.h" />
+    <ClInclude Include="src\player\PlayerStateMachine.h" />
     <ClInclude Include="src\player\PlayerInventory.h" />
     <ClInclude Include="src\ui\InventoryView.h" />
     <ClInclude Include="src\ui\InteractionBubbleView.h" />
