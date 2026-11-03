@@ -103,3 +103,10 @@ PNG 로딩에는 Windows 내장 WIC를 사용하며 추가 이미지 DLL은 필�
 - 화면 크기는 framebuffer 픽셀 기준이며 마우스는 창 좌표를 framebuffer 좌표로 변환한다. 반복 키 이벤트는 무시한다. 키 입력은 문자 입력기가 아닌 물리 키 코드 기준이다.
 - 라이브러리 버전, 라이선스, Windows 지원 범위와 배포 절차는 [GLFW README](../../SimpleGame/Dependencies/GLFW/README.md)를 따른다. 이전 FreeGLUT 파일은 호환 이력으로 남아 있지만 게임의 링크·DLL 복사·실행 경로에서는 사용하지 않는다.
 - 정적 검토만 수행했다. 사용자 확인 항목: 네 구성 빌드, WASD/방향키/좌우 Ctrl·Shift, 3단 콤보, 메뉴·스킬 드래그, Alt-Tab 중 누른 키, DPI 100/150/200%, 크기 변경·최소화·복원, F10/메뉴/닫기 종료, Release 폴더를 개발 도구 없는 Windows PC로 복사한 실행.
+
+### GLFW 전환 후 빌드 오류 수정 — 2026-11-03
+
+- 사용자 빌드 오류 보고에 따라 빌드 검증을 수행했다. 기존 빌드 로그의 C3861(OutputDebugStringA, SetConsoleOutputCP), C2065(CP_UTF8)는 FreeGLUT 헤더 제거 뒤 Windows API 선언을 간접 포함하던 경로가 사라진 것이 원인이었다.
+- SimpleGame.cpp에 Windows.h를 명시적으로 포함했다. 함수나 게임 동작은 변경하지 않았다.
+- 샌드박스에서 중단된 빌드의 불완전한 PCH 때문에 C1852가 발생해 전체 Rebuild로 재생성했다. Visual Studio 18 MSBuild, v145, x64 Debug 전체 빌드·링크·배포 복사 성공(exit 0). Chapter1View.cpp의 기존 C4244 경고 두 건은 남아 있다.
+- 게임 실행·FPS 측정과 다른 세 구성의 빌드는 수행하지 않았다. 위 최초 전환 시점의 미검증 기록과 구분한다.

@@ -6,6 +6,7 @@ This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY.
 */
 #include "stdafx.h"
+#include <Windows.h>
 #include "Renderer.h"
 #include "FrameProfiler.h"
 #include "PrototypeWorld.h"
