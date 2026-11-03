@@ -306,3 +306,12 @@ Chapter1Sprites::Load는 챕터 3 인물 시트의 다섯 대기 자세를 알�
 | --- | --- | --- | --- |
 | 플레이어 상태 | [PlayerStateMachine.h](../../SimpleGame/src/player/PlayerStateMachine.h) | Update, IsIn, CanMove, CanAttack, CanUseSkill | 진행 상태를 계층으로 분류하고 행동 허용 여부를 제공한다. |
 | 월드 연결 | [PrototypeWorld.cpp](../../SimpleGame/src/app/PrototypeWorld.cpp) | UpdatePlayerState | 공격·시전·이동과 조작 제한을 상태 머신에 반영한다. |
+
+## 2026-11-03 GLFW 프레임워크
+
+| 영역 | 선언·구현 | 함수 | 역할 |
+| --- | --- | --- | --- |
+| 창 수명 | [GlfwWindow.cpp](../../SimpleGame/src/app/GlfwWindow.cpp) | Open, Handle, 소멸자 | GLFW 초기화와 OpenGL 호환 컨텍스트 생성·반환·해제. |
+| 좌표와 대기 | [GlfwWindow.cpp](../../SimpleGame/src/app/GlfwWindow.cpp) | CursorPixels, WaitForNextFrame | DPI 좌표 변환과 활성 4ms/비활성 100ms 이벤트 대기. |
+| 입력과 루프 | [SimpleGame.cpp](../../SimpleGame/src/app/SimpleGame.cpp) | UpdateFrame, GlfwKey | GLFW 상태를 게임 갱신에 연결하고 기존 키 인덱스를 변환. |
+| 공격 입력 | [AttackInput.cpp](../../SimpleGame/src/combat/AttackInput.cpp) | Poll(enabled, down) | 외부에서 전달한 Ctrl 상태의 상승 에지와 복귀 억제. |

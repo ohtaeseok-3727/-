@@ -26,10 +26,15 @@
       <RuntimeDependencyDir Condition="'$(Platform)'=='x64'">$(MSBuildThisFileDirectory)Dependencies\x64\</RuntimeDependencyDir>
     </PropertyGroup>
     <ItemGroup>
-      <DevelopmentDll Include="$(RuntimeDependencyDir)freeglut.dll;$(RuntimeDependencyDir)glew32.dll" />
+      <DevelopmentDll Include="$(MSBuildThisFileDirectory)Dependencies\GLFW\$(Platform)\glfw3.dll;$(RuntimeDependencyDir)glew32.dll" />
+      <DevelopmentCrt Include="$(VCToolsRedistDir)x64\Microsoft.VC*.CRT\*.dll" Condition="'$(Platform)'=='x64' and '$(Configuration)'=='Release'" />
+      <DevelopmentCrt Include="$(VCToolsRedistDir)x86\Microsoft.VC*.CRT\*.dll" Condition="'$(Platform)'=='Win32' and '$(Configuration)'=='Release'" />
       <DevelopmentShader Include="$(MSBuildThisFileDirectory)Shaders\**\*" />
     </ItemGroup>
+    <MakeDir Directories="$(OutDir)licenses" />
+    <Copy SourceFiles="$(MSBuildThisFileDirectory)Dependencies\GLFW\LICENSE.md" DestinationFiles="$(OutDir)licenses\GLFW-LICENSE.md" SkipUnchangedFiles="true" />
     <Copy SourceFiles="@(DevelopmentDll)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(DevelopmentCrt)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" />
     <Copy SourceFiles="@(DevelopmentShader)" DestinationFiles="@(DevelopmentShader->'$(OutDir)Shaders\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
   </Target>
 </Project>

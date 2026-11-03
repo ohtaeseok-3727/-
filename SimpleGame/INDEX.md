@@ -10,4 +10,5 @@
 | 묶음 | 위치 |
 | --- | --- |
 | Assets | [문서 목록](Assets/INDEX.md) |
+| Dependencies | [문서 목록](Dependencies/INDEX.md) |
 | src | [문서 목록](src/INDEX.md) |

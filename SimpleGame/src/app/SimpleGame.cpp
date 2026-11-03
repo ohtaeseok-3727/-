@@ -20,7 +20,7 @@ but WITHOUT ANY WARRANTY.
 #include <cstring>
 #include <exception>
 #include <cstdlib>
-#include "Dependencies/freeglut.h"
+#include "GlfwWindow.h"
 #include <chrono>
 #include <iostream>
 #include <memory>
@@ -28,25 +28,35 @@ but WITHOUT ANY WARRANTY.
 
 namespace
 {
+    GlfwWindow appWindow;
     std::unique_ptr<Renderer> renderer;
+    GLFWwindow* window = nullptr;
     FrameProfiler frameProfiler;
     PrototypeWorld world;
     MonitorPublisher worldMonitor;
     AttackInput attackInput;
-    bool keys[256] = {}, arrows[256] = {}, suppressedKeys[256] = {}, paused = false;
+    bool keys[256] = {}, arrows[GLFW_KEY_LAST + 1] = {}, suppressedKeys[256] = {}, paused = false;
     int width = 1280, height = 720;
     bool benchmarkRender = false;
     int benchmarkFrames = 0;
     auto previous = std::chrono::steady_clock::now();
 
-    int VirtualKey(int key)
+    int GlfwKey(int key)
     {
+        if (key == 27)
+        {
+            return GLFW_KEY_ESCAPE;
+        }
+        if (key == 13)
+        {
+            return GLFW_KEY_ENTER;
+        }
         return key >= 'a' && key <= 'z' ? key - 'a' + 'A' : key;
     }
 
     bool Focused()
     {
-        return GetForegroundWindow() == GetActiveWindow();
+        return window && glfwGetWindowAttrib(window, GLFW_FOCUSED) == GLFW_TRUE;
     }
 
     void ClearInput()
@@ -61,7 +71,9 @@ namespace
         }
         for (int i = 0; i < 256; ++i)
         {
-            suppressedKeys[i] = (GetAsyncKeyState(VirtualKey(i)) & 0x8000) != 0;
+            suppressedKeys[i] =
+                (i >= 32 && i <= 96) || (i >= 'a' && i <= 'z') || i == 13 || i == 27;
+            suppressedKeys[i] = suppressedKeys[i] && glfwGetKey(window, GlfwKey(i)) == GLFW_PRESS;
         }
         world.CancelSkillDrag();
         world.CancelMenuPress();
@@ -85,13 +97,17 @@ namespace
         frameProfiler.SetContext(width, height, flags, Focused(), paused || world.SystemMenuOpen());
         world.Draw(*renderer, width, height);
         frameProfiler.SetPhase(FrameProfiler::Phase::Present);
-        glutSwapBuffers();
+        glfwSwapBuffers(window);
         renderer->EndFrameProfiling();
     }
 
     void Resize(int w, int h)
     {
         world.CancelMenuPress();
+        if (w <= 0 || h <= 0)
+        {
+            return;
+        }
         width = w > 0 ? w : 1;
         height = h > 0 ? h : 1;
         if (renderer)
@@ -102,12 +118,6 @@ namespace
 
     unsigned char NormalizeKey(unsigned char key)
     {
-        // Ctrl+A..Z arrive as control characters; keep movement and key-up paired.
-        if (key >= 1 && key <= 26)
-        {
-            return static_cast<unsigned char>('a' + key - 1);
-        }
-
         return static_cast<unsigned char>(std::tolower(key));
     }
 
@@ -245,21 +255,21 @@ namespace
         {
             return;
         }
-        if (key < 0 || key >= 256 || arrows[key])
+        if (key < 0 || key > GLFW_KEY_LAST || arrows[key])
         {
             return;
         }
         arrows[key] = true;
-        if (key == GLUT_KEY_F10)
+        if (key == GLFW_KEY_F10)
         {
-            glutLeaveMainLoop();
+            glfwSetWindowShouldClose(window, GLFW_TRUE);
             return;
         }
-        if (key == GLUT_KEY_PAGE_UP)
+        if (key == GLFW_KEY_PAGE_UP)
         {
             world.ChangeInventoryPage(-1);
         }
-        if (key == GLUT_KEY_PAGE_DOWN)
+        if (key == GLFW_KEY_PAGE_DOWN)
         {
             world.ChangeInventoryPage(1);
         }
@@ -268,19 +278,19 @@ namespace
             return;
         }
         auto& fx = renderer->Effects();
-        if (key == GLUT_KEY_F1)
+        if (key == GLFW_KEY_F1)
         {
             fx.enabled = !fx.enabled;
         }
-        if (key == GLUT_KEY_F2)
+        if (key == GLFW_KEY_F2)
         {
             fx.bloom = !fx.bloom;
         }
-        if (key == GLUT_KEY_F3)
+        if (key == GLFW_KEY_F3)
         {
             fx.vignette = !fx.vignette;
         }
-        if (key == GLUT_KEY_F4)
+        if (key == GLFW_KEY_F4)
         {
             fx.edgeBlur = !fx.edgeBlur;
         }
@@ -288,17 +298,9 @@ namespace
 
     void SpecialUp(int key, int, int)
     {
-        if (key >= 0 && key < 256)
+        if (key >= 0 && key <= GLFW_KEY_LAST)
         {
             arrows[key] = false;
-        }
-    }
-
-    void Entry(int state)
-    {
-        if (state == GLUT_LEFT)
-        {
-            ClearInput();
         }
     }
 
@@ -312,17 +314,17 @@ namespace
         if (world.SystemMenuOpen())
         {
             attackInput.Suspend();
-            if (renderer && button == GLUT_LEFT_BUTTON)
+            if (renderer && button == GLFW_MOUSE_BUTTON_LEFT)
             {
                 const bool quit = world.SystemMenuMouseButton(
-                    state == GLUT_DOWN, x, y, width, height, renderer->Effects());
-                if (state == GLUT_UP)
+                    state == GLFW_PRESS, x, y, width, height, renderer->Effects());
+                if (state == GLFW_RELEASE)
                 {
                     ClearInput();
                 }
                 if (quit)
                 {
-                    glutLeaveMainLoop();
+                    glfwSetWindowShouldClose(window, GLFW_TRUE);
                 }
             }
             return;
@@ -332,9 +334,9 @@ namespace
             world.CancelSkillDrag();
             return;
         }
-        if (button == GLUT_LEFT_BUTTON)
+        if (button == GLFW_MOUSE_BUTTON_LEFT)
         {
-            world.SkillMouseButton(state == GLUT_DOWN, x, y);
+            world.SkillMouseButton(state == GLFW_PRESS, x, y);
         }
     }
 
@@ -348,7 +350,7 @@ namespace
         world.SkillMouseMove(x, y);
     }
 
-    void Timer(int)
+    void UpdateFrame()
     {
         if (!renderer)
         {
@@ -368,7 +370,7 @@ namespace
         }
         for (int i = 0; i < 256; ++i)
         {
-            if ((GetAsyncKeyState(VirtualKey(i)) & 0x8000) == 0)
+            if (suppressedKeys[i] && glfwGetKey(window, GlfwKey(i)) == GLFW_RELEASE)
             {
                 suppressedKeys[i] = false;
             }
@@ -378,16 +380,20 @@ namespace
         const bool dMoves = !skillUi && !world.IsSkillBound('d') && keys['d'];
         const bool sMoves = !skillUi && !world.IsSkillBound('s') && keys['s'];
         const bool wMoves = !skillUi && !world.IsSkillBound('w') && keys['w'];
-        float dx = float(dMoves || arrows[GLUT_KEY_RIGHT]) - float(aMoves || arrows[GLUT_KEY_LEFT]);
-        float dy = float(sMoves || arrows[GLUT_KEY_DOWN]) - float(wMoves || arrows[GLUT_KEY_UP]);
+        float dx = float(dMoves || arrows[GLFW_KEY_RIGHT]) - float(aMoves || arrows[GLFW_KEY_LEFT]);
+        float dy = float(sMoves || arrows[GLFW_KEY_DOWN]) - float(wMoves || arrows[GLFW_KEY_UP]);
         if (skillUi)
         {
             dx = 0.f;
             dy = 0.f;
         }
-        bool sprint = focused && (GetAsyncKeyState(VK_SHIFT) & 0x8000) != 0;
+        bool sprint = focused && (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ||
+                                  glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS);
         world.SetPaused(paused || !focused);
-        bool attackPressed = attackInput.Poll(focused && !paused && !skillUi && world.Started());
+        const bool controlDown = glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS ||
+                                 glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS;
+        bool attackPressed =
+            attackInput.Poll(focused && !paused && !skillUi && world.Started(), controlDown);
         const auto updateStart = std::chrono::steady_clock::now();
         if (benchmarkRender)
         {
@@ -414,20 +420,11 @@ namespace
         {
             // Automated benchmark has no interactive shutdown; logs flush each interval.
             std::cout.flush();
-            std::_Exit(0);
+            glfwSetWindowShouldClose(window, GLFW_TRUE);
         }
         frameProfiler.RecordUpdate(std::chrono::duration<double, std::milli>(
                                        std::chrono::steady_clock::now() - updateStart)
                                        .count());
-        glutPostRedisplay();
-        // Let active rendering exceed the old ~60 Hz timer ceiling, but avoid
-        // spending the same CPU budget on an unfocused window.
-        const double workMs =
-            std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - now)
-                .count();
-        const double targetMs = focused ? 4.0 : 100.0;
-        const unsigned delay = static_cast<unsigned>((std::max)(1.0, targetMs - workMs));
-        glutTimerFunc(delay, Timer, 0);
     }
 }
 
@@ -469,7 +466,7 @@ int main(int argc, char** argv)
     if (argc == 2 && std::strcmp(argv[1], "--preview-chapter2") == 0)
     {
         world.EnableChapterPreview("chapter2");
-        argc = 1; // Do not forward the application flag to freeglut.
+        argc = 1;
         argv[1] = nullptr;
         std::cout << "챕터 2 시작 미리보기: 직업 선택 후 연결된 세계의 회색벽에서 시작합니다.\n";
     }
@@ -478,7 +475,8 @@ int main(int argc, char** argv)
         world.EnableChapterPreview("chapter3");
         argc = 1;
         argv[1] = nullptr;
-        std::cout << "챕터 3 시작 미리보기: 기념홀에서 시작합니다. 챕터 2 완료·피해 단계 1을 가정하며 챕터 3 진행은 생략하지 않습니다.\n";
+        std::cout
+            << "챕터 3 시작 미리보기: 기념홀에서 시작합니다. 챕터 2 완료·피해 단계 1을 가정하며 챕터 3 진행은 생략하지 않습니다.\n";
     }
     if (argc == 2 && std::strcmp(argv[1], "--benchmark-render") == 0)
     {
@@ -486,22 +484,16 @@ int main(int argc, char** argv)
         argc = 1;
         argv[1] = nullptr;
     }
-    glutInit(&argc, argv);
-    glutInitContextVersion(3, 3);
-    glutInitContextProfile(GLUT_COMPATIBILITY_PROFILE);
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
-    glutInitWindowSize(width, height);
-    int window = glutCreateWindow("The Long War - Open World");
-    if (window <= 0)
+    if (!appWindow.Open(width, height))
     {
         return 1;
     }
-    SetWindowTextW(GetActiveWindow(), L"긴 전쟁 - 변경의 여정");
+    window = appWindow.Handle();
+    glfwGetFramebufferSize(window, &width, &height);
     glewExperimental = GL_TRUE;
     if (glewInit() != GLEW_OK || !GLEW_VERSION_3_3)
     {
         std::cerr << "OpenGL 3.3 호환 모드가 필요합니다.\n";
-        glutDestroyWindow(window);
         return 1;
     }
     renderer.reset(new Renderer(width, height, frameProfiler));
@@ -510,34 +502,98 @@ int main(int argc, char** argv)
         std::cerr
             << "렌더러 또는 캐릭터 스프라이트 초기화에 실패했습니다. 위 에셋 오류를 확인하세요.\n";
         renderer.reset();
-        glutDestroyWindow(window);
         return 1;
     }
-    glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
-    glutCloseFunc(Close);
-    glutDisplayFunc(Display);
-    glutReshapeFunc(Resize);
-    glutKeyboardFunc(KeyDown);
-    glutKeyboardUpFunc(KeyUp);
-    glutSpecialFunc(SpecialDown);
-    glutSpecialUpFunc(SpecialUp);
-    glutEntryFunc(Entry);
-    glutMouseFunc(MouseButton);
-    glutMotionFunc(MouseMove);
-    glutPassiveMotionFunc(MouseMove);
-    glutIgnoreKeyRepeat(1);
+    glfwSetFramebufferSizeCallback(window,
+                                   [](GLFWwindow*, int w, int h)
+                                   {
+                                       Resize(w, h);
+                                   });
+    glfwSetKeyCallback(window,
+                       [](GLFWwindow*, int key, int, int action, int)
+                       {
+                           if (action == GLFW_REPEAT || key == GLFW_KEY_UNKNOWN)
+                           {
+                               return;
+                           }
+                           int character = key;
+                           if (key == GLFW_KEY_ESCAPE)
+                           {
+                               character = 27;
+                           }
+                           else if (key == GLFW_KEY_ENTER || key == GLFW_KEY_KP_ENTER)
+                           {
+                               character = 13;
+                           }
+                           else if (key > 255)
+                           {
+                               if (action == GLFW_PRESS)
+                               {
+                                   SpecialDown(key, 0, 0);
+                               }
+                               else
+                               {
+                                   SpecialUp(key, 0, 0);
+                               }
+                               return;
+                           }
+                           if (action == GLFW_PRESS)
+                           {
+                               KeyDown(static_cast<unsigned char>(character), 0, 0);
+                           }
+                           else
+                           {
+                               KeyUp(static_cast<unsigned char>(character), 0, 0);
+                           }
+                       });
+    glfwSetWindowFocusCallback(window,
+                               [](GLFWwindow*, int)
+                               {
+                                   ClearInput();
+                                   attackInput.Suspend();
+                                   previous = std::chrono::steady_clock::now();
+                               });
+    glfwSetMouseButtonCallback(window,
+                               [](GLFWwindow* handle, int button, int action, int)
+                               {
+                                   double x, y;
+                                   int pixelX, pixelY;
+                                   glfwGetCursorPos(handle, &x, &y);
+                                   appWindow.CursorPixels(x, y, pixelX, pixelY);
+                                   MouseButton(button, action, pixelX, pixelY);
+                               });
+    glfwSetCursorPosCallback(window,
+                             [](GLFWwindow*, double x, double y)
+                             {
+                                 int pixelX, pixelY;
+                                 appWindow.CursorPixels(x, y, pixelX, pixelY);
+                                 MouseMove(pixelX, pixelY);
+                             });
     world.Reset();
     if (benchmarkRender)
     {
         world.Select(1);
     }
     previous = std::chrono::steady_clock::now();
-    glutTimerFunc(0, Timer, 0);
     std::cout
         << "1/2 선택. 이동: WASD/방향키. 달리기: Shift. 공격: Ctrl (1-2-3 연계). "
            "인벤토리: I (Page Up/Down). 지도: M. 확인: Space. 스킬: K. 기록: J. 일시정지: P. 시스템 메뉴: Esc (마우스 클릭). 야영지: B. 재도전: Enter. 종료: F10.\n";
     std::cout << "후처리: F1 전체, F2 블룸, F3 비네트, F4 가장자리 흐림, [ ] 노출.\n";
-    glutMainLoop();
-    // Freeglut close callback releases GPU objects before context destruction.
+    while (!glfwWindowShouldClose(window))
+    {
+        const double frameStart = glfwGetTime();
+        glfwPollEvents();
+        if (glfwWindowShouldClose(window))
+        {
+            break;
+        }
+        UpdateFrame();
+        if (!glfwGetWindowAttrib(window, GLFW_ICONIFIED))
+        {
+            Display();
+        }
+        appWindow.WaitForNextFrame(frameStart, benchmarkRender || Focused());
+    }
+    Close(); // Release GPU resources while the GLFW context is still current.
     return 0;
 }

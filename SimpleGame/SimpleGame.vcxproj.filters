@@ -547,4 +547,8 @@
     <ClCompile Include="src\app\GameSessionPortals.cpp"><Filter>src\app</Filter></ClCompile>
     <ClInclude Include="src\ui\MageUltimateSwordView.h"><Filter>src\ui</Filter></ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\app\GlfwWindow.h"><Filter>src\app</Filter></ClInclude>
+    <ClCompile Include="src\app\GlfwWindow.cpp"><Filter>src\app</Filter></ClCompile>
+  </ItemGroup>
 </Project>

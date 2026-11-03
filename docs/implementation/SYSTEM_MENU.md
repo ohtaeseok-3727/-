@@ -21,7 +21,7 @@
 | 파일 | 책임 |
 | --- | --- |
 | [SettingsMenu.h](../../SimpleGame/src/ui/SettingsMenu.h), [SettingsMenu.cpp](../../SimpleGame/src/ui/SettingsMenu.cpp) | 메뉴 페이지, 공통 버튼 레이아웃과 클릭 판정, 확인 화면, 그래픽 설정 적용 |
-| [SimpleGame.cpp](../../SimpleGame/src/app/SimpleGame.cpp) | Esc와 마우스 입력 우선 전달, 게임 입력 차단, 종료 요청을 freeglut 루프 종료로 연결 |
+| [SimpleGame.cpp](../../SimpleGame/src/app/SimpleGame.cpp) | Esc와 마우스 입력 우선 전달, 게임 입력 차단, 종료 요청을 GLFW 창 종료 플래그로 연결 |
 | [PrototypeWorld.cpp](../../SimpleGame/src/app/PrototypeWorld.cpp) | 메뉴 수명과 렌더 순서, 스킵 명령 전달, 위치·카메라·공격·발사체 정리 |
 | [GameSessionSkipping.cpp](../../SimpleGame/src/app/GameSessionSkipping.cpp) | 사용 가능 조건, 목적지 검증, 지역별 적 정리, 활성 지역·체크포인트·회복 연결 |
 | [ChapterSkipping.cpp](../../SimpleGame/src/chapters/ChapterSkipping.cpp) | Chapter1/Chapter2가 소유한 스토리 상태의 스킵 전용 변경. 성채 사건과 보스전은 미완료 상태로 유지 |

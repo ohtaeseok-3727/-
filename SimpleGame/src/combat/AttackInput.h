@@ -1,10 +1,10 @@
 #pragma once
 
-// Poll Ctrl separately because GLUT's normal character callback omits modifiers.
+// Track the Ctrl press edge and suppress held input when control resumes.
 class AttackInput
 {
   public:
-    bool Poll(bool enabled);
+    bool Poll(bool enabled, bool down);
     void Suspend();
 
   private:

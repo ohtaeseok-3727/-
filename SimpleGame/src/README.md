@@ -21,3 +21,7 @@
 ## 플레이어 행동 상태
 
 `player/PlayerStateMachine.h`는 행동을 Active 아래 Locomotion(Idle, Moving)과 Action(BasicAttack, Casting)으로 분류하고, Casting 아래에 세 시전 종류를 둔다. Defeated는 별도 상태다. 일시정지·메뉴·이벤트 조작 잠금은 독립적인 입력 제한으로 취급한다. `PrototypeWorld::UpdatePlayerState`가 공격·스킬 진행 상태와 이동 결과를 반영하며 입력 허용과 `SceneRenderer`의 표시 선택에 같은 상태를 사용한다. 공격 연계와 스킬 타이밍은 기존 담당 객체가 소유한다. 상태 갱신은 해당 객체의 현재 진행 상태를 기반으로 하며, 전환 시 진입·종료 콜백은 없다.
+
+## GLFW 창과 입력
+
+`app/GlfwWindow`가 GLFW 창·컨텍스트와 이벤트 대기를 소유한다. `SimpleGame`은 GLFW 콜백을 게임 입력으로 연결하고 update/draw/swap 루프를 실행한다. 외부 의존성과 배포 범위는 [GLFW 안내](../Dependencies/GLFW/README.md)를 따른다.
