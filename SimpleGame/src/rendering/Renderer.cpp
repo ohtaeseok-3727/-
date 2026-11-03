@@ -482,7 +482,7 @@ bool Renderer::CombatVisual(const char* clipId,
     return true;
 }
 
-void Renderer::Text(float x, float y, const std::string& text, Color t)
+void Renderer::Text(float x, float y, const std::string& text, Color t, float scale)
 {
     Flush();
     if (!m_TextRenderer)
@@ -498,9 +498,9 @@ void Renderer::Text(float x, float y, const std::string& text, Color t)
     }
     m_Profiler.RecordText(cached);
 
-    const float top = y - static_cast<float>(sprite.baseline);
-    const float right = x + static_cast<float>(sprite.width);
-    const float bottom = top + static_cast<float>(sprite.height);
+    const float top = y - static_cast<float>(sprite.baseline) * scale;
+    const float right = x + static_cast<float>(sprite.width) * scale;
+    const float bottom = top + static_cast<float>(sprite.height) * scale;
     Vertex a = {x, top, t.r, t.g, t.b, t.a, 0.f, 0.f};
     Vertex b = {right, top, t.r, t.g, t.b, t.a, 1.f, 0.f};
     Vertex c = {right, bottom, t.r, t.g, t.b, t.a, 1.f, 1.f};

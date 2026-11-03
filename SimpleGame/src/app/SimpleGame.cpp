@@ -175,7 +175,7 @@ namespace
         }
         if (key == 'p')
         {
-            if (!world.Started())
+            if (!world.Started() || world.MenuOpen())
             {
                 return;
             }
@@ -200,7 +200,7 @@ namespace
         }
         if (key == 'b')
         {
-            if (paused || world.IsSkillWindowOpen())
+            if (paused || world.MenuOpen())
             {
                 return;
             }
@@ -217,7 +217,7 @@ namespace
         }
         if (key == ' ')
         {
-            if (paused || world.IsSkillWindowOpen())
+            if (paused || world.MenuOpen())
             {
                 return;
             }
@@ -252,7 +252,7 @@ namespace
 
     void SpecialDown(int key, int, int)
     {
-        if (!Focused() || world.SystemMenuOpen())
+        if (!Focused())
         {
             return;
         }
@@ -264,6 +264,10 @@ namespace
         if (key == GLFW_KEY_F10)
         {
             glfwSetWindowShouldClose(window, GLFW_TRUE);
+            return;
+        }
+        if (world.SystemMenuOpen())
+        {
             return;
         }
         if (key == GLFW_KEY_PAGE_UP)
@@ -312,6 +316,19 @@ namespace
             ClearInput();
             return;
         }
+        if (!world.Started())
+        {
+            if (button == GLFW_MOUSE_BUTTON_LEFT)
+            {
+                world.TitleMouseButton(state == GLFW_PRESS, x, y);
+                if (world.Started())
+                {
+                    ClearInput();
+                    attackInput.Suspend();
+                }
+            }
+            return;
+        }
         if (world.SystemMenuOpen())
         {
             attackInput.Suspend();
@@ -343,6 +360,7 @@ namespace
 
     void MouseMove(int x, int y)
     {
+        world.TitleMouseMove(x, y);
         if (world.SystemMenuOpen())
         {
             world.SystemMenuMouseMove(x, y);
@@ -390,7 +408,7 @@ namespace
         }
         bool sprint = focused && (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ||
                                   glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS);
-        world.SetPaused(paused || !focused);
+        world.SetPaused(paused || !focused, focused);
         const bool controlDown = glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS ||
                                  glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS;
         bool attackPressed =

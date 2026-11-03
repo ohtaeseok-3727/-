@@ -4,7 +4,9 @@
 #include "Renderer.h"
 #include "SkillLayout.h"
 #include "HudTextLayout.h"
+#include "GameUiTheme.h"
 #include <cctype>
+#include <cmath>
 #include <string>
 
 namespace
@@ -19,12 +21,27 @@ namespace
         if (dim)
             color = Color(color.r * .3f, color.g * .3f, color.b * .3f);
         renderer.Ellipse(x, y, radius, radius, color);
-        if (radius >= 10.f)
+        const Color mark = dim ? Color(.30f, .35f, .36f) : Color(.96f, .91f, .70f);
+        if (variant % 3 == 0)
         {
-            renderer.Text(x - 4.f,
-                          y + 5.f,
-                          std::to_string(variant + 1),
-                          dim ? Color(.4f, .4f, .4f) : Color(.95f, .92f, .70f));
+            GameUiTheme::Diamond(renderer, x, y, radius * .72f, mark);
+            GameUiTheme::Diamond(renderer, x, y, radius * .38f, color);
+            renderer.Rect(x - 1, y - radius, 2, radius * 2, mark);
+        }
+        else if (variant % 3 == 1)
+        {
+            renderer.Quad({x - radius * .55f, y + radius * .65f},
+                          {x - radius * .22f, y + radius * .75f},
+                          {x + radius * .62f, y - radius * .70f},
+                          {x + radius * .12f, y - radius * .50f},
+                          mark);
+            renderer.Rect(x - radius * .68f, y + radius * .30f, radius, 3, mark);
+        }
+        else
+        {
+            renderer.Ellipse(x, y, radius * .64f, radius * .64f, mark);
+            renderer.Ellipse(x, y, radius * .38f, radius * .38f, color);
+            GameUiTheme::Diamond(renderer, x, y, radius * .19f, mark);
         }
     }
 }
@@ -37,15 +54,24 @@ void SkillView::Draw(
     const SkillDragController& drag = skills.Drag();
     const int hovered =
         drag.SkillIndex() >= 0 ? layout.SlotAt(float(drag.MouseX()), float(drag.MouseY())) : -1;
+    const float barWidth = layout.slotSize * 8 + layout.slotGap * 7;
+    GameUiTheme::Panel(
+        renderer, layout.slotsX - 12, layout.slotsY - 32, barWidth + 24, layout.slotSize + 68);
+    GameUiTheme::Diamond(renderer, width * .5f, layout.slotsY - 32, 5, GameUiTheme::Gold());
     for (int i = 0; i < 8; ++i)
     {
         const float x = layout.SlotX(i);
+        renderer.Rect(x - 1,
+                      layout.slotsY - 1,
+                      layout.slotSize + 2,
+                      layout.slotSize + 2,
+                      i == hovered ? GameUiTheme::Gold() : Color(.24f, .29f, .29f));
         renderer.Rect(x,
                       layout.slotsY,
                       layout.slotSize,
                       layout.slotSize,
                       i == hovered ? Color(.25f, .34f, .29f) : Color(.04f, .07f, .085f, .96f));
-        renderer.Rect(x, layout.slotsY, layout.slotSize, 2.f, Color(.73f, .62f, .34f));
+        renderer.Rect(x, layout.slotsY, layout.slotSize, 2.f, GameUiTheme::Gold());
         if (layout.slotSize >= 12.f)
         {
             const std::string label =
@@ -57,13 +83,29 @@ void SkillView::Draw(
         const SkillData* data = skills.PlayerSkillsState().Find(skills.QuickSlots().At(i));
         if (data)
         {
-            const bool cooling = skills.Cooldowns().count(data->id) != 0;
+            const auto cooldown = skills.Cooldowns().find(data->id);
+            const bool cooling = cooldown != skills.Cooldowns().end();
             DrawIcon(renderer,
                      x + layout.slotSize * .5f,
                      layout.slotsY + layout.slotSize * .68f,
                      data->iconVariant,
                      cooling,
                      (std::min)(15.f, layout.slotSize * .24f));
+            if (cooling && layout.slotSize >= 32.f)
+            {
+                const std::string seconds =
+                    std::to_string((std::max)(1, static_cast<int>(std::ceil(cooldown->second))));
+                const float textWidth = renderer.TextWidth(seconds);
+                renderer.Rect(x + (layout.slotSize - textWidth) * .5f - 3.f,
+                              layout.slotsY + layout.slotSize * .68f - 12.f,
+                              textWidth + 6.f,
+                              19.f,
+                              Color(.02f, .03f, .04f, .94f));
+                renderer.Text(x + (layout.slotSize - textWidth) * .5f,
+                              layout.slotsY + layout.slotSize * .68f + 3.f,
+                              seconds,
+                              Color(.98f, .88f, .60f));
+            }
         }
         else if (layout.slotSize >= 32.f)
         {
@@ -73,8 +115,24 @@ void SkillView::Draw(
                           Color(.38f, .46f, .48f));
         }
     }
+    GameUiTheme::Center(renderer,
+                        width * .5f,
+                        layout.slotsY + layout.slotSize + 24,
+                        "[Ctrl] 기본 공격   ·   [Shift] 달리기   ·   [K] 스킬 관리",
+                        GameUiTheme::Muted());
     if (!skills.IsWindowOpen())
+    {
+        const bool movementBound = skills.IsSlotBound('w') || skills.IsSlotBound('a') ||
+                                   skills.IsSlotBound('s') || skills.IsSlotBound('d');
+        const std::string hint =
+            movementBound ? "방향키로 이동 · WASD 등록 키는 스킬 사용 · 숫자는 남은 대기 시간(초)"
+                          : "[K] 스킬 등록 · 슬롯의 키로 사용 · 숫자는 남은 대기 시간(초)";
+        renderer.Text(layout.slotsX,
+                      layout.slotsY - 10.f,
+                      HudTextLayout::Fit(renderer, hint, float(width) - layout.slotsX - 10.f),
+                      Color(.75f, .79f, .72f));
         return;
+    }
     if (!layout.canShowWindow)
     {
         const std::string message = "스킬 창: 창을 더 키우세요 [K]";
@@ -84,8 +142,7 @@ void SkillView::Draw(
         }
         return;
     }
-    renderer.Rect(
-        layout.panelX, layout.panelY, layout.panelWidth, 330.f, Color(.025f, .045f, .06f, .97f));
+    GameUiTheme::Panel(renderer, layout.panelX, layout.panelY, layout.panelWidth, 350.f);
     const std::string profession =
         !list.empty() && list.front().profession == 0 ? "마법사" : "기사";
     renderer.Text(layout.panelX + 18.f,
@@ -98,6 +155,10 @@ void SkillView::Draw(
                        ? "액티브를 슬롯으로 드래그 · 검기 상인은 Lv.5부터 자동 적용"
                        : "액티브를 슬롯으로 드래그 · 궁극기는 Lv.20부터 사용"),
                   Color(.58f, .72f, .75f));
+    renderer.Text(layout.panelX + 18.f,
+                  layout.panelY + 77.f,
+                  "WASD에 스킬을 등록하면 방향키로 이동하세요. [K] 닫기",
+                  Color(.82f, .73f, .51f));
     for (int i = 0; i < static_cast<int>(list.size()); ++i)
     {
         const SkillData& skill = list[i];

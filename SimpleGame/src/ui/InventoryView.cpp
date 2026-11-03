@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "InventoryView.h"
+#include "GameUiTheme.h"
 #include <algorithm>
 #include <string>
 
@@ -55,29 +56,25 @@ void InventoryView::Draw(Renderer& renderer,
     }
 
     const float panelWidth = (std::min)(float(viewportWidth - 24), PanelWidth);
-    const float panelHeight = (std::min)(float(viewportHeight - 170), PanelHeight);
+    const float panelHeight = (std::min)(float(viewportHeight - 48), PanelHeight);
     if (panelWidth < PanelWidth || panelHeight < PanelHeight)
     {
-        renderer.Text(20,
-                      150,
-                      "인벤토리를 보려면 창을 키우세요. [I]",
-                      Color(1.f, .8f, .5f));
+        renderer.Text(20, 150, "인벤토리를 보려면 창을 키우세요. [I]", Color(1.f, .8f, .5f));
         return;
     }
 
     const float panelX = (viewportWidth - panelWidth) * .5f;
-    const float panelY = 128.f;
+    const float panelY = (viewportHeight - panelHeight) * .5f;
     const int itemCount = static_cast<int>(inventory.Items().size());
     const int pageCount = (std::max)(1, (itemCount + SlotsPerPage - 1) / SlotsPerPage);
     const int page = (std::min)(m_Page, pageCount - 1);
 
-    renderer.Rect(panelX, panelY, PanelWidth, PanelHeight, Color(.025f, .045f, .055f, .98f));
+    renderer.Rect(0, 0, float(viewportWidth), float(viewportHeight), Color(0, 0, 0, .45f));
+    GameUiTheme::Panel(renderer, panelX, panelY, PanelWidth, PanelHeight);
     renderer.Rect(panelX + 4.f, panelY + 4.f, PanelWidth - 8.f, 3.f, Color(.80f, .63f, .25f));
     renderer.Text(panelX + 20.f, panelY + 27.f, "인벤토리", Color(.91f, .83f, .63f));
-    renderer.Text(panelX + 20.f,
-                  panelY + 51.f,
-                  "I 닫기   Page Up / Down 쪽 이동",
-                  Color(.58f, .70f, .75f));
+    renderer.Text(
+        panelX + 20.f, panelY + 51.f, "I 닫기   Page Up / Down 쪽 이동", Color(.58f, .70f, .75f));
 
     const float goldX = panelX + 362.f;
     renderer.Rect(goldX, panelY + 18.f, 202.f, 47.f, Color(.10f, .085f, .04f, .92f));
@@ -108,13 +105,16 @@ void InventoryView::Draw(Renderer& renderer,
         const int itemIndex = page * SlotsPerPage + slot;
         const bool hasItem = itemIndex < itemCount;
         const bool equipped = hasItem && itemIndex == inventory.EquippedIndex();
-        const Color slotColor = equipped ? Color(.18f, .24f, .22f, .98f)
-                            : hasItem ? Color(.075f, .11f, .13f, .98f)
-                                      : Color(.045f, .068f, .078f, .92f);
+        const Color slotColor = equipped  ? Color(.18f, .24f, .22f, .98f)
+                                : hasItem ? Color(.075f, .11f, .13f, .98f)
+                                          : Color(.045f, .068f, .078f, .92f);
 
         renderer.Rect(slotX, slotY, SlotWidth, SlotHeight, slotColor);
-        renderer.Rect(slotX, slotY, SlotWidth, 2.f, equipped ? Color(.96f, .73f, .28f)
-                                                             : Color(.18f, .28f, .32f));
+        renderer.Rect(slotX,
+                      slotY,
+                      SlotWidth,
+                      2.f,
+                      equipped ? Color(.96f, .73f, .28f) : Color(.18f, .28f, .32f));
 
         if (!hasItem)
         {

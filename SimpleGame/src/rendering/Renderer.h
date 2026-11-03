@@ -98,7 +98,7 @@ class Renderer
     void Quad(Point a, Point b, Point c, Point d, Color color);
     void Rect(float x, float y, float width, float height, Color color);
     void Ellipse(float x, float y, float rx, float ry, Color color);
-    void Text(float x, float y, const std::string& text, Color color);
+    void Text(float x, float y, const std::string& text, Color color, float scale = 1.f);
     float TextWidth(const std::string& text) const;
     bool LoadCharacterSprites();
     bool CharacterAttack(int profession,

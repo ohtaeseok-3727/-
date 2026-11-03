@@ -4,6 +4,7 @@
 #include <cmath>
 #include "SceneCamera.h"
 #include "HudTextLayout.h"
+#include "GameUiTheme.h"
 
 namespace
 {
@@ -37,6 +38,15 @@ void ExpeditionView::DrawGuide(Renderer& r,
     const auto marker = session.TrackedGoal();
     if (!marker)
     {
+        const float w = (std::min)(360.f, width - 32.f);
+        const float x = width - w - 16.f;
+        const float y = width < 760 ? 148.f : 16.f;
+        GameUiTheme::Panel(r, x, y, w, 86);
+        r.Text(x + 16, y + 27, "여정 기록", GameUiTheme::Gold());
+        r.Text(x + 16,
+               y + 56,
+               HudTextLayout::Fit(r, session.Objective(), w - 32),
+               GameUiTheme::Text());
         return;
     }
     const float dx = marker->position.x - player.x;
@@ -44,25 +54,34 @@ void ExpeditionView::DrawGuide(Renderer& r,
     const float distance = std::sqrt(dx * dx + dy * dy);
     const float x = (std::max)(16.f, float(width) - 376.f);
     const float panelWidth = (std::min)(360.f, float(width) - 32.f);
-    r.Rect(x, 121, panelWidth, 92, Ink);
+    const float y = width < 760 ? 148.f : 16.f;
+    GameUiTheme::Panel(r, x, y, panelWidth, 124);
+    r.Text(x + 16, y + 25, "진행 중인 임무", GameUiTheme::Gold());
+    r.Text(x + panelWidth - 70, y + 25, "[M] 지도", GameUiTheme::Muted());
+    r.Rect(x + 15, y + 36, panelWidth - 30, 1, Color(.25f, .27f, .24f));
     const float projectedY = dy * SceneCamera::GroundDepthScale();
-    const float scale = 16.f / (std::max)(1.f, std::hypot(dx, projectedY));
-    const Point center{x + 27, 153};
+    const float scale = 13.f / (std::max)(1.f, std::hypot(dx, projectedY));
+    const Point center{x + 30, y + 66};
     const Point tip{center.x + dx * scale, center.y + projectedY * scale};
-    r.Ellipse(center.x, center.y, 20, 20, Color(.12f, .17f, .17f));
+    GameUiTheme::Diamond(r, center.x, center.y, 19, Color(.16f, .20f, .21f));
     Line(r, center, tip, Gold);
-    r.Ellipse(tip.x, tip.y, 3, 3, Gold);
-    r.Text(x + 58, 147, HudTextLayout::Fit(r, marker->label, panelWidth - 73.f), Gold);
+    GameUiTheme::Diamond(r, tip.x, tip.y, 3, Gold);
+    r.Text(
+        x + 60, y + 61, HudTextLayout::Fit(r, marker->label, panelWidth - 76), GameUiTheme::Text());
     const auto* nearby = map.Layout().NearbyLandmark(player);
     const bool targetSelected = nearby && std::hypot(nearby->position.x - marker->position.x,
                                                      nearby->position.y - marker->position.y) < 1.f;
     const std::string instruction =
         targetSelected || distance < 90.f
-            ? marker->hint.empty() ? "상단 임무 확인" : marker->hint
-            : "거리 " + std::to_string(static_cast<int>(std::ceil(distance / 10.f))) +
-                  " · [M] 지도";
-    r.Text(x + 58, 173, HudTextLayout::Fit(r, instruction, panelWidth - 73.f), Text);
-    r.Text(x + 15, 198, "주황색: 공격 준비 · 범위 밖으로 이동", Color(.95f, .65f, .35f));
+            ? marker->hint.empty() ? "[Space] 주변 단서 확인" : marker->hint
+            : "목표까지 " + std::to_string(static_cast<int>(std::ceil(distance / 10.f))) +
+                  " · 화살표 방향으로 이동";
+    r.Text(
+        x + 60, y + 84, HudTextLayout::Fit(r, instruction, panelWidth - 76), GameUiTheme::Gold());
+    r.Text(x + 16,
+           y + 110,
+           HudTextLayout::Fit(r, session.StoryChapter().Title(), panelWidth - 32),
+           GameUiTheme::Muted());
 }
 
 void ExpeditionView::DrawMap(Renderer& r,
@@ -80,7 +99,8 @@ void ExpeditionView::DrawMap(Renderer& r,
         return;
     }
     const float x = (width - w) * .5f, y = 128.f;
-    r.Rect(x, y, w, h, Ink);
+    r.Rect(0, 0, float(width), float(height), Color(0, 0, 0, .45f));
+    GameUiTheme::Panel(r, x, y, w, h);
     r.Text(x + 22, y + 28, "변경과 북부 전선  /  세계 지도 [M]", Gold);
     float minX = (std::min)(-1300.f, player.x - 300.f);
     float maxX = (std::max)(2400.f, player.x + 300.f);
@@ -155,7 +175,8 @@ void ExpeditionView::DrawJournal(Renderer& r,
         return;
     }
     const float x = (width - w) * .5f, y = 130.f;
-    r.Rect(x, y, w, h, Ink);
+    r.Rect(0, 0, float(width), float(height), Color(0, 0, 0, .45f));
+    GameUiTheme::Panel(r, x, y, w, h);
     r.Text(x + 24, y + 32, "여정 기록 [J]  /  탐험과 작전", Gold);
     r.Text(x + 24, y + 69, session.StoryChapter().Title(), Text);
     r.Text(x + 24, y + 99, HudTextLayout::Fit(r, session.Objective(), w - 48.f), Gold);
@@ -248,4 +269,24 @@ void ExpeditionView::DrawDefeat(Renderer& r, int width, int height) const
     r.Text(x + 35, y + 85, "조사한 단서와 완료한 임무, 레벨과 장비는 남습니다.", Text);
     r.Text(x + 35, y + 120, "진행 중이던 전투를 다시 준비합니다.", Text);
     r.Text(x + 35, y + 172, "[Enter] 마지막 야영지에서 다시 시작", Gold);
+}
+
+void ExpeditionView::DrawPause(Renderer& r, int width, int height, bool focused) const
+{
+    r.Rect(0, 0, float(width), float(height), Color(.01f, .02f, .025f, .58f));
+    const float panelWidth = (std::max)(1.f, (std::min)(520.f, float(width) - 32.f));
+    const float x = (width - panelWidth) * .5f;
+    const float y = height * .5f - 60.f;
+    GameUiTheme::Panel(r, x, y, panelWidth, 120);
+    r.Rect(x, y, panelWidth, 2, Gold);
+    const auto line = [&](float baseline, const std::string& text, Color color)
+    {
+        const auto fitted = HudTextLayout::Fit(r, text, panelWidth - 32.f);
+        r.Text(x + (panelWidth - r.TextWidth(fitted)) * .5f, baseline, fitted, color);
+    };
+    line(y + 37, focused ? "일시정지" : "다른 창을 사용 중입니다", Gold);
+    line(y + 69,
+         focused ? "[P] 계속하기 · [Esc] 시스템 메뉴" : "게임 창을 선택하면 돌아갑니다",
+         Text);
+    line(y + 98, "이동·공격과 게임 진행이 멈춰 있습니다.", Color(.59f, .66f, .64f));
 }

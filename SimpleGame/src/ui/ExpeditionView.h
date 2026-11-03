@@ -19,4 +19,5 @@ class ExpeditionView
                  int height) const;
     void DrawJournal(Renderer& renderer, const GameSession& session, int width, int height) const;
     void DrawDefeat(Renderer& renderer, int width, int height) const;
+    void DrawPause(Renderer& renderer, int width, int height, bool focused) const;
 };

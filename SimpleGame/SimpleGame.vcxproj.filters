@@ -551,4 +551,9 @@
     <ClInclude Include="src\app\GlfwWindow.h"><Filter>src\app</Filter></ClInclude>
     <ClCompile Include="src\app\GlfwWindow.cpp"><Filter>src\app</Filter></ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\ui\GameUiTheme.h"><Filter>src\ui</Filter></ClInclude>
+    <ClInclude Include="src\ui\TitleScreenView.h"><Filter>src\ui</Filter></ClInclude>
+    <ClCompile Include="src\ui\TitleScreenView.cpp"><Filter>src\ui</Filter></ClCompile>
+  </ItemGroup>
 </Project>

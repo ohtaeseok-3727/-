@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "SettingsMenu.h"
+#include "GameUiTheme.h"
 #include <algorithm>
 #include <cmath>
 #include <utility>
@@ -230,9 +231,7 @@ void SettingsMenu::Draw(Renderer& r,
     }
     const auto panel = Layout(width, height);
     r.Rect(0, 0, float(width), float(height), Color(.01f, .015f, .025f, .7f));
-    r.Rect(panel.x + 6, panel.y + 8, panel.width, panel.height, Color(0, 0, 0, .45f));
-    r.Rect(panel.x, panel.y, panel.width, panel.height, Color(.045f, .06f, .08f, .98f));
-    r.Rect(panel.x, panel.y, panel.width, 3, Color(.76f, .60f, .31f));
+    GameUiTheme::Panel(r, panel.x, panel.y, panel.width, panel.height);
     const std::string title = m_Page == Page::Graphics       ? "게임 설정"
                               : m_Page == Page::Confirmation ? "선택 확인"
                                                              : "시스템 메뉴";
@@ -302,7 +301,7 @@ void SettingsMenu::Draw(Renderer& r,
     {
         const bool hover = button.enabled && button.Contains(m_MouseX, m_MouseY);
         const bool pressed = hover && m_Pressed == button.action;
-        const Color border = hover ? Color(.87f, .70f, .38f) : Color(.23f, .29f, .35f);
+        const Color border = hover ? GameUiTheme::Gold() : Color(.24f, .28f, .29f);
         r.Rect(button.x, button.y, button.width, button.height, border);
         r.Rect(button.x + 1,
                button.y + 1,
@@ -311,6 +310,11 @@ void SettingsMenu::Draw(Renderer& r,
                pressed ? Color(.24f, .27f, .29f)
                : hover ? Color(.14f, .19f, .24f)
                        : Color(.075f, .10f, .13f));
+        if (hover)
+        {
+            GameUiTheme::Diamond(
+                r, button.x + 12, button.y + button.height * .5f, 3, GameUiTheme::Gold());
+        }
         r.Text(button.x + (button.width - r.TextWidth(button.text)) * .5f,
                button.y + button.height * .5f + 5.f,
                button.text,

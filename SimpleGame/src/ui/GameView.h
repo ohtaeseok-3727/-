@@ -13,6 +13,7 @@ class GameView
                  const char* region,
                  int width,
                  int height) const;
+    void DrawInventory(Renderer& renderer, const GameSession& session, int width, int height) const;
     void ToggleInventory();
     void CloseInventory();
 

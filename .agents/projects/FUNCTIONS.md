@@ -315,3 +315,21 @@ Chapter1Sprites::Load는 챕터 3 인물 시트의 다섯 대기 자세를 알�
 | 좌표와 대기 | [GlfwWindow.cpp](../../SimpleGame/src/app/GlfwWindow.cpp) | CursorPixels, WaitForNextFrame | DPI 좌표 변환과 활성 4ms/비활성 100ms 이벤트 대기. |
 | 입력과 루프 | [SimpleGame.cpp](../../SimpleGame/src/app/SimpleGame.cpp) | UpdateFrame, GlfwKey | GLFW 상태를 게임 갱신에 연결하고 기존 키 인덱스를 변환. |
 | 공격 입력 | [AttackInput.cpp](../../SimpleGame/src/combat/AttackInput.cpp) | Poll(enabled, down) | 외부에서 전달한 Ctrl 상태의 상승 에지와 복귀 억제. |
+
+## 2026-11-03 화면·조작·안내 개선
+
+| 영역 | 선언·구현 | 함수 | 역할 |
+| --- | --- | --- | --- |
+| 정지 안내 | [ExpeditionView.cpp](../../SimpleGame/src/ui/ExpeditionView.cpp) | DrawPause | 포커스 상태에 따라 정지 이유와 재개 방법을 별도 패널로 표시한다. |
+| 입력 상태 | [PrototypeWorld.h](../../SimpleGame/src/app/PrototypeWorld.h) | SetPaused(value, focused) | 시뮬레이션 정지와 화면 안내용 포커스 상태를 연결한다. |
+| 글줄 맞춤 | [HudTextLayout.h](../../SimpleGame/src/ui/HudTextLayout.h) | Fit | 너비에 맞춰 UTF-8 글줄을 생략하며 생략 부호도 들어가지 않으면 빈 글줄을 반환한다. |
+
+## 2026-11-03 판타지 RPG UI 전면 개편
+
+| 영역 | 선언·구현 | 함수 | 역할 |
+| --- | --- | --- | --- |
+| 공통 테마 | [GameUiTheme.h](../../SimpleGame/src/ui/GameUiTheme.h) | Panel, Diamond, Meter, Center | 금속 프레임·문장·자원 막대·가운데 글자 배치를 공통 제공한다. |
+| 직업 선택 | [TitleScreenView.cpp](../../SimpleGame/src/ui/TitleScreenView.cpp) | Draw, MouseMove, MouseButton, CancelPress | 공통 TitleLayout으로 카드 표시·클릭을 맞추고 올림/누름/취소를 처리한다. |
+| 입력 연결 | [PrototypeWorld.cpp](../../SimpleGame/src/app/PrototypeWorld.cpp) | TitleMouseButton, TitleMouseMove | 타이틀 포인터 상태와 실제 직업 선택을 연결한다. |
+| 메뉴 계층 | [GameView.cpp](../../SimpleGame/src/ui/GameView.cpp) | DrawInventory | 가방을 퀵슬롯 이후 별도 단계로 그린다. |
+| 글자 확대 | [Renderer.cpp](../../SimpleGame/src/rendering/Renderer.cpp) | Text(..., scale) | 캐시된 텍스트의 정점 크기와 baseline을 배율에 맞춘다. 기존 호출은 배율 1이다. |

@@ -188,6 +188,9 @@
     <ClInclude Include="src\combat\LootSystem.h" />
     <ClInclude Include="src\app\GameSession.h" />
     <ClInclude Include="src\ui\GameView.h" />
+    <ClInclude Include="src\ui\GameUiTheme.h" />
+    <ClInclude Include="src\ui\TitleScreenView.h" />
+    <ClCompile Include="src\ui\TitleScreenView.cpp" />
     <ClInclude Include="src\world\LevelTypes.h" />
     <ClInclude Include="src\world\MapLayout.h" />
     <ClInclude Include="src\ui\MapView.h" />

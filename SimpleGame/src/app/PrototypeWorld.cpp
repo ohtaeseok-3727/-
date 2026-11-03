@@ -5,6 +5,8 @@
 #include "ChapterCatalog.h"
 #include "CheondanView.h"
 #include "MageUltimateView.h"
+#include "HudTextLayout.h"
+#include "TitleScreenView.h"
 #include <stdexcept>
 
 void PrototypeWorld::EnableChapterPreview(const std::string& chapter)
@@ -128,8 +130,8 @@ void PrototypeWorld::UpdatePlayerState()
 {
     PlayerStateMachine::Inputs inputs;
     inputs.defeated = m_Level.IsDefeated();
-    inputs.controlLocked = !m_Started || m_Paused || MenuOpen() ||
-                           m_Level.CurrentChapter().ControlLocked();
+    inputs.controlLocked =
+        !m_Started || m_Paused || MenuOpen() || m_Level.CurrentChapter().ControlLocked();
     inputs.moving = m_Moving;
     inputs.attacking = m_Attack.IsAttacking();
     inputs.mageProjectile = m_MageProjectiles.Casting();
@@ -520,6 +522,7 @@ void PrototypeWorld::Draw(Renderer& r, int width, int height)
             }
             m_ExpeditionView.DrawGuide(r, m_Level, m_Map, {m_X, m_Y}, width);
         }
+        m_LevelView.DrawInventory(r, m_Level, width, height);
         if (m_MapView.IsOpen())
         {
             m_ExpeditionView.DrawMap(r, m_Level, m_Map, {m_X, m_Y}, width, height);
@@ -532,13 +535,9 @@ void PrototypeWorld::Draw(Renderer& r, int width, int height)
         {
             m_ExpeditionView.DrawDefeat(r, width, height);
         }
-        if (m_Paused && !m_SettingsMenu.IsOpen())
+        if (m_Paused && !MenuOpen() && !m_Level.IsDefeated())
         {
-            const std::string pauseText = "일시정지 · [P] 계속 · [Esc] 시스템 메뉴";
-            r.Text(width * .5f - r.TextWidth(pauseText) * .5f,
-                   height * .5f,
-                   pauseText,
-                   Color(1.f, .85f, .56f));
+            m_ExpeditionView.DrawPause(r, width, height, m_InputFocused);
         }
         m_SettingsMenu.Draw(r,
                             width,
@@ -550,37 +549,7 @@ void PrototypeWorld::Draw(Renderer& r, int width, int height)
         r.Flush();
         return;
     }
-    // Quiet letterbox and readable UI, independent of world coordinates.
-    r.Rect(0, 0, float(width), 78, Color(.025f, .04f, .045f, .94f));
-    r.Rect(0, 78, float(width), 1, Color(.48f, .42f, .27f, .65f));
-    r.Rect(0, float(height - 46), float(width), 46, Color(.025f, .04f, .045f, .94f));
-    r.Text(24, 28, "긴 전쟁  /  변경의 여정", Color(.82f, .76f, .60f));
-    r.Text(24, 53, "수백 년의 전쟁으로 지친 나라.", Color(.52f, .60f, .59f));
-    r.Text(24, 71, r.EffectStatus(), Color(.58f, .63f, .61f));
-    if (!m_Started)
-    {
-        float x = width * .5f - 250, y = height * .5f - 165;
-        r.Rect(x, y, 500, 330, Color(.04f, .06f, .065f, .97f));
-        r.Rect(x, y, 500, 2, Color(.65f, .54f, .33f));
-        const std::string selectText = "용병을 선택하세요";
-        r.Text(x + (500.f - r.TextWidth(selectText)) * .5f,
-               y + 39,
-               selectText,
-               Color(.91f, .83f, .65f));
-        r.Character(0, x + 135, y + 180);
-        r.Character(1, x + 365, y + 180);
-        r.Text(x + 100, y + 213, "[1] 마법사", Color(.76f, .79f, .75f));
-        r.Text(x + 330, y + 213, "[2] 기사", Color(.76f, .79f, .75f));
-        r.Text(x + 90, y + 240, "룬 장갑", Color(.42f, .76f, .80f));
-        r.Text(x + 325, y + 240, "검과 방패", Color(.69f, .72f, .69f));
-        r.Text(
-            x + 55, y + 278, "직업 선택 → 마을 조사 → 자유 탐험과 전투", Color(.57f, .64f, .61f));
-        r.Text(x + 102, y + 309, "Ctrl을 눌러 1 → 2 → 3단 공격", Color(.48f, .54f, .53f));
-    }
-    r.Text(24,
-           float(height - 18),
-           "WASD·방향키 이동   Shift 달리기   Ctrl 공격   Space 확인   B 야영지 복귀",
-           Color(.64f, .68f, .63f));
+    m_TitleScreen.Draw(r, width, height);
     r.Flush();
 }
 
@@ -632,6 +601,27 @@ void PrototypeWorld::SystemMenuMouseMove(int x, int y)
 void PrototypeWorld::CancelMenuPress()
 {
     m_SettingsMenu.CancelPress();
+    m_TitleScreen.CancelPress();
+}
+
+void PrototypeWorld::TitleMouseButton(bool down, int x, int y)
+{
+    if (!m_Started)
+    {
+        const int profession = m_TitleScreen.MouseButton(down, x, y, m_Width, m_Height);
+        if (profession >= 0)
+        {
+            Select(profession);
+        }
+    }
+}
+
+void PrototypeWorld::TitleMouseMove(int x, int y)
+{
+    if (!m_Started)
+    {
+        m_TitleScreen.MouseMove(x, y, m_Width, m_Height);
+    }
 }
 
 bool PrototypeWorld::SystemMenuMouseButton(

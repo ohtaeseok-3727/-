@@ -2,6 +2,7 @@
 #include "Renderer.h"
 #include "BasicAttack.h"
 #include "PlayerStateMachine.h"
+#include "TitleScreenView.h"
 #include "InteractionBubbleView.h"
 #include "LevelMap.h"
 #include "GameSession.h"
@@ -30,6 +31,8 @@ class PrototypeWorld
     void Draw(Renderer& renderer, int width, int height);
 
     void Select(int value);
+    void TitleMouseButton(bool down, int x, int y);
+    void TitleMouseMove(int x, int y);
     void EnableChapterPreview(const std::string& chapter);
 
     void Reset();
@@ -57,7 +60,7 @@ class PrototypeWorld
     void ReturnToCamp();
     void RetryDefeat();
 
-    void SetPaused(bool value)
+    void SetPaused(bool value, bool focused = true)
     {
         if (value && !m_Paused)
         {
@@ -65,6 +68,7 @@ class PrototypeWorld
         }
 
         m_Paused = value;
+        m_InputFocused = focused;
     }
 
     bool Started() const
@@ -84,10 +88,12 @@ class PrototypeWorld
     float m_Time = 0, m_Walk = 0;
     int m_Width = 1280, m_Height = 720, m_Class = 1;
     bool m_Started = false, m_Paused = false;
+    bool m_InputFocused = true;
     bool m_FaceLeft = false; // Vertical movement retains the last horizontal facing.
     bool m_Moving = false;
     SceneGraph m_Scene;
     SceneRenderer m_SceneRenderer;
+    TitleScreenView m_TitleScreen;
     BasicAttack m_Attack;
     PlayerStateMachine m_PlayerState;
     LevelMap m_Map;
