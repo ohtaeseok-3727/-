@@ -1,5 +1,14 @@
 # 성능 분석 및 구조 변경 이력
 
+## 2026-11-03 300+ FPS → 70~100 FPS 저하 보고와 활성 창 대기 제거
+
+- 사용자 관측: 이전에는 300 FPS 이상이었으나 현재는 약 70~100 FPS다.
+- 기존 실행 로그 증거: `x64/Debug/runtime-logs/performance/session-2026-11-3-11-41-3-14140.csv`의 row 6은 72.650 FPS, 프레임 간격 13.760ms, active 2.246ms, update 0.017ms, UI 0.158ms다. row 8은 69.795 FPS, 간격 14.326ms, active 2.003ms, UI 0.138ms다. 두 행은 1280×720, focused=1, paused=0이다. 새 실행을 만든 값이 아니라 사용자 기존 로그를 읽은 관측값이다.
+- 분석: 프레임 간격에서 active와 update를 뺀 나머지가 크므로 UI 제출 비용만으로 감소폭을 설명하기 어렵다. `WaitForNextFrame`은 활성 창도 4ms 목표까지 `glfwWaitEventsTimeout`을 호출했다. 이는 이론상 250 FPS 상한이며, 실제 OS 이벤트 대기의 스케줄링 지연이 겹치는 경로가 주된 원인으로 의심된다. 기존 계측에는 event-wait 단독 시간이 없어 대기 시간이 정확히 몇 ms인지는 확정하지 않는다.
+- 외부 구현 확인: [GLFW 3.4 Win32 소스](https://github.com/glfw/glfw/blob/3.4/src/win32_window.c)의 `_glfwWaitEventsTimeoutWin32`는 초를 정수 밀리초로 바꾸어 `MsgWaitForMultipleObjects`를 호출한다. 이 경로를 정밀한 활성 프레임 페이서로 사용하지 않는다.
+- 변경: 활성 창·렌더 벤치마크는 추가 대기 없이 반환한다. 비활성 창은 기존 100ms 이벤트 대기와 포커스 복귀 시 조기 종료를 유지한다. UI 디자인·화질·전투와 게임 시간 계산은 변경하지 않는다. 기존 `glfwSwapInterval(0)`과 루프 시작의 `glfwPollEvents`도 유지한다.
+- 검증: 기존 CSV 읽기, 호출/분기와 소스 정적 검토, 서식 확인. 이번 요청에 별도 빌드·실행 지시가 없어 수정 후 게임·벤치마크는 실행하지 않았다. 따라서 300 FPS 회복이나 개선율은 아직 확인하지 않았다. 비교 시 같은 Debug/Release, 1280×720, GPU/드라이버 VSync, 후처리·카메라·지역·적·메뉴 조건에서 schema 2의 cadence와 active/UI/update를 확인해야 한다. 로그 필드·단위·경로는 그대로다.
+
 ## 2026-11-03 판타지 RPG UI 배치 전면 개편
 
 - 정적 관측: 전폭 HUD와 고정 선택 상자는 월드 시야를 가리고, 가방을 퀵슬롯보다 먼저 그려 메뉴의 아래쪽을 슬롯이 덮을 수 있었다.

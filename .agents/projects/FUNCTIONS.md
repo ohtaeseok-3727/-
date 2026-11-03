@@ -333,3 +333,9 @@ Chapter1Sprites::Load는 챕터 3 인물 시트의 다섯 대기 자세를 알�
 | 입력 연결 | [PrototypeWorld.cpp](../../SimpleGame/src/app/PrototypeWorld.cpp) | TitleMouseButton, TitleMouseMove | 타이틀 포인터 상태와 실제 직업 선택을 연결한다. |
 | 메뉴 계층 | [GameView.cpp](../../SimpleGame/src/ui/GameView.cpp) | DrawInventory | 가방을 퀵슬롯 이후 별도 단계로 그린다. |
 | 글자 확대 | [Renderer.cpp](../../SimpleGame/src/rendering/Renderer.cpp) | Text(..., scale) | 캐시된 텍스트의 정점 크기와 baseline을 배율에 맞춘다. 기존 호출은 배율 1이다. |
+
+## 2026-11-03 프레임 대기 회귀 수정
+
+| 영역 | 선언·구현 | 함수 | 현재 동작 |
+| --- | --- | --- | --- |
+| 프레임 대기 | [GlfwWindow.cpp](../../SimpleGame/src/app/GlfwWindow.cpp) | WaitForNextFrame | active=true이면 즉시 반환한다. 비활성에서만 100ms 이벤트 대기와 포커스 복귀 조기 종료를 적용한다. 앞선 활성 4ms 설명을 대체한다. |

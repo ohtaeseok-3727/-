@@ -110,3 +110,7 @@ PNG 로딩에는 Windows 내장 WIC를 사용하며 추가 이미지 DLL은 필�
 - SimpleGame.cpp에 Windows.h를 명시적으로 포함했다. 함수나 게임 동작은 변경하지 않았다.
 - 샌드박스에서 중단된 빌드의 불완전한 PCH 때문에 C1852가 발생해 전체 Rebuild로 재생성했다. Visual Studio 18 MSBuild, v145, x64 Debug 전체 빌드·링크·배포 복사 성공(exit 0). Chapter1View.cpp의 기존 C4244 경고 두 건은 남아 있다.
 - 게임 실행·FPS 측정과 다른 세 구성의 빌드는 수행하지 않았다. 위 최초 전환 시점의 미검증 기록과 구분한다.
+
+### 활성 창 프레임 대기 수정 — 2026-11-03
+
+기존 4ms 활성 프레임 목표는 프레임 상한 및 OS 이벤트 대기 지연을 만들 수 있어 제거했다. `GlfwWindow::WaitForNextFrame`은 active=true이면 즉시 반환하고 비활성에서만 100ms 대기를 사용한다. 자세한 사용자 관측과 기존 CSV 근거는 [성능 분석](../performance/PERFORMANCE_ANALYSIS.md)의 300+ FPS 저하 보고 항목을 따른다. 기존 GLFW 전환 시점의 4ms 설명보다 이 후속 수정이 우선한다.

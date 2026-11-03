@@ -58,7 +58,13 @@ void GlfwWindow::CursorPixels(double x, double y, int& pixelX, int& pixelY) cons
 
 void GlfwWindow::WaitForNextFrame(double frameStart, bool active) const
 {
-    const double deadline = frameStart + (active ? 0.004 : 0.100);
+    // Active rendering is paced by the actual work and swap, not a window-event
+    // timeout. Short Win32 event waits can oversleep and also cap fast frames.
+    if (active)
+    {
+        return;
+    }
+    const double deadline = frameStart + 0.100;
     while (!glfwWindowShouldClose(m_Window))
     {
         const double remaining = deadline - glfwGetTime();
@@ -67,7 +73,7 @@ void GlfwWindow::WaitForNextFrame(double frameStart, bool active) const
             break;
         }
         glfwWaitEventsTimeout(remaining);
-        if (!active && glfwGetWindowAttrib(m_Window, GLFW_FOCUSED))
+        if (glfwGetWindowAttrib(m_Window, GLFW_FOCUSED))
         {
             break;
         }
