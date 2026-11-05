@@ -133,8 +133,7 @@ void TradeSystem::Draw(Renderer& r, const PlayerInventory& inventory, int width,
     const float left = (width - 560) * .5f;
     const float top = (height - 400) * .5f;
     r.Rect(0, 0, float(width), float(height), Color(0, 0, 0, .45f));
-    GameUiTheme::Panel(r, left, top, 560, 400);
-    r.Text(left + 20, top + 28, "상점  [T 닫기]", GameUiTheme::Gold());
+    GameUiTheme::Window(r, left, top, 560, 400, "상점  [T 닫기]");
     r.Text(
         left + 20, top + 55, "보유 금화 " + std::to_string(inventory.Gold()), GameUiTheme::Text());
     r.Text(left + 290, top + 55, "장비 판매", GameUiTheme::Text());
@@ -142,8 +141,7 @@ void TradeSystem::Draw(Renderer& r, const PlayerInventory& inventory, int width,
         "체력 물약  20 금화", "마나 물약  20 금화", "장비 공격 +5  60 금화"};
     for (int i = 0; i < 3; ++i)
     {
-        r.Rect(left + 20, top + 80 + i * 48, 240, 42, Color(.08f, .12f, .13f));
-        r.Text(left + 30, top + 106 + i * 48, buys[i], GameUiTheme::Text());
+        GameUiTheme::Button(r, left + 20, top + 80 + i * 48, 240, 42, buys[i]);
     }
     for (int i = 0; i < 4; ++i)
     {
@@ -153,16 +151,18 @@ void TradeSystem::Draw(Renderer& r, const PlayerInventory& inventory, int width,
             break;
         }
         const Equipment& item = inventory.Items()[index];
-        r.Rect(left + 290, top + 80 + i * 48, 250, 42, Color(.08f, .12f, .13f));
-        r.Text(left + 300,
-               top + 106 + i * 48,
-               item.name + " +" + std::to_string(item.attack) + "  " +
-                   std::to_string((std::max)(0, (std::min)(item.attack, 1000000) * 5)) + " 금화" +
-                   (index == inventory.EquippedIndex() ? " [착용]" : ""),
-               GameUiTheme::Text());
+        GameUiTheme::Button(
+            r,
+            left + 290,
+            top + 80 + i * 48,
+            250,
+            42,
+            item.name + " +" + std::to_string(item.attack) + "  " +
+                std::to_string((std::max)(0, (std::min)(item.attack, 1000000) * 5)) + " 금화" +
+                (index == inventory.EquippedIndex() ? " [착용]" : ""));
     }
-    r.Text(left + 300, top + 325, "이전 쪽", GameUiTheme::Gold());
-    r.Text(left + 435, top + 325, "다음 쪽", GameUiTheme::Gold());
+    GameUiTheme::Button(r, left + 290, top + 300, 100, 40, "이전 쪽");
+    GameUiTheme::Button(r, left + 420, top + 300, 120, 40, "다음 쪽");
     r.Text(left + 20,
            top + 350,
            "보유 물약: 체력 " + std::to_string(inventory.HealthPotions()) + " / 마나 " +

@@ -241,14 +241,10 @@ void SettingsMenu::Draw(Renderer& r,
     }
     const auto panel = Layout(width, height);
     r.Rect(0, 0, float(width), float(height), Color(.01f, .015f, .025f, .7f));
-    GameUiTheme::Panel(r, panel.x, panel.y, panel.width, panel.height);
     const std::string title = m_Page == Page::Graphics       ? "게임 설정"
                               : m_Page == Page::Confirmation ? "선택 확인"
                                                              : "시스템 메뉴";
-    r.Text(panel.x + (panel.width - r.TextWidth(title)) * .5f,
-           panel.y + 38,
-           title,
-           Color(.96f, .85f, .62f));
+    GameUiTheme::Window(r, panel.x, panel.y, panel.width, panel.height, title);
     const std::string subtitle =
         m_Page == Page::Graphics
             ? "밝기 " + std::to_string(static_cast<int>(std::lround(r.Effects().exposure * 100))) +
@@ -257,7 +253,7 @@ void SettingsMenu::Draw(Renderer& r,
     r.Text(panel.x + (panel.width - r.TextWidth(subtitle)) * .5f,
            panel.y + 66,
            subtitle,
-           Color(.60f, .68f, .74f));
+           GameUiTheme::Muted());
     if (m_Page == Page::Confirmation)
     {
         std::vector<std::string> lines;
@@ -304,7 +300,7 @@ void SettingsMenu::Draw(Renderer& r,
             r.Text(panel.x + 24.f,
                    panel.y + 120.f + 30.f * static_cast<float>(i),
                    lines[i],
-                   Color(.79f, .84f, .87f));
+                   GameUiTheme::Text());
         }
     }
     for (const auto& button : Buttons(width,
@@ -317,24 +313,15 @@ void SettingsMenu::Draw(Renderer& r,
     {
         const bool hover = button.enabled && button.Contains(m_MouseX, m_MouseY);
         const bool pressed = hover && m_Pressed == button.action;
-        const Color border = hover ? GameUiTheme::Gold() : Color(.24f, .28f, .29f);
-        r.Rect(button.x, button.y, button.width, button.height, border);
-        r.Rect(button.x + 1,
-               button.y + 1,
-               button.width - 2,
-               button.height - 2,
-               pressed ? Color(.24f, .27f, .29f)
-               : hover ? Color(.14f, .19f, .24f)
-                       : Color(.075f, .10f, .13f));
-        if (hover)
-        {
-            GameUiTheme::Diamond(
-                r, button.x + 12, button.y + button.height * .5f, 3, GameUiTheme::Gold());
-        }
-        r.Text(button.x + (button.width - r.TextWidth(button.text)) * .5f,
-               button.y + button.height * .5f + 5.f,
-               button.text,
-               button.enabled ? Color(.90f, .90f, .84f) : Color(.37f, .43f, .48f));
+        GameUiTheme::Button(r,
+                            button.x,
+                            button.y,
+                            button.width,
+                            button.height,
+                            button.text,
+                            hover,
+                            pressed,
+                            button.enabled);
     }
     const std::string hint = m_Page == Page::Main
                                  ? "Esc 닫기 · 완료/선행 조건에 따라 스킵 버튼 활성화"
@@ -342,5 +329,5 @@ void SettingsMenu::Draw(Renderer& r,
     r.Text(panel.x + (panel.width - r.TextWidth(hint)) * .5f,
            panel.y + panel.height - 17.f,
            hint,
-           Color(.53f, .61f, .67f));
+           GameUiTheme::Muted());
 }

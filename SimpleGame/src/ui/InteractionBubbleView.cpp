@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "InteractionBubbleView.h"
+#include "GameUiTheme.h"
 #include <algorithm>
 #include <sstream>
 
@@ -12,9 +13,9 @@ void InteractionBubbleView::DrawPrompt(
          anchor,
          width,
          height,
-         Color(.96f, .86f, .58f),
-         Color(.055f, .070f, .075f, .94f),
-         Color(.63f, .52f, .31f, .95f));
+         GameUiTheme::Text(),
+         Color(1.f, .99f, .91f, .98f),
+         Color(.45f, .61f, .73f));
 }
 
 void InteractionBubbleView::DrawDescription(
@@ -26,13 +27,14 @@ void InteractionBubbleView::DrawDescription(
          anchor,
          width,
          height,
-         Color(.93f, .91f, .79f),
-         Color(.035f, .050f, .055f, .97f),
-         Color(.76f, .65f, .42f, .98f));
+         GameUiTheme::Text(),
+         Color(1.f, .99f, .94f, .99f),
+         Color(.45f, .61f, .73f));
 }
 
-std::vector<std::string> InteractionBubbleView::Wrap(
-    Renderer& renderer, const std::string& text, float maximumWidth) const
+std::vector<std::string> InteractionBubbleView::Wrap(Renderer& renderer,
+                                                     const std::string& text,
+                                                     float maximumWidth) const
 {
     std::istringstream words(text);
     std::vector<std::string> lines;
@@ -52,10 +54,10 @@ std::vector<std::string> InteractionBubbleView::Wrap(
             for (std::size_t index = 0; index < word.size();)
             {
                 const unsigned char first = static_cast<unsigned char>(word[index]);
-                const std::size_t characterLength =
-                    first < 0x80 ? 1 : (first & 0xE0) == 0xC0 ? 2
-                                      : (first & 0xF0) == 0xE0 ? 3
-                                                                 : 4;
+                const std::size_t characterLength = first < 0x80             ? 1
+                                                    : (first & 0xE0) == 0xC0 ? 2
+                                                    : (first & 0xF0) == 0xE0 ? 3
+                                                                             : 4;
                 const std::string character = word.substr(index, characterLength);
                 if (!fragment.empty() && renderer.TextWidth(fragment + character) > maximumWidth)
                 {
@@ -125,8 +127,8 @@ void InteractionBubbleView::Draw(Renderer& renderer,
     const float bottomLimit =
         (std::max)(topLimit, float(height) - hudBottom - bubbleHeight - tailHeight - 10.f);
     const float x = (std::max)(leftLimit, (std::min)(anchor.x - bubbleWidth * .5f, rightLimit));
-    const float y = (std::max)(topLimit,
-                               (std::min)(anchor.y - bubbleHeight - tailHeight, bottomLimit));
+    const float y =
+        (std::max)(topLimit, (std::min)(anchor.y - bubbleHeight - tailHeight, bottomLimit));
     const float tailX = (std::max)(x + 12.f, (std::min)(anchor.x, x + bubbleWidth - 12.f));
 
     renderer.Rect(x - 1.f, y - 1.f, bubbleWidth + 2.f, bubbleHeight + 2.f, outlineColor);

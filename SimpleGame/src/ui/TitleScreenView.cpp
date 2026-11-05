@@ -30,12 +30,15 @@ void TitleScreenView::Draw(Renderer& r, int width, int height) const
 {
     const auto layout = Layout(width, height);
     const float center = layout.center;
-    r.Rect(0, 0, float(width), float(height), Color(.008f, .018f, .025f, .74f));
+    r.Rect(0, 0, float(width), float(height), Color(.66f, .84f, .94f));
+    r.Rect(0, float(height) * .58f, float(width), float(height) * .42f, Color(.83f, .92f, .91f));
+    r.Ellipse(center - 300.f, 85.f, 110.f, 24.f, Color(1.f, 1.f, 1.f, .55f));
+    r.Ellipse(center + 300.f, 120.f, 130.f, 28.f, Color(1.f, 1.f, 1.f, .5f));
     r.Rect(0, 0, float(width), 6, GameUiTheme::Gold());
     const float heading = layout.heading;
     GameUiTheme::Diamond(r, center - 160, heading - 16, 7, GameUiTheme::Gold());
     GameUiTheme::Diamond(r, center + 160, heading - 16, 7, GameUiTheme::Gold());
-    GameUiTheme::Center(r, center, heading, "긴 전쟁", GameUiTheme::Text(), 2.8f);
+    GameUiTheme::Center(r, center, heading, "긴 전쟁", GameUiTheme::Gold(), 2.8f);
     GameUiTheme::Center(r, center, heading + 29, "변경의 여정", GameUiTheme::Gold(), 1.15f);
     GameUiTheme::Center(r, center, heading + 55, "당신의 전투를 선택하세요", GameUiTheme::Muted());
     const float cardWidth = layout.cardWidth;
@@ -44,7 +47,7 @@ void TitleScreenView::Draw(Renderer& r, int width, int height) const
     for (int profession = 0; profession < 2; ++profession)
     {
         const float x = layout.CardX(profession);
-        const Color accent = profession == 0 ? Color(.33f, .64f, .74f) : Color(.82f, .59f, .33f);
+        const Color accent = profession == 0 ? Color(.16f, .42f, .64f) : Color(.65f, .32f, .10f);
         GameUiTheme::Panel(r, x, top, cardWidth, cardHeight);
         if (m_Hovered == profession)
         {
@@ -79,16 +82,23 @@ void TitleScreenView::Draw(Renderer& r, int width, int height) const
                             profession == 0 ? "마력을 엮어 전장을 지배합니다"
                                             : "전열을 지키고 적을 돌파합니다",
                             GameUiTheme::Muted());
-        r.Rect(x + 20, top + cardHeight - 40, cardWidth - 40, 25, Color(.12f, .16f, .17f));
-        GameUiTheme::Center(r,
-                            x + cardWidth * .5f,
-                            top + cardHeight - 22,
+        GameUiTheme::Button(r,
+                            x + 20,
+                            top + cardHeight - 40,
+                            cardWidth - 40,
+                            25,
                             profession == 0 ? "[1] 또는 클릭하여 시작" : "[2] 또는 클릭하여 시작",
-                            GameUiTheme::Text());
+                            m_Hovered == profession,
+                            m_Pressed == profession);
     }
-    r.Rect(center - 160.f, height - 59.f, 320.f, 28.f, Color(.12f, .16f, .17f));
-    GameUiTheme::Center(
-        r, center, height - 40.f, "[Enter] 저장한 여정 이어하기", GameUiTheme::Gold());
+    GameUiTheme::Button(r,
+                        center - 160.f,
+                        height - 59.f,
+                        320.f,
+                        28.f,
+                        "[Enter] 저장한 여정 이어하기",
+                        m_Hovered == 2,
+                        m_Pressed == 2);
     GameUiTheme::Center(
         r,
         center,

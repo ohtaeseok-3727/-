@@ -435,4 +435,12 @@
     <ClInclude Include="src\app\GameSave.h" />
     <ClInclude Include="src\ui\TradeSystem.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\app\PrototypeWorldUi.cpp" />
+    <ClCompile Include="src\ui\GameUiControls.cpp" />
+    <ClCompile Include="src\verification\UiControlsVerification.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\ui\GameUiControls.h" />
+  </ItemGroup>
 </Project>

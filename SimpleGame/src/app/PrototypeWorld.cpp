@@ -42,6 +42,8 @@ void PrototypeWorld::Select(int value)
 
 void PrototypeWorld::Reset()
 {
+    m_UiControls.Cancel();
+    m_WorldInteractionHeld = false;
     if (!m_MapGenerated)
     {
         m_Map.Generate(m_PreviewChapter.empty() ? std::random_device{}() : 743u);
@@ -90,6 +92,8 @@ void PrototypeWorld::DebugLevel20()
 
 void PrototypeWorld::ToggleInventory()
 {
+    m_UiControls.Cancel();
+    m_WorldInteractionHeld = false;
     if (m_Started)
     {
         m_Trade.Close();
@@ -108,6 +112,8 @@ void PrototypeWorld::ChangeInventoryPage(int direction)
 
 void PrototypeWorld::ToggleMap()
 {
+    m_UiControls.Cancel();
+    m_WorldInteractionHeld = false;
     if (m_Started)
     {
         m_Trade.Close();
@@ -121,6 +127,8 @@ void PrototypeWorld::ToggleMap()
 
 void PrototypeWorld::ToggleSkills()
 {
+    m_UiControls.Cancel();
+    m_WorldInteractionHeld = false;
     if (m_Started && !m_Paused)
     {
         m_Trade.Close();
@@ -203,7 +211,19 @@ void PrototypeWorld::SkillMouseButton(bool down, int x, int y)
 
 void PrototypeWorld::SkillMouseMove(int x, int y)
 {
+    m_UiControls.MouseMove(x, y, m_Width, m_Height, UiState());
     m_Skills.MouseMove(x, y, m_Width, m_Height);
+    if (m_WorldInteractionHeld)
+    {
+        const auto* site = m_Map.Layout().NearbyLandmark({m_X, m_Y});
+        const auto p = site ? Project(site->position.x, site->position.y) : Point{-1000, -1000};
+        if (!site || site->position.x != m_WorldInteractionTarget.x ||
+            site->position.y != m_WorldInteractionTarget.y || x < p.x - 30 || x > p.x + 30 ||
+            y < p.y - 70 || y > p.y + 16)
+        {
+            m_WorldInteractionHeld = false;
+        }
+    }
 }
 
 void PrototypeWorld::CancelSkillDrag()
@@ -220,6 +240,7 @@ void PrototypeWorld::InspectLandmark()
 {
     if (!m_Started || m_Paused || MenuOpen() || m_Level.IsDefeated())
     {
+        m_WorldInteractionHeld = false;
         return;
     }
     const auto* site = m_Map.Layout().NearbyLandmark({m_X, m_Y});
@@ -346,7 +367,19 @@ void PrototypeWorld::Update(
         m_Walk = 0;
     }
     m_Level.FollowPlayer({m_X, m_Y});
-    m_Level.Update(dt, {m_X, m_Y}, m_Map, interactionHeld);
+    if (m_WorldInteractionHeld)
+    {
+        const auto* site = m_Map.Layout().NearbyLandmark({m_X, m_Y});
+        if (!site || site->position.x != m_WorldInteractionTarget.x ||
+            site->position.y != m_WorldInteractionTarget.y)
+        {
+            m_WorldInteractionHeld = false;
+        }
+    }
+    m_Level.Update(dt,
+                   {m_X, m_Y},
+                   m_Map,
+                   interactionHeld || m_UiControls.HoldingInteract() || m_WorldInteractionHeld);
     const auto push = m_Level.ConsumePush();
     const int pushSteps = static_cast<int>(std::ceil(std::hypot(push.x, push.y) / 4.f));
     for (int i = 0; i < pushSteps; ++i)
@@ -567,6 +600,7 @@ void PrototypeWorld::Draw(Renderer& r, int width, int height)
                             m_Level.CanSkipChapter2FieldStory(),
                             m_Level.CanSkipChapter2(),
                             m_Level.CanSkipChapter3());
+        m_UiControls.Draw(r, width, height, UiState());
         r.Flush();
         return;
     }
@@ -589,7 +623,10 @@ bool PrototypeWorld::MenuOpen() const
 
 bool PrototypeWorld::CloseMenus()
 {
+    m_MouseInteractionStarted = false;
     const bool open = MenuOpen();
+    m_UiControls.Cancel();
+    m_WorldInteractionHeld = false;
     m_Trade.Close();
     m_SettingsMenu.Close();
     m_JournalOpen = false;
@@ -602,6 +639,8 @@ bool PrototypeWorld::CloseMenus()
 
 void PrototypeWorld::ToggleSystemMenu()
 {
+    m_UiControls.Cancel();
+    m_WorldInteractionHeld = false;
     if (!m_Started)
     {
         return;
@@ -624,11 +663,16 @@ bool PrototypeWorld::SystemMenuOpen() const
 
 void PrototypeWorld::SystemMenuMouseMove(int x, int y)
 {
+    m_UiControls.MouseMove(x, y, m_Width, m_Height, UiState());
     m_SettingsMenu.MouseMove(x, y);
 }
 
 void PrototypeWorld::CancelMenuPress()
 {
+    m_Skills.CancelDrag();
+    m_MouseInteractionStarted = false;
+    m_UiControls.Cancel();
+    m_WorldInteractionHeld = false;
     m_Trade.CancelPress();
     m_LevelView.CancelInventoryPress();
     m_SettingsMenu.CancelPress();

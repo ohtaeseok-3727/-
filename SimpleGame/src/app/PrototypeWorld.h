@@ -17,6 +17,7 @@
 #include "ExpeditionView.h"
 #include "SettingsMenu.h"
 #include "TradeSystem.h"
+#include "GameUiControls.h"
 #include <utility>
 #include <vector>
 
@@ -64,12 +65,16 @@ class PrototypeWorld
     void LoadGame();
     void ToggleTrade();
     void UsePotion(bool mana);
+    bool UiMouseButton(bool down, int x, int y, int width, int height);
+    bool ConsumeUiResume();
 
     void SetPaused(bool value, bool focused = true)
     {
         if (value && !m_Paused)
         {
             m_Attack.Reset();
+            m_UiControls.Cancel();
+            m_WorldInteractionHeld = false;
         }
 
         m_Paused = value;
@@ -88,6 +93,8 @@ class PrototypeWorld
     friend class VisualPlaytest;
     void UpdatePlayerState();
     void Stream();
+    GameUiControls::State UiState() const;
+    void ApplyUiAction(GameUiControls::Action action);
     bool Blocked(float x, float y) const;
     Point Project(float x, float y) const;
     float m_X = 0, m_Y = 0, m_CameraX = 0, m_CameraY = 0;
@@ -113,6 +120,11 @@ class PrototypeWorld
     ExpeditionView m_ExpeditionView;
     SettingsMenu m_SettingsMenu;
     TradeSystem m_Trade;
+    GameUiControls m_UiControls;
+    bool m_UiResume = false;
+    bool m_WorldInteractionHeld = false;
+    bool m_MouseInteractionStarted = false;
+    WorldPosition m_WorldInteractionTarget{};
     std::string m_SaveMessage;
     bool m_JournalOpen = false;
     bool m_CompletionShown = false;

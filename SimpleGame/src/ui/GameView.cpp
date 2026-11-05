@@ -33,84 +33,69 @@ void GameView::DrawDrop(Renderer& r, const LootDrop& drop, Point p) const
 void GameView::DrawHud(
     Renderer& r, const GameSession& session, const char* region, int width, int height) const
 {
-    const auto& progress = session.Progress();
+    const auto& p = session.Progress();
     const auto& inventory = session.Inventory();
-    const float panelWidth = (std::min)(350.f, float(width) - 32.f);
-    GameUiTheme::Panel(r, 16, 16, panelWidth, 117);
-    GameUiTheme::Diamond(r, 51, 57, 24, GameUiTheme::Gold());
-    GameUiTheme::Diamond(r, 51, 57, 21, GameUiTheme::Ink());
-    GameUiTheme::Center(r, 51, 63, std::to_string(progress.Level()), GameUiTheme::Text(), 1.25f);
-    GameUiTheme::Center(r, 51, 97, "레벨", GameUiTheme::Muted());
-    r.Text(88, 39, HudTextLayout::Fit(r, region, panelWidth - 90), GameUiTheme::Gold());
-    const float meterWidth = (std::max)(8.f, panelWidth - 90.f);
-    GameUiTheme::Meter(r,
-                       88,
-                       49,
-                       meterWidth,
-                       19,
-                       progress.Health(),
-                       progress.MaxHealth(),
-                       Color(.57f, .16f, .15f));
-    GameUiTheme::Center(r,
-                        88 + meterWidth * .5f,
-                        63,
-                        "체력 " + std::to_string(progress.Health()) + " / " +
-                            std::to_string(progress.MaxHealth()),
-                        GameUiTheme::Text());
+    // The bottom bar reserves its right-hand area for mouse navigation.
+    r.Rect(0, height - 114.f, float(width), 114.f, Color(.72f, .83f, .91f, .98f));
+    r.Rect(0, height - 114.f, float(width), 3, Color(1, 1, 1));
+    r.Rect(0, height - 111.f, float(width), 1, Color(.40f, .57f, .70f));
+    const float panelWidth = (std::max)(120.f, width * .43f - 22.f);
+    const float top = height - 106.f;
+    GameUiTheme::Panel(r, 10, top, panelWidth, 83);
+    r.Text(20,
+           top + 19,
+           "Lv." + std::to_string(p.Level()) + "  " +
+               HudTextLayout::Fit(r, region, panelWidth - 100),
+           GameUiTheme::Text());
+    const float meterWidth = (std::max)(60.f, panelWidth - 70.f);
+    r.Text(20, top + 41, "HP", Color(.78f, .20f, .21f));
+    r.Text(20, top + 65, "MP", Color(.16f, .40f, .72f));
     GameUiTheme::Meter(
-        r, 88, 75, meterWidth, 15, progress.Mana(), progress.MaxMana(), Color(.13f, .32f, .52f));
+        r, 58, top + 26, meterWidth, 19, p.Health(), p.MaxHealth(), Color(.94f, .35f, .40f));
+    GameUiTheme::Meter(
+        r, 58, top + 50, meterWidth, 19, p.Mana(), p.MaxMana(), Color(.28f, .58f, .94f));
     GameUiTheme::Center(r,
-                        88 + meterWidth * .5f,
-                        87,
-                        "마나 " + std::to_string(progress.Mana()) + " / " +
-                            std::to_string(progress.MaxMana()),
-                        GameUiTheme::Text());
-    r.Text(88,
-           112,
-           "공격력 " +
-               std::to_string(static_cast<int>(
-                   std::lround(progress.EffectiveAttack(inventory.AttackBonus())))) +
-               "   금화 " + std::to_string(inventory.Gold()),
-           GameUiTheme::Muted());
+                        58 + meterWidth * .5f,
+                        top + 40,
+                        std::to_string(p.Health()) + " / " + std::to_string(p.MaxHealth()),
+                        Color(1, 1, 1));
+    GameUiTheme::Center(r,
+                        58 + meterWidth * .5f,
+                        top + 64,
+                        std::to_string(p.Mana()) + " / " + std::to_string(p.MaxMana()),
+                        Color(1, 1, 1));
     GameUiTheme::Meter(r,
-                       24,
-                       123,
-                       panelWidth - 16,
-                       4,
-                       progress.Experience(),
-                       progress.RequiredExperience(),
-                       GameUiTheme::Gold());
-    r.Text(24,
-           153,
-           HudTextLayout::Fit(r,
-                              "[7] 체력 물약 " + std::to_string(inventory.HealthPotions()) +
-                                  "  [8] 마나 물약 " + std::to_string(inventory.ManaPotions()) +
-                                  "  [T] 상점",
-                              panelWidth - 16.f),
-           GameUiTheme::Muted());
-    if (width >= 1120)
+                       0,
+                       height - 14.f,
+                       float(width),
+                       14,
+                       p.Experience(),
+                       p.RequiredExperience(),
+                       Color(.91f, .69f, .16f));
+    GameUiTheme::Center(r,
+                        width * .5f,
+                        height - 3.f,
+                        "EXP " + std::to_string(p.Experience()) + " / " +
+                            std::to_string(p.RequiredExperience()),
+                        GameUiTheme::Text());
+    if (width >= 760)
     {
-        GameUiTheme::Panel(r, 16, float(height - 112), 178, 94);
-        r.Text(30, float(height - 87), "탐험 수첩", GameUiTheme::Gold());
-        r.Text(30, float(height - 62), "[M] 지도   [J] 기록", GameUiTheme::Text());
-        r.Text(30, float(height - 37), "[I] 가방   [Esc] 메뉴", GameUiTheme::Muted());
-        GameUiTheme::Panel(r, float(width - 194), float(height - 112), 178, 94);
-        r.Text(float(width - 180), float(height - 87), "전투와 탐험", GameUiTheme::Gold());
-        r.Text(float(width - 180), float(height - 62), "[Ctrl] 연계 공격", GameUiTheme::Text());
-        r.Text(float(width - 180),
-               float(height - 37),
-               "[Space] 확인 · 상호작용",
+        GameUiTheme::Panel(r, 16, 16, 240, 54);
+        r.Text(28, 38, HudTextLayout::Fit(r, region, 216), GameUiTheme::Text());
+        r.Text(28,
+               58,
+               "공격 " +
+                   std::to_string(
+                       static_cast<int>(std::lround(p.EffectiveAttack(inventory.AttackBonus())))) +
+                   "  금화 " + std::to_string(inventory.Gold()),
                GameUiTheme::Muted());
     }
-    const float noticeWidth = (std::min)(680.f, float(width) - 48.f);
     if (!session.Notice().empty())
     {
-        const float noticeX = (width - noticeWidth) * .5f;
-        GameUiTheme::Panel(r, noticeX, float(height - 183), noticeWidth, 34);
-        r.Text(noticeX + 12,
-               float(height - 160),
-               HudTextLayout::Fit(r, session.Notice(), noticeWidth - 24),
-               GameUiTheme::Text());
+        const float w = (std::min)(680.f, width - 32.f), x = (width - w) * .5f, y = height - 266.f;
+        GameUiTheme::Panel(r, x, y, w, 34);
+        r.Text(
+            x + 12, y + 23, HudTextLayout::Fit(r, session.Notice(), w - 24), GameUiTheme::Text());
     }
 }
 

@@ -361,3 +361,14 @@ Chapter1Sprites::Load는 챕터 3 인물 시트의 다섯 대기 자세를 알�
 | [InventoryView.cpp](../../SimpleGame/src/ui/InventoryView.cpp), [GameView.cpp](../../SimpleGame/src/ui/GameView.cpp) | `MouseButton`, `InventoryMouseButton`, `DrawHud` | 장비 선택 비교·두 번째 클릭 착용, 물약 수량과 사용 키를 표시한다. |
 | [SceneRenderer.cpp](../../SimpleGame/src/rendering/SceneRenderer.cpp), [Chapter3View.cpp](../../SimpleGame/src/chapters/Chapter3View.cpp) | `DrawActor`, `DrawLandmark` | 플레이어 정지 시 기존 공격 1타의 준비 자세를 표시하고 조사 원고·석재·수도원 기록의 구분을 보강한다. NPC 연속 보행은 미완료다. |
 | [PersistenceVerification.cpp](../../SimpleGame/src/verification/PersistenceVerification.cpp) | `VerifyPersistenceAndTrading` | 사용자 파일을 쓰지 않는 메모리 왕복·두 직업의 진행과 물품·거래 실패·판매 인덱스·소모품·잘린 상태 거절 회귀 소스다. 이번 작업에서 실행하지 않았다. |
+
+## 2026-11-05 전체 창형 UI와 마우스 조작
+
+| 파일 | 함수·형식 | 역할 |
+| --- | --- | --- |
+| [GameUiTheme.h](../../SimpleGame/src/ui/GameUiTheme.h) | `Panel`, `Window`, `Button`, `Slot`, `Meter` | 밝은 패널·주황 제목줄·파란 버튼·아이콘 슬롯·자원 막대의 공통 표현이다. |
+| [GameUiControls.cpp](../../SimpleGame/src/ui/GameUiControls.cpp) | `Layout`, `Buttons`, `MouseButton`, `HoldingInteract`, `Cancel` | 공통 버튼 표시/판정 좌표와 캐시를 제공하며 같은 항목 누름/놓음, 유지 조작과 취소를 관리한다. 모달 뒤 슬롯 사용과 정지 중 게임 조작을 차단한다. |
+| [PrototypeWorldUi.cpp](../../SimpleGame/src/app/PrototypeWorldUi.cpp) | `UiState`, `ApplyUiAction`, `UiMouseButton`, `ConsumeUiResume` | 창·정지·보유 수량을 UI로 전달하고 클릭을 기존 저장/거래/전투/창 메서드로 보낸다. 지점 클릭 유지와 앱의 P 정지 플래그 재개를 연결한다. |
+| [PrototypeWorld.cpp](../../SimpleGame/src/app/PrototypeWorld.cpp), [SimpleGame.cpp](../../SimpleGame/src/app/SimpleGame.cpp) | `Update`, `SkillMouseMove`, `CancelMenuPress`, `MouseButton` | UI 우선 입력과 마우스/Space 유지 병합, 포커스·크기·창 전환 취소를 처리한다. |
+| [GameView.cpp](../../SimpleGame/src/ui/GameView.cpp), [SkillLayout.h](../../SimpleGame/src/player/SkillLayout.h) | `DrawHud`, `Create` | 하단 HP/MP/경험치와 공유 퀵슬롯 좌표를 배치하고 작은 창에서도 스킬 창과 등록 슬롯을 분리한다. |
+| [UiControlsVerification.cpp](../../SimpleGame/src/verification/UiControlsVerification.cpp) | `VerifyUiControls` | 3개 화면 크기, 표시/판정, 놓음·취소·모달·정지·재도전 및 스킬 창 높이 회귀 소스다. 이번 작업에서 실행하지 않았다. |

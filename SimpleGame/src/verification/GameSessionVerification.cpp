@@ -6,6 +6,7 @@
 #include <stdexcept>
 
 void VerifyPersistenceAndTrading();
+void VerifyUiControls();
 
 namespace
 {
@@ -218,6 +219,7 @@ namespace
 void VerifyChapterTransitions()
 {
     VerifyPersistenceAndTrading();
+    VerifyUiControls();
     VerifyManaRecovery();
     GameSession session;
     LevelMap map;

@@ -20,18 +20,18 @@ namespace
                       {centerX + 3.f, centerY + 17.f},
                       {centerX + 7.f, centerY - 16.f},
                       {centerX, centerY - 23.f},
-                      Color(.78f, .85f, .91f));
-        renderer.Rect(centerX - 12.f, centerY + 11.f, 24.f, 4.f, Color(.92f, .71f, .26f));
+                      Color(.34f, .40f, .45f));
+        renderer.Rect(centerX - 12.f, centerY + 11.f, 24.f, 4.f, Color(.50f, .36f, .14f));
         renderer.Quad({centerX - 5.f, centerY + 15.f},
                       {centerX + 5.f, centerY + 15.f},
                       {centerX + 10.f, centerY + 27.f},
                       {centerX - 10.f, centerY + 27.f},
-                      Color(.33f, .20f, .12f));
+                      Color(.23f, .15f, .10f));
     }
 
     void DrawRuneGloveIcon(Renderer& renderer, float centerX, float centerY)
     {
-        const Color glove(.40f, .66f, .88f);
+        const Color glove(.20f, .32f, .44f);
         renderer.Quad({centerX - 14.f, centerY + 20.f},
                       {centerX + 10.f, centerY + 20.f},
                       {centerX + 15.f, centerY - 8.f},
@@ -40,8 +40,8 @@ namespace
         renderer.Rect(centerX - 9.f, centerY - 25.f, 5.f, 15.f, glove);
         renderer.Rect(centerX - 2.f, centerY - 28.f, 5.f, 17.f, glove);
         renderer.Rect(centerX + 5.f, centerY - 23.f, 5.f, 14.f, glove);
-        renderer.Ellipse(centerX + 3.f, centerY + 5.f, 6.f, 6.f, Color(.90f, .77f, .31f));
-        renderer.Ellipse(centerX + 3.f, centerY + 5.f, 2.f, 2.f, Color(.12f, .24f, .36f));
+        renderer.Ellipse(centerX + 3.f, centerY + 5.f, 6.f, 6.f, Color(.50f, .40f, .17f));
+        renderer.Ellipse(centerX + 3.f, centerY + 5.f, 2.f, 2.f, Color(.08f, .16f, .23f));
     }
 }
 
@@ -70,29 +70,27 @@ void InventoryView::Draw(Renderer& renderer,
     const int page = (std::min)(m_Page, pageCount - 1);
 
     renderer.Rect(0, 0, float(viewportWidth), float(viewportHeight), Color(0, 0, 0, .45f));
-    GameUiTheme::Panel(renderer, panelX, panelY, PanelWidth, PanelHeight);
-    renderer.Rect(panelX + 4.f, panelY + 4.f, PanelWidth - 8.f, 3.f, Color(.80f, .63f, .25f));
-    renderer.Text(panelX + 20.f, panelY + 27.f, "인벤토리", Color(.91f, .83f, .63f));
+    GameUiTheme::Window(renderer, panelX, panelY, PanelWidth, PanelHeight, "인벤토리");
     renderer.Text(
-        panelX + 20.f, panelY + 51.f, "I 닫기   Page Up / Down 쪽 이동", Color(.58f, .70f, .75f));
+        panelX + 20.f, panelY + 55.f, "I 닫기   Page Up / Down 쪽 이동", GameUiTheme::Muted());
 
     const float goldX = panelX + 362.f;
-    renderer.Rect(goldX, panelY + 18.f, 202.f, 47.f, Color(.10f, .085f, .04f, .92f));
-    renderer.Ellipse(goldX + 24.f, panelY + 41.f, 10.f, 10.f, Color(.96f, .72f, .22f));
-    renderer.Ellipse(goldX + 24.f, panelY + 41.f, 5.f, 5.f, Color(1.f, .88f, .45f));
-    renderer.Text(goldX + 43.f,
-                  panelY + 39.f,
+    renderer.Rect(goldX, panelY + 36.f, 202.f, 29.f, Color(1.f, .96f, .81f));
+    renderer.Ellipse(goldX + 17.f, panelY + 50.f, 9.f, 9.f, Color(.95f, .67f, .16f));
+    renderer.Ellipse(goldX + 17.f, panelY + 50.f, 5.f, 5.f, Color(1.f, .88f, .46f));
+    renderer.Text(goldX + 32.f,
+                  panelY + 55.f,
                   "보유금  " + std::to_string(inventory.Gold()),
-                  Color(.96f, .80f, .36f));
+                  GameUiTheme::Text());
 
     renderer.Text(panelX + 20.f,
                   panelY + 89.f,
                   "장비 가방  " + std::to_string(itemCount) + "개",
-                  Color(.72f, .82f, .88f));
-    renderer.Text(panelX + 435.f,
+                  GameUiTheme::Text());
+    renderer.Text(panelX + 350.f,
                   panelY + 89.f,
                   "쪽 " + std::to_string(page + 1) + " / " + std::to_string(pageCount),
-                  Color(.68f, .75f, .70f));
+                  GameUiTheme::Muted());
 
     const float slotsX = panelX + 20.f;
     const float slotsY = panelY + 108.f;
@@ -105,38 +103,38 @@ void InventoryView::Draw(Renderer& renderer,
         const int itemIndex = page * SlotsPerPage + slot;
         const bool hasItem = itemIndex < itemCount;
         const bool equipped = hasItem && itemIndex == inventory.EquippedIndex();
-        const Color slotColor = equipped  ? Color(.18f, .24f, .22f, .98f)
-                                : hasItem ? Color(.075f, .11f, .13f, .98f)
-                                          : Color(.045f, .068f, .078f, .92f);
-
-        renderer.Rect(slotX, slotY, SlotWidth, SlotHeight, slotColor);
-        if (hasItem && itemIndex == m_Selected)
-        {
-            renderer.Rect(slotX, slotY + SlotHeight - 3.f, SlotWidth, 3.f, GameUiTheme::Gold());
-        }
         renderer.Rect(slotX,
                       slotY,
                       SlotWidth,
-                      2.f,
-                      equipped ? Color(.96f, .73f, .28f) : Color(.18f, .28f, .32f));
+                      SlotHeight,
+                      equipped ? Color(.96f, .71f, .27f) : Color(.68f, .77f, .82f));
+        renderer.Rect(slotX + 2.f,
+                      slotY + 2.f,
+                      SlotWidth - 4.f,
+                      SlotHeight - 4.f,
+                      hasItem ? Color(1.f, 1.f, .98f) : Color(.94f, .96f, .96f));
+        if (hasItem && itemIndex == m_Selected)
+        {
+            renderer.Rect(slotX, slotY + SlotHeight - 4.f, SlotWidth, 4.f, GameUiTheme::Gold());
+        }
 
         if (!hasItem)
         {
-            renderer.Text(slotX + 43.f, slotY + 54.f, "비어 있음", Color(.32f, .42f, .46f));
+            renderer.Text(slotX + 43.f, slotY + 54.f, "비어 있음", GameUiTheme::Muted());
             continue;
         }
 
         const Equipment& equipment = inventory.Items()[itemIndex];
         DrawEquipmentIcon(renderer, equipment, slotX + SlotWidth * .5f, slotY + 29.f);
-        renderer.Text(slotX + 14.f, slotY + 62.f, equipment.name, Color(.83f, .89f, .89f));
+        renderer.Text(slotX + 14.f, slotY + 62.f, equipment.name, GameUiTheme::Text());
         renderer.Text(slotX + 14.f,
                       slotY + 84.f,
                       "공격 +" + std::to_string(equipment.attack),
-                      Color(.62f, .78f, .88f));
-        renderer.Text(slotX + 99.f, slotY + 84.f, "x1", Color(.74f, .79f, .72f));
+                      Color(.16f, .36f, .57f));
+        renderer.Text(slotX + 99.f, slotY + 84.f, "x1", GameUiTheme::Muted());
         if (equipped)
         {
-            renderer.Text(slotX + 10.f, slotY + 15.f, "착용", Color(.98f, .77f, .31f));
+            renderer.Text(slotX + 10.f, slotY + 15.f, "착용", Color(.72f, .34f, .06f));
         }
     }
 
@@ -148,7 +146,7 @@ void InventoryView::Draw(Renderer& renderer,
                       "선택 공격 " + std::to_string(inventory.Items()[m_Selected].attack) +
                           " / 현재 " + std::to_string(inventory.AttackBonus()) + " (차이 " +
                           (difference >= 0 ? "+" : "") + std::to_string(difference) + ")",
-                      Color(.72f, .82f, .88f));
+                      GameUiTheme::Text());
         renderer.Text(panelX + 20.f,
                       panelY + 380.f,
                       "선택한 장비를 다시 클릭하면 착용합니다.",

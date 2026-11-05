@@ -21,6 +21,7 @@
 | [레벨 1 구현 안내](LEVEL_ONE.md) | `LEVEL_ONE.md` |
 | [로컬 JSON 월드 모니터링](LOCAL_WORLD_MONITOR.md) | `LOCAL_WORLD_MONITOR.md` |
 | [마법과 검의 노래](MAGE_SWORD_SONG.md) | `MAGE_SWORD_SONG.md` |
+| [전체 창형 UI와 마우스 조작 — 2026-11-05](MAPLE_UI_AND_MOUSE.md) | `MAPLE_UI_AND_MOUSE.md` |
 | [연속 오픈월드와 플레이 흐름](OPEN_WORLD_FLOW.md) | `OPEN_WORLD_FLOW.md` |
 | [저장·이어하기와 거래, 시각 보완 — 2026-11-05](SAVE_AND_TRADE.md) | `SAVE_AND_TRADE.md` |
 | [스킬 시스템 구현·테스트 안내](SKILL_SYSTEM_IMPLEMENTATION.md) | `SKILL_SYSTEM_IMPLEMENTATION.md` |

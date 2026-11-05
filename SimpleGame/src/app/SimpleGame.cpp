@@ -352,6 +352,16 @@ namespace
             }
             return;
         }
+        if (button == GLFW_MOUSE_BUTTON_LEFT &&
+            world.UiMouseButton(state == GLFW_PRESS, x, y, width, height))
+        {
+            if (world.ConsumeUiResume())
+            {
+                paused = false;
+            }
+            attackInput.Suspend();
+            return;
+        }
         if (world.SystemMenuOpen())
         {
             attackInput.Suspend();
