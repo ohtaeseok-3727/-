@@ -8,8 +8,8 @@
 
 namespace
 {
-    const Color Gold(.83f, .37f, .12f);
-    const Color Text(.18f, .25f, .32f);
+    const Color Gold = GameUiTheme::Gold();
+    const Color Text = GameUiTheme::Text();
 
     void Line(Renderer& r, Point a, Point b, Color color)
     {
@@ -57,12 +57,12 @@ void ExpeditionView::DrawGuide(Renderer& r,
     GameUiTheme::Panel(r, x, y, panelWidth, 124);
     r.Text(x + 16, y + 25, "진행 중인 임무", GameUiTheme::Gold());
     r.Text(x + panelWidth - 70, y + 25, "[M] 지도", GameUiTheme::Muted());
-    r.Rect(x + 15, y + 36, panelWidth - 30, 1, Color(.65f, .76f, .80f));
+    r.Rect(x + 15, y + 36, panelWidth - 30, 1, GameUiTheme::Border());
     const float projectedY = dy * SceneCamera::GroundDepthScale();
     const float scale = 13.f / (std::max)(1.f, std::hypot(dx, projectedY));
     const Point center{x + 30, y + 66};
     const Point tip{center.x + dx * scale, center.y + projectedY * scale};
-    GameUiTheme::Diamond(r, center.x, center.y, 19, Color(.82f, .91f, .94f));
+    GameUiTheme::Diamond(r, center.x, center.y, 19, GameUiTheme::Surface());
     Line(r, center, tip, Gold);
     GameUiTheme::Diamond(r, tip.x, tip.y, 3, Gold);
     r.Text(
@@ -100,7 +100,7 @@ void ExpeditionView::DrawMap(Renderer& r,
     const float x = (width - w) * .5f, y = 128.f;
     r.Rect(0, 0, float(width), float(height), Color(0, 0, 0, .45f));
     GameUiTheme::Window(r, x, y, w, h, "변경과 북부 전선  /  세계 지도");
-    r.Rect(x + 350, y + 42, w - 365, h - 55, Color(.90f, .94f, .87f));
+    r.Rect(x + 350, y + 42, w - 365, h - 55, GameUiTheme::Surface());
     float minX = (std::min)(-1300.f, player.x - 300.f);
     float maxX = (std::max)(2400.f, player.x + 300.f);
     float minY = player.y - 300.f, maxY = player.y + 300.f;
@@ -122,7 +122,7 @@ void ExpeditionView::DrawMap(Renderer& r,
     };
     for (const auto& road : map.Layout().Roads())
     {
-        Line(r, project(road.from), project(road.to), Color(.56f, .65f, .49f));
+        Line(r, project(road.from), project(road.to), Color(.27f, .35f, .29f));
     }
     const auto& atlas = session.Atlas();
     const float rowHeight =
@@ -133,7 +133,7 @@ void ExpeditionView::DrawMap(Renderer& r,
     {
         const auto& region = atlas.Regions()[i];
         const auto p = project(atlas.ToWorld(i, region.local.entry));
-        const auto color = region.discovered ? Text : Color(.56f, .60f, .60f);
+        const auto color = region.discovered ? Text : Color(.43f, .48f, .52f);
         r.Ellipse(p.x, p.y, 5, 5, color);
         r.Text(p.x + 10, p.y + 4, std::to_string(i + 1), color);
         r.Text(x + 22,
@@ -148,14 +148,14 @@ void ExpeditionView::DrawMap(Renderer& r,
     if (const auto target = session.TrackedGoal())
     {
         const auto p = project(target->position);
-        r.Ellipse(p.x, p.y, 8, 8, Color(.96f, .55f, .19f, .35f));
+        r.Ellipse(p.x, p.y, 8, 8, Color(.60f, .43f, .23f, .35f));
         r.Ellipse(p.x, p.y, 3, 3, Gold);
         r.Text(x + 22, y + h - 90, "목적지: " + target->label, Gold);
     }
     const auto camp = project(session.Checkpoint());
-    r.Rect(camp.x - 4, camp.y - 4, 8, 8, Color(.36f, .8f, .9f));
+    r.Rect(camp.x - 4, camp.y - 4, 8, 8, Color(.26f, .46f, .55f));
     const auto p = project(player);
-    r.Ellipse(p.x, p.y, 4, 4, Color(.16f, .29f, .42f));
+    r.Ellipse(p.x, p.y, 4, 4, Color(.65f, .74f, .80f));
     r.Text(x + 22, y + h - 62, "짙은 점: 현재 위치 / 주황: 목표 / 파랑: 복귀 야영지", Text);
     r.Text(x + 22, y + h - 37, "야외는 도보 이동 · 기록관 실내는 [Space] 포탈 · [J] 기록", Text);
     r.Text(x + 22, y + h - 15, "먼 지역의 전투는 대기하며, 재방문하면 이어집니다.", Text);

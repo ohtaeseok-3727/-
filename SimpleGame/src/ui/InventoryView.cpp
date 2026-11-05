@@ -59,7 +59,7 @@ void InventoryView::Draw(Renderer& renderer,
     const float panelHeight = (std::min)(float(viewportHeight - 48), PanelHeight);
     if (panelWidth < PanelWidth || panelHeight < PanelHeight)
     {
-        renderer.Text(20, 150, "인벤토리를 보려면 창을 키우세요. [I]", Color(1.f, .8f, .5f));
+        renderer.Text(20, 150, "인벤토리를 보려면 창을 키우세요. [I]", GameUiTheme::Gold());
         return;
     }
 
@@ -75,9 +75,9 @@ void InventoryView::Draw(Renderer& renderer,
         panelX + 20.f, panelY + 55.f, "I 닫기   Page Up / Down 쪽 이동", GameUiTheme::Muted());
 
     const float goldX = panelX + 362.f;
-    renderer.Rect(goldX, panelY + 36.f, 202.f, 29.f, Color(1.f, .96f, .81f));
-    renderer.Ellipse(goldX + 17.f, panelY + 50.f, 9.f, 9.f, Color(.95f, .67f, .16f));
-    renderer.Ellipse(goldX + 17.f, panelY + 50.f, 5.f, 5.f, Color(1.f, .88f, .46f));
+    renderer.Rect(goldX, panelY + 36.f, 202.f, 29.f, GameUiTheme::Surface());
+    renderer.Ellipse(goldX + 17.f, panelY + 50.f, 9.f, 9.f, Color(.55f, .40f, .16f));
+    renderer.Ellipse(goldX + 17.f, panelY + 50.f, 5.f, 5.f, Color(.68f, .54f, .28f));
     renderer.Text(goldX + 32.f,
                   panelY + 55.f,
                   "보유금  " + std::to_string(inventory.Gold()),
@@ -107,12 +107,12 @@ void InventoryView::Draw(Renderer& renderer,
                       slotY,
                       SlotWidth,
                       SlotHeight,
-                      equipped ? Color(.96f, .71f, .27f) : Color(.68f, .77f, .82f));
+                      equipped ? GameUiTheme::Gold() : GameUiTheme::Border());
         renderer.Rect(slotX + 2.f,
                       slotY + 2.f,
                       SlotWidth - 4.f,
                       SlotHeight - 4.f,
-                      hasItem ? Color(1.f, 1.f, .98f) : Color(.94f, .96f, .96f));
+                      hasItem ? GameUiTheme::Surface() : GameUiTheme::Ink());
         if (hasItem && itemIndex == m_Selected)
         {
             renderer.Rect(slotX, slotY + SlotHeight - 4.f, SlotWidth, 4.f, GameUiTheme::Gold());
@@ -130,11 +130,11 @@ void InventoryView::Draw(Renderer& renderer,
         renderer.Text(slotX + 14.f,
                       slotY + 84.f,
                       "공격 +" + std::to_string(equipment.attack),
-                      Color(.16f, .36f, .57f));
+                      Color(.43f, .59f, .73f));
         renderer.Text(slotX + 99.f, slotY + 84.f, "x1", GameUiTheme::Muted());
         if (equipped)
         {
-            renderer.Text(slotX + 10.f, slotY + 15.f, "착용", Color(.72f, .34f, .06f));
+            renderer.Text(slotX + 10.f, slotY + 15.f, "착용", GameUiTheme::Gold());
         }
     }
 

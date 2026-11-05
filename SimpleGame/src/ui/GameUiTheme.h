@@ -9,22 +9,32 @@ class GameUiTheme
   public:
     static Color Gold()
     {
-        return Color(.86f, .38f, .08f);
+        return Color(.68f, .57f, .38f);
     }
 
     static Color Text()
     {
-        return Color(.16f, .23f, .31f);
+        return Color(.82f, .85f, .88f);
     }
 
     static Color Muted()
     {
-        return Color(.36f, .43f, .50f);
+        return Color(.58f, .64f, .69f);
     }
 
     static Color Ink()
     {
-        return Color(.98f, .98f, .94f, .98f);
+        return Color(.055f, .070f, .095f, .98f);
+    }
+
+    static Color Surface()
+    {
+        return Color(.085f, .11f, .145f);
+    }
+
+    static Color Border()
+    {
+        return Color(.24f, .30f, .36f);
     }
 
     static void Diamond(Renderer& r, float x, float y, float size, Color color)
@@ -38,12 +48,12 @@ class GameUiTheme
         {
             return;
         }
-        r.Rect(x + 3, y + 4, w, h, Color(.08f, .15f, .24f, .22f));
-        r.Rect(x, y, w, h, Color(.40f, .52f, .63f));
-        r.Rect(x + 1, y + 1, w - 2, h - 2, Color(.79f, .86f, .91f));
+        r.Rect(x + 3, y + 4, w, h, Color(0.f, 0.f, 0.f, .45f));
+        r.Rect(x, y, w, h, Border());
+        r.Rect(x + 1, y + 1, w - 2, h - 2, Color(.12f, .16f, .20f));
         r.Rect(x + 3, y + 3, w - 6, h - 6, Ink());
-        r.Rect(x + 4, y + 4, w - 8, 2, Color(1, 1, 1));
-        r.Rect(x + 4, y + h - 6, w - 8, 2, Color(.86f, .88f, .84f));
+        r.Rect(x + 4, y + 4, w - 8, 2, Color(.18f, .23f, .29f));
+        r.Rect(x + 4, y + h - 6, w - 8, 2, Color(.035f, .050f, .065f));
     }
 
     static void Button(Renderer& r,
@@ -60,46 +70,39 @@ class GameUiTheme
         {
             return;
         }
-        r.Rect(x, y, w, h, hover && enabled ? Gold() : Color(.39f, .52f, .63f));
+        r.Rect(x, y, w, h, hover && enabled ? Gold() : Border());
         r.Rect(x + 1,
                y + 1,
                w - 2,
                h - 2,
-               enabled ? (pressed ? Color(.16f, .44f, .69f) : Color(.29f, .62f, .86f))
-                       : Color(.76f, .80f, .81f));
+               enabled ? (pressed ? Color(.070f, .10f, .14f) : Color(.12f, .16f, .21f))
+                       : Color(.075f, .09f, .11f));
         r.Rect(x + 2,
                y + 2,
                w - 4,
                (h - 4) * .48f,
-               enabled ? (pressed ? Color(.24f, .54f, .77f) : Color(.48f, .77f, .94f))
-                       : Color(.85f, .87f, .87f));
+               enabled ? (pressed ? Color(.10f, .14f, .19f) : Color(.17f, .22f, .28f))
+                       : Color(.09f, .11f, .135f));
         const auto label = HudTextLayout::Fit(r, text, w - 8);
-        Center(r,
-               x + w * .5f,
-               y + h * .5f + 5 + (pressed ? 1 : 0),
-               label,
-               enabled ? Color(.08f, .20f, .32f) : Muted());
+        Center(
+            r, x + w * .5f, y + h * .5f + 5 + (pressed ? 1 : 0), label, enabled ? Text() : Muted());
     }
 
     static void Window(Renderer& r, float x, float y, float w, float h, const std::string& title)
     {
         Panel(r, x, y, w, h);
-        r.Rect(x + 3, y + 3, w - 6, 31, Color(.96f, .50f, .14f));
-        r.Rect(x + 4, y + 4, w - 8, 13, Color(1.f, .66f, .29f));
-        r.Text(x + 12, y + 24, HudTextLayout::Fit(r, title, w - 52), Color(.25f, .15f, .05f));
+        r.Rect(x + 3, y + 3, w - 6, 31, Color(.11f, .145f, .19f));
+        r.Rect(x + 4, y + 4, w - 8, 13, Color(.15f, .19f, .24f));
+        r.Text(x + 12, y + 24, HudTextLayout::Fit(r, title, w - 52), Text());
         Button(r, x + w - 28, y + 6, 20, 20, "×");
     }
 
     static void Slot(Renderer& r, float x, float y, float size, bool selected = false)
     {
-        r.Rect(x, y, size, size, selected ? Gold() : Color(.66f, .74f, .77f));
-        r.Rect(x + 1, y + 1, size - 2, size - 2, Color(1, 1, 1));
-        r.Rect(x + 3,
-               y + 3,
-               size - 6,
-               size - 6,
-               selected ? Color(1, .94f, .77f) : Color(.90f, .94f, .94f));
-        r.Rect(x + 3, y + 3, size - 6, 2, Color(.80f, .87f, .89f));
+        r.Rect(x, y, size, size, selected ? Gold() : Border());
+        r.Rect(x + 1, y + 1, size - 2, size - 2, Color(.18f, .23f, .29f));
+        r.Rect(x + 3, y + 3, size - 6, size - 6, selected ? Color(.15f, .14f, .105f) : Surface());
+        r.Rect(x + 3, y + 3, size - 6, 2, Color(.18f, .22f, .27f));
     }
 
     static void Center(Renderer& r,
@@ -116,9 +119,9 @@ class GameUiTheme
         Renderer& r, float x, float y, float w, float h, int value, int maximum, Color color)
     {
         const float ratio = std::clamp(float(value) / (std::max)(1, maximum), 0.f, 1.f);
-        r.Rect(x, y, w, h, Color(.50f, .58f, .63f));
-        r.Rect(x + 1, y + 1, w - 2, h - 2, Color(.87f, .90f, .91f));
+        r.Rect(x, y, w, h, Border());
+        r.Rect(x + 1, y + 1, w - 2, h - 2, Color(.035f, .050f, .070f));
         r.Rect(x + 1, y + 1, (w - 2) * ratio, h - 2, color);
-        r.Rect(x + 1, y + 1, (w - 2) * ratio, 2, Color(1, 1, 1, .17f));
+        r.Rect(x + 1, y + 1, (w - 2) * ratio, 2, Color(.65f, .71f, .77f, .10f));
     }
 };

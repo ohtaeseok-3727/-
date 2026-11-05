@@ -93,7 +93,7 @@ void SkillView::Draw(
                 renderer.Text(x + (layout.slotSize - textWidth) * .5f,
                               layout.slotsY + layout.slotSize * .68f + 3.f,
                               seconds,
-                              Color(.98f, .88f, .60f));
+                              GameUiTheme::Text());
             }
         }
         else if (layout.slotSize >= 32.f)
@@ -149,7 +149,7 @@ void SkillView::Draw(
                       y,
                       layout.cardWidth - 8.f,
                       94.f,
-                      available ? Color(.91f, .96f, .98f) : Color(.89f, .89f, .86f));
+                      available ? GameUiTheme::Surface() : GameUiTheme::Ink());
         DrawIcon(renderer, x + 22.f, y + 28.f, skill.iconVariant, !available);
         renderer.Text(
             x + 46.f, y + 24.f, "Lv." + std::to_string(skill.requiredLevel), GameUiTheme::Muted());

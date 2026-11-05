@@ -36,9 +36,9 @@ void GameView::DrawHud(
     const auto& p = session.Progress();
     const auto& inventory = session.Inventory();
     // The bottom bar reserves its right-hand area for mouse navigation.
-    r.Rect(0, height - 114.f, float(width), 114.f, Color(.72f, .83f, .91f, .98f));
-    r.Rect(0, height - 114.f, float(width), 3, Color(1, 1, 1));
-    r.Rect(0, height - 111.f, float(width), 1, Color(.40f, .57f, .70f));
+    r.Rect(0, height - 114.f, float(width), 114.f, GameUiTheme::Ink());
+    r.Rect(0, height - 114.f, float(width), 3, GameUiTheme::Border());
+    r.Rect(0, height - 111.f, float(width), 1, GameUiTheme::Border());
     const float panelWidth = (std::max)(120.f, width * .43f - 22.f);
     const float top = height - 106.f;
     GameUiTheme::Panel(r, 10, top, panelWidth, 83);
@@ -48,22 +48,22 @@ void GameView::DrawHud(
                HudTextLayout::Fit(r, region, panelWidth - 100),
            GameUiTheme::Text());
     const float meterWidth = (std::max)(60.f, panelWidth - 70.f);
-    r.Text(20, top + 41, "HP", Color(.78f, .20f, .21f));
-    r.Text(20, top + 65, "MP", Color(.16f, .40f, .72f));
+    r.Text(20, top + 41, "HP", Color(.72f, .43f, .45f));
+    r.Text(20, top + 65, "MP", Color(.42f, .58f, .74f));
     GameUiTheme::Meter(
-        r, 58, top + 26, meterWidth, 19, p.Health(), p.MaxHealth(), Color(.94f, .35f, .40f));
+        r, 58, top + 26, meterWidth, 19, p.Health(), p.MaxHealth(), Color(.42f, .13f, .17f));
     GameUiTheme::Meter(
-        r, 58, top + 50, meterWidth, 19, p.Mana(), p.MaxMana(), Color(.28f, .58f, .94f));
+        r, 58, top + 50, meterWidth, 19, p.Mana(), p.MaxMana(), Color(.12f, .26f, .43f));
     GameUiTheme::Center(r,
                         58 + meterWidth * .5f,
                         top + 40,
                         std::to_string(p.Health()) + " / " + std::to_string(p.MaxHealth()),
-                        Color(1, 1, 1));
+                        GameUiTheme::Text());
     GameUiTheme::Center(r,
                         58 + meterWidth * .5f,
                         top + 64,
                         std::to_string(p.Mana()) + " / " + std::to_string(p.MaxMana()),
-                        Color(1, 1, 1));
+                        GameUiTheme::Text());
     GameUiTheme::Meter(r,
                        0,
                        height - 14.f,
@@ -71,7 +71,7 @@ void GameView::DrawHud(
                        14,
                        p.Experience(),
                        p.RequiredExperience(),
-                       Color(.91f, .69f, .16f));
+                       Color(.40f, .30f, .115f));
     GameUiTheme::Center(r,
                         width * .5f,
                         height - 3.f,

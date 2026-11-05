@@ -30,10 +30,10 @@ void TitleScreenView::Draw(Renderer& r, int width, int height) const
 {
     const auto layout = Layout(width, height);
     const float center = layout.center;
-    r.Rect(0, 0, float(width), float(height), Color(.66f, .84f, .94f));
-    r.Rect(0, float(height) * .58f, float(width), float(height) * .42f, Color(.83f, .92f, .91f));
-    r.Ellipse(center - 300.f, 85.f, 110.f, 24.f, Color(1.f, 1.f, 1.f, .55f));
-    r.Ellipse(center + 300.f, 120.f, 130.f, 28.f, Color(1.f, 1.f, 1.f, .5f));
+    r.Rect(0, 0, float(width), float(height), Color(.025f, .040f, .065f));
+    r.Rect(0, float(height) * .58f, float(width), float(height) * .42f, Color(.045f, .065f, .080f));
+    r.Ellipse(center - 300.f, 85.f, 110.f, 24.f, Color(.11f, .16f, .22f, .25f));
+    r.Ellipse(center + 300.f, 120.f, 130.f, 28.f, Color(.10f, .14f, .19f, .25f));
     r.Rect(0, 0, float(width), 6, GameUiTheme::Gold());
     const float heading = layout.heading;
     GameUiTheme::Diamond(r, center - 160, heading - 16, 7, GameUiTheme::Gold());
@@ -47,7 +47,7 @@ void TitleScreenView::Draw(Renderer& r, int width, int height) const
     for (int profession = 0; profession < 2; ++profession)
     {
         const float x = layout.CardX(profession);
-        const Color accent = profession == 0 ? Color(.16f, .42f, .64f) : Color(.65f, .32f, .10f);
+        const Color accent = profession == 0 ? Color(.42f, .58f, .72f) : Color(.67f, .50f, .30f);
         GameUiTheme::Panel(r, x, top, cardWidth, cardHeight);
         if (m_Hovered == profession)
         {

@@ -14,8 +14,8 @@ void InteractionBubbleView::DrawPrompt(
          width,
          height,
          GameUiTheme::Text(),
-         Color(1.f, .99f, .91f, .98f),
-         Color(.45f, .61f, .73f));
+         GameUiTheme::Ink(),
+         GameUiTheme::Border());
 }
 
 void InteractionBubbleView::DrawDescription(
@@ -28,8 +28,8 @@ void InteractionBubbleView::DrawDescription(
          width,
          height,
          GameUiTheme::Text(),
-         Color(1.f, .99f, .94f, .99f),
-         Color(.45f, .61f, .73f));
+         GameUiTheme::Ink(),
+         GameUiTheme::Border());
 }
 
 std::vector<std::string> InteractionBubbleView::Wrap(Renderer& renderer,

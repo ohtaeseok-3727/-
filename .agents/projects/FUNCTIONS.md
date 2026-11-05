@@ -366,9 +366,16 @@ Chapter1Sprites::Load는 챕터 3 인물 시트의 다섯 대기 자세를 알�
 
 | 파일 | 함수·형식 | 역할 |
 | --- | --- | --- |
-| [GameUiTheme.h](../../SimpleGame/src/ui/GameUiTheme.h) | `Panel`, `Window`, `Button`, `Slot`, `Meter` | 밝은 패널·주황 제목줄·파란 버튼·아이콘 슬롯·자원 막대의 공통 표현이다. |
+| [GameUiTheme.h](../../SimpleGame/src/ui/GameUiTheme.h) | `Panel`, `Window`, `Button`, `Slot`, `Meter` | 최신 사용자 정정에 따른 어두운 패널·제목줄·버튼·슬롯·자원 막대의 공통 표현이다. |
 | [GameUiControls.cpp](../../SimpleGame/src/ui/GameUiControls.cpp) | `Layout`, `Buttons`, `MouseButton`, `HoldingInteract`, `Cancel` | 공통 버튼 표시/판정 좌표와 캐시를 제공하며 같은 항목 누름/놓음, 유지 조작과 취소를 관리한다. 모달 뒤 슬롯 사용과 정지 중 게임 조작을 차단한다. |
 | [PrototypeWorldUi.cpp](../../SimpleGame/src/app/PrototypeWorldUi.cpp) | `UiState`, `ApplyUiAction`, `UiMouseButton`, `ConsumeUiResume` | 창·정지·보유 수량을 UI로 전달하고 클릭을 기존 저장/거래/전투/창 메서드로 보낸다. 지점 클릭 유지와 앱의 P 정지 플래그 재개를 연결한다. |
 | [PrototypeWorld.cpp](../../SimpleGame/src/app/PrototypeWorld.cpp), [SimpleGame.cpp](../../SimpleGame/src/app/SimpleGame.cpp) | `Update`, `SkillMouseMove`, `CancelMenuPress`, `MouseButton` | UI 우선 입력과 마우스/Space 유지 병합, 포커스·크기·창 전환 취소를 처리한다. |
 | [GameView.cpp](../../SimpleGame/src/ui/GameView.cpp), [SkillLayout.h](../../SimpleGame/src/player/SkillLayout.h) | `DrawHud`, `Create` | 하단 HP/MP/경험치와 공유 퀵슬롯 좌표를 배치하고 작은 창에서도 스킬 창과 등록 슬롯을 분리한다. |
 | [UiControlsVerification.cpp](../../SimpleGame/src/verification/UiControlsVerification.cpp) | `VerifyUiControls` | 3개 화면 크기, 표시/판정, 놓음·취소·모달·정지·재도전 및 스킬 창 높이 회귀 소스다. 이번 작업에서 실행하지 않았다. |
+
+## 2026-11-05 전체 UI 다크 테마
+
+| 파일 | 함수·형식 | 역할 |
+| --- | --- | --- |
+| [GameUiTheme.h](../../SimpleGame/src/ui/GameUiTheme.h) | `Ink`, `Surface`, `Border`, `Text`, `Muted`, `Gold`, `Panel`, `Window`, `Button`, `Slot`, `Meter` | 남청·차콜 배경, 어두운 인셋/테두리, 회색 글자와 차분한 강조색을 모든 UI가 공유한다. 버튼 누름/비활성 상태도 같은 팔레트로 구분한다. |
+| [GameView.cpp](../../SimpleGame/src/ui/GameView.cpp), [TitleScreenView.cpp](../../SimpleGame/src/ui/TitleScreenView.cpp), [InventoryView.cpp](../../SimpleGame/src/ui/InventoryView.cpp), [SkillView.cpp](../../SimpleGame/src/ui/SkillView.cpp), [ExpeditionView.cpp](../../SimpleGame/src/ui/ExpeditionView.cpp), [InteractionBubbleView.cpp](../../SimpleGame/src/ui/InteractionBubbleView.cpp) | `DrawHud`, `Draw`, `DrawGuide`, `DrawMap`, `DrawJournal`, `DrawPrompt`, `DrawDescription` | 공통 테마 외의 하단 바·시작 배경·장비/스킬 카드·지도 바닥·대사 배경도 다크 테마로 맞춘다. 배치와 입력을 변경하지 않는다. |
