@@ -256,7 +256,7 @@ void ExpeditionView::DrawJournal(Renderer& r,
     r.Text(
         x + 24,
         y + h - 18,
-        "기록은 현재 플레이 세션에 보존됩니다. 게임 종료 후 저장/불러오기는 아직 지원하지 않습니다.",
+        "Esc → 여정 저장 / 불러오기 · F5 저장 · 시작 화면 Enter 이어하기. 수동 저장 이후 진행은 종료 시 사라집니다.",
         Text);
 }
 

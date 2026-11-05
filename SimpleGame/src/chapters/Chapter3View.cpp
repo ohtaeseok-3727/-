@@ -85,27 +85,35 @@ bool Chapter3::DrawLandmark(Renderer& r, const MapLandmark& site, Point p, float
     else if (id >= ManuscriptEarly && id <= ManuscriptLate)
     {
         const int index = id - ManuscriptEarly;
-        r.Rect(p.x - 28, p.y - 62, 56, 30, m_State.manuscripts > index ? Green : Paper);
-        for (int i = 0; i < 7; ++i)
+        // The bindings and writing remain visible after an entry has been examined.
+        r.Rect(p.x - 31, p.y - 64, 62, 34, Color(.24f, .16f, .12f));
+        r.Rect(p.x - 27, p.y - 61, 25, 27, Paper);
+        r.Rect(p.x + 2, p.y - 61, 25, 27, Paper);
+        r.Rect(p.x - 1, p.y - 61, 2, 27, Color(.42f, .31f, .20f));
+        for (int i = 0; i < 4; ++i)
         {
-            r.Rect(p.x - 22 + i * 7.f,
-                   p.y - 55,
-                   4,
-                   15,
-                   index > 0 && i == 6 ? Color(.12f, .12f, .12f) : Stone);
+            r.Rect(p.x - 23, p.y - 56 + i * 5.f, 17, 2, Stone);
+            r.Rect(p.x + 6, p.y - 56 + i * 5.f, i == 3 && index > 0 ? 8.f : 17.f, 2, Stone);
+        }
+        if (m_State.manuscripts > index)
+        {
+            r.Rect(p.x + 22, p.y - 66, 7, 7, Green);
         }
         r.Text(p.x - 38, p.y - 78, (std::to_string(index + 1) + "번째 시대"), Paper);
     }
     else if (id >= FoundationWest && id <= FoundationEast)
     {
         const int index = id - FoundationWest;
+        r.Rect(p.x - 34, p.y - 29, 68, 26, Color(.22f, .27f, .29f));
         for (int i = -1; i <= 1; ++i)
         {
-            r.Rect(p.x + i * 20.f - 8,
-                   p.y - 18,
-                   16,
-                   m_State.foundations.test(index) ? 18.f : 9.f,
-                   m_State.foundations.test(index) ? Green : Stone);
+            const float x = p.x + i * 20.f;
+            r.Rect(x - 8, p.y - 25, 16, 19, Stone);
+            r.Rect(x - 5, p.y - 22, 10, 4, Color(.18f, .21f, .22f));
+            if (m_State.foundations.test(index))
+            {
+                r.Rect(x - 3, p.y - 21, 6, 3, Green);
+            }
         }
         r.Text(p.x - 40,
                p.y - 49,
@@ -123,7 +131,12 @@ bool Chapter3::DrawLandmark(Renderer& r, const MapLandmark& site, Point p, float
                       7,
                       m_State.monastery > index ? Green : Paper);
         }
-        r.Ellipse(p.x, p.y - 47, 13, 13, Color(.6f, .15f, .18f));
+        r.Rect(p.x - 22, p.y - 60, 44, 27, Color(.24f, .17f, .14f));
+        r.Rect(p.x - 18, p.y - 57, 36, 20, Paper);
+        r.Rect(p.x - 14, p.y - 53, 20, 2, Stone);
+        r.Rect(p.x - 14, p.y - 48, 27, 2, Stone);
+        r.Rect(p.x - 14, p.y - 43, 16, 2, Stone);
+        r.Ellipse(p.x + 12, p.y - 42, 6, 6, Color(.6f, .15f, .18f));
         r.Text(p.x - 32, p.y - 72, "같은 인장", Paper);
     }
     else if (id == Rations)
@@ -305,8 +318,11 @@ void Chapter3::DrawActor(Renderer& r, int actor, Point p, float) const
                             : actor == 10 ? "엘리안"
                             : actor == 12 ? "에드릭"
                                           : "공증 사본 운반자";
-        const int frame = actor == 10 ? 0 : actor == 12 ? 1 : actor == 5 ? 2
-                          : actor == 0 || actor >= 20 ? 3 : 4;
+        const int frame = actor == 10                 ? 0
+                          : actor == 12               ? 1
+                          : actor == 5                ? 2
+                          : actor == 0 || actor >= 20 ? 3
+                                                      : 4;
         if (m_Sprites.Draw(r, ChapterSprite::Chapter3People, frame, p, 52.f))
         {
             r.Text(p.x - 35, p.y - 66, label, Paper);

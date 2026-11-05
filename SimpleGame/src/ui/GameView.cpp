@@ -80,6 +80,14 @@ void GameView::DrawHud(
                        progress.Experience(),
                        progress.RequiredExperience(),
                        GameUiTheme::Gold());
+    r.Text(24,
+           153,
+           HudTextLayout::Fit(r,
+                              "[7] 체력 물약 " + std::to_string(inventory.HealthPotions()) +
+                                  "  [8] 마나 물약 " + std::to_string(inventory.ManaPotions()) +
+                                  "  [T] 상점",
+                              panelWidth - 16.f),
+           GameUiTheme::Muted());
     if (width >= 1120)
     {
         GameUiTheme::Panel(r, 16, float(height - 112), 178, 94);
@@ -124,4 +132,15 @@ void GameView::ChangePage(int direction, int itemCount)
 void GameView::DrawInventory(Renderer& r, const GameSession& session, int width, int height) const
 {
     m_InventoryView.Draw(r, session.Inventory(), width, height);
+}
+
+void GameView::InventoryMouseButton(
+    bool down, int x, int y, int width, int height, PlayerInventory& inventory)
+{
+    m_InventoryView.MouseButton(down, x, y, width, height, inventory);
+}
+
+void GameView::CancelInventoryPress()
+{
+    m_InventoryView.CancelPress();
 }

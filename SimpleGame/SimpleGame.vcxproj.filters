@@ -556,4 +556,17 @@
     <ClInclude Include="src\ui\TitleScreenView.h"><Filter>src\ui</Filter></ClInclude>
     <ClCompile Include="src\ui\TitleScreenView.cpp"><Filter>src\ui</Filter></ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\app\SaveArchive.cpp" />
+    <ClCompile Include="src\app\GameSave.cpp" />
+    <ClCompile Include="src\app\PrototypeWorldSaving.cpp" />
+    <ClCompile Include="src\app\PrototypeWorldTrading.cpp" />
+    <ClCompile Include="src\ui\TradeSystem.cpp" />
+    <ClCompile Include="src\verification\PersistenceVerification.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\app\SaveArchive.h" />
+    <ClInclude Include="src\app\GameSave.h" />
+    <ClInclude Include="src\ui\TradeSystem.h" />
+  </ItemGroup>
 </Project>

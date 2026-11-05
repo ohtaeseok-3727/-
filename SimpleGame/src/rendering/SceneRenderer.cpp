@@ -119,8 +119,10 @@ void SceneRenderer::DrawActor(Renderer& r, const SceneItem& item, const SceneFra
         {
             if (frame.profession == 1 && frame.level.Progress().KnightAuraActive())
             {
+                const int auraFrame =
+                    frame.playerState.Current() == PlayerStateMachine::State::Idle ? -1 : walkFrame;
                 KnightSkillView::DrawAura(
-                    r, frame.knightSkills, frame.attack, p, frame.faceLeft, walkFrame, frame.time);
+                    r, frame.knightSkills, frame.attack, p, frame.faceLeft, auraFrame, frame.time);
             }
         };
         if (frame.playerState.Current() == PlayerStateMachine::State::KnightSkill)
@@ -144,6 +146,20 @@ void SceneRenderer::DrawActor(Renderer& r, const SceneItem& item, const SceneFra
             r.CharacterAttack(frame.profession,
                               frame.attack.ClipId(),
                               frame.attack.ElapsedMilliseconds(),
+                              x,
+                              y,
+                              frame.faceLeft,
+                              frame.level.Progress().AttackRangeScale()))
+        {
+            aura();
+            return;
+        }
+        // The first attack pose is a planted ready stance from the existing character atlas.
+        // The attack effect begins later in the clip, so time zero draws only the body.
+        if (frame.playerState.Current() == PlayerStateMachine::State::Idle &&
+            r.CharacterAttack(frame.profession,
+                              frame.profession == 0 ? "mage-1" : "knight-1",
+                              0.f,
                               x,
                               y,
                               frame.faceLeft,

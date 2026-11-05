@@ -54,9 +54,8 @@ namespace
 
     float SkillBodyTime(const KnightSkills& skills)
     {
-        const int pose = skills.Kind() == KnightSkillKind::Thrust
-                             ? ThrustPose(skills.CastTime())
-                             : WavePose(skills.CastTime());
+        const int pose = skills.Kind() == KnightSkillKind::Thrust ? ThrustPose(skills.CastTime())
+                                                                  : WavePose(skills.CastTime());
         constexpr float times[] = {0.f, 280.f, 350.f, 520.f};
         return times[pose];
     }
@@ -99,13 +98,8 @@ void KnightSkillView::DrawBody(Renderer& r, const KnightSkills& skills, Point fe
         CheondanView::DrawCast(r, skills, feet);
         return;
     }
-    r.CombatVisual("knight-2",
-                   SkillBodyTime(skills),
-                   feet.x,
-                   feet.y,
-                   skills.FaceLeft(),
-                   .32f,
-                   false);
+    r.CombatVisual(
+        "knight-2", SkillBodyTime(skills), feet.x, feet.y, skills.FaceLeft(), .32f, false);
 }
 
 void KnightSkillView::DrawShot(Renderer& r, const KnightSkillShot& shot, Point ground)
@@ -162,8 +156,9 @@ void KnightSkillView::DrawAura(Renderer& r,
     }
     Point hilt{-6.f, -15.f};
     float angle = .733038f;
-    const char* id = "knight-walk";
-    float ms = walkFrame * 90.f;
+    // A negative walk frame selects the planted ready pose used for idle rendering.
+    const char* id = walkFrame < 0 ? "knight-1" : "knight-walk";
+    float ms = walkFrame < 0 ? 0.f : walkFrame * 90.f;
     if (skills.Casting())
     {
         faceLeft = skills.FaceLeft();

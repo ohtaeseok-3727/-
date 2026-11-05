@@ -524,6 +524,19 @@ const PlayerInventory& GameSession::Inventory() const
     return m_Inventory;
 }
 
+PlayerInventory& GameSession::Inventory()
+{
+    return m_Inventory;
+}
+
+void GameSession::RebindWorldGeometry(LevelMap& map)
+{
+    for (std::size_t i = 0; i < m_Regions.size(); ++i)
+    {
+        m_Regions[i].map.UseWorldGeometry(map, m_Atlas.Regions()[i].origin);
+    }
+}
+
 const EnemySystem& GameSession::Enemies() const
 {
     return m_Enemies;

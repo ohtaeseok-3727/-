@@ -90,6 +90,8 @@ struct MeleeStrikeResult
 
 class EnemySystem
 {
+    friend class SaveArchive;
+
   public:
     void Reset(unsigned seed, const LevelMap& map);
     void Clear();

@@ -15,6 +15,8 @@ class SettingsMenu
         Settings,
         Back,
         Quit,
+        Save,
+        Load,
         SkipChapter1,
         SkipChapter2,
         SkipChapter2Story,

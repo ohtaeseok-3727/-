@@ -110,6 +110,10 @@ void InventoryView::Draw(Renderer& renderer,
                                           : Color(.045f, .068f, .078f, .92f);
 
         renderer.Rect(slotX, slotY, SlotWidth, SlotHeight, slotColor);
+        if (hasItem && itemIndex == m_Selected)
+        {
+            renderer.Rect(slotX, slotY + SlotHeight - 3.f, SlotWidth, 3.f, GameUiTheme::Gold());
+        }
         renderer.Rect(slotX,
                       slotY,
                       SlotWidth,
@@ -136,20 +140,41 @@ void InventoryView::Draw(Renderer& renderer,
         }
     }
 
-    renderer.Text(panelX + 20.f,
-                  panelY + 376.f,
-                  "획득한 장비 중 공격력이 가장 높은 장비를 자동 착용합니다.",
-                  Color(.59f, .70f, .67f));
+    if (m_Selected >= 0 && m_Selected < itemCount)
+    {
+        const int difference = inventory.Items()[m_Selected].attack - inventory.AttackBonus();
+        renderer.Text(panelX + 20.f,
+                      panelY + 355.f,
+                      "선택 공격 " + std::to_string(inventory.Items()[m_Selected].attack) +
+                          " / 현재 " + std::to_string(inventory.AttackBonus()) + " (차이 " +
+                          (difference >= 0 ? "+" : "") + std::to_string(difference) + ")",
+                      Color(.72f, .82f, .88f));
+        renderer.Text(panelX + 20.f,
+                      panelY + 380.f,
+                      "선택한 장비를 다시 클릭하면 착용합니다.",
+                      GameUiTheme::Gold());
+    }
+    else
+    {
+        renderer.Text(panelX + 20.f,
+                      panelY + 376.f,
+                      "장비를 클릭해 비교하고 다시 클릭해 착용합니다.",
+                      GameUiTheme::Muted());
+    }
 }
 
 void InventoryView::Toggle()
 {
+    m_Selected = -1;
+    m_Page = 0;
     m_IsOpen = !m_IsOpen;
+    CancelPress();
 }
 
 void InventoryView::Close()
 {
     m_IsOpen = false;
+    CancelPress();
 }
 
 void InventoryView::ChangePage(int direction, int itemCount)
@@ -159,6 +184,8 @@ void InventoryView::ChangePage(int direction, int itemCount)
         return;
     }
 
+    CancelPress();
+    m_Selected = -1;
     const int lastPage = (std::max)(0, (itemCount - 1) / SlotsPerPage);
     m_Page = (std::max)(0, (std::min)(lastPage, m_Page + direction));
 }
@@ -175,4 +202,51 @@ void InventoryView::DrawEquipmentIcon(Renderer& renderer,
     }
 
     DrawRuneGloveIcon(renderer, centerX, centerY);
+}
+
+void InventoryView::CancelPress()
+{
+    m_Pressed = -1;
+}
+
+void InventoryView::MouseButton(
+    bool down, int x, int y, int width, int height, PlayerInventory& inventory)
+{
+    int hit = -1;
+    if (m_IsOpen && width >= 608 && height >= 452)
+    {
+        const float left = (width - PanelWidth) * .5f + 20.f;
+        const float top = (height - PanelHeight) * .5f + 108.f;
+        for (int slot = 0; slot < SlotsPerPage; ++slot)
+        {
+            const float sx = left + (slot % ColumnCount) * (SlotWidth + SlotGap);
+            const float sy = top + (slot / ColumnCount) * (SlotHeight + SlotGap);
+            const int index = m_Page * SlotsPerPage + slot;
+            if (x >= sx && x < sx + SlotWidth && y >= sy && y < sy + SlotHeight &&
+                index < static_cast<int>(inventory.Items().size()))
+            {
+                hit = index;
+                break;
+            }
+        }
+    }
+    if (down)
+    {
+        m_Pressed = hit;
+        return;
+    }
+    const int pressed = m_Pressed;
+    CancelPress();
+    if (hit < 0 || hit != pressed)
+    {
+        return;
+    }
+    if (m_Selected == hit)
+    {
+        inventory.Equip(hit);
+    }
+    else
+    {
+        m_Selected = hit;
+    }
 }

@@ -78,7 +78,7 @@ std::vector<SettingsMenu::Button> SettingsMenu::Buttons(int width,
                                                         bool skipChapter3) const
 {
     const auto panel = Layout(width, height);
-    const float row = (panel.height - 150.f) / 7.f;
+    const float row = (panel.height - 150.f) / (m_Page == Page::Main ? 9.f : 7.f);
     std::vector<Button> buttons;
     const auto add = [&](Action action, std::string text, int index, bool enabled = true)
     {
@@ -96,13 +96,15 @@ std::vector<SettingsMenu::Button> SettingsMenu::Buttons(int width,
     };
     if (m_Page == Page::Main)
     {
-        add(Action::Settings, "게임 설정", 0);
-        add(Action::SkipChapter1, "챕터 1 스킵  →  회색벽 입구", 1, skipChapter1);
-        add(Action::SkipChapter2, "챕터 2 필드 스토리 스킵  →  성채 입구", 2, skipChapter2);
-        add(Action::SkipChapter2Story, "챕터 2 전체 스킵  →  기록관 기념홀", 3, skipChapter2Story);
-        add(Action::SkipChapter3, "챕터 3 전체 스킵  →  아르겐 귀환", 4, skipChapter3);
-        add(Action::Quit, "게임 종료", 5);
-        add(Action::Resume, "게임으로 돌아가기", 6);
+        add(Action::Save, "여정 저장  ·  현재 슬롯 덮어쓰기", 0);
+        add(Action::Load, "저장한 여정 불러오기", 1);
+        add(Action::Settings, "게임 설정", 2);
+        add(Action::SkipChapter1, "챕터 1 스킵  →  회색벽 입구", 3, skipChapter1);
+        add(Action::SkipChapter2, "챕터 2 필드 스토리 스킵  →  성채 입구", 4, skipChapter2);
+        add(Action::SkipChapter2Story, "챕터 2 전체 스킵  →  기록관 기념홀", 5, skipChapter2Story);
+        add(Action::SkipChapter3, "챕터 3 전체 스킵  →  아르겐 귀환", 6, skipChapter3);
+        add(Action::Quit, "게임 종료", 7);
+        add(Action::Resume, "게임으로 돌아가기", 8);
     }
     else if (m_Page == Page::Graphics)
     {
@@ -121,7 +123,11 @@ std::vector<SettingsMenu::Button> SettingsMenu::Buttons(int width,
     }
     else
     {
-        add(Action::Confirm, m_Pending == Action::Quit ? "게임 종료" : "스킵 실행", 4);
+        add(Action::Confirm,
+            m_Pending == Action::Quit   ? "게임 종료"
+            : m_Pending == Action::Load ? "불러오기"
+                                        : "스킵 실행",
+            4);
         add(Action::Back, "취소", 6);
     }
     return buttons;
@@ -170,6 +176,9 @@ SettingsMenu::Action SettingsMenu::Activate(Action action, PostSettings& setting
     case Action::Resume:
         Close();
         break;
+    case Action::Save:
+        Close();
+        return Action::Save;
     case Action::Settings:
         m_Page = Page::Graphics;
         break;
@@ -178,6 +187,7 @@ SettingsMenu::Action SettingsMenu::Activate(Action action, PostSettings& setting
         m_Pending = Action::None;
         break;
     case Action::Quit:
+    case Action::Load:
     case Action::SkipChapter1:
     case Action::SkipChapter2:
     case Action::SkipChapter2Story:
@@ -253,7 +263,13 @@ void SettingsMenu::Draw(Renderer& r,
         std::vector<std::string> lines;
         if (m_Pending == Action::Quit)
         {
-            lines = {"게임을 종료할까요?", "현재 진행은 저장되지 않습니다."};
+            lines = {"게임을 종료할까요?", "마지막 수동 저장 이후의 진행은 사라집니다."};
+        }
+        else if (m_Pending == Action::Load)
+        {
+            lines = {"저장한 여정으로 돌아갈까요?",
+                     "마지막 저장 이후의 진행은 사라집니다.",
+                     "취소하면 현재 여정을 계속합니다."};
         }
         else if (m_Pending == Action::SkipChapter1)
         {

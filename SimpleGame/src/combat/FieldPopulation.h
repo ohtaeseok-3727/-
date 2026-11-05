@@ -6,6 +6,8 @@
 // Optional outdoor packs have IDs outside the authored chapter encounter range.
 class FieldPopulation
 {
+    friend class SaveArchive;
+
   public:
     void Populate(const LevelMap& map, EnemySystem& enemies);
     void Update(float dt, WorldPosition player, EnemySystem& enemies);

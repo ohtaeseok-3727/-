@@ -2,6 +2,8 @@
 
 class PlayerProgression
 {
+    friend class SaveArchive;
+
   public:
     void Reset(int profession);
     void DebugSetLevel(int level);
@@ -11,6 +13,12 @@ class PlayerProgression
     void Damage(int amount);
     int RequiredExperience() const;
     int Level() const;
+
+    int Profession() const
+    {
+        return m_Profession;
+    }
+
     int Experience() const;
     int Health() const;
     int MaxHealth() const;

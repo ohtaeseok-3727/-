@@ -348,3 +348,16 @@ Chapter1Sprites::Load는 챕터 3 인물 시트의 다섯 대기 자세를 알�
 | [GameSession.cpp](../../SimpleGame/src/app/GameSession.cpp) | `Strike`, `Update` | 모든 지역의 명중을 합쳐 기본 공격 1·2·3타에 최대 MP의 5·5·30%를 한 번 회복하고 게임 시간에 자연 회복을 연결한다. |
 | [PlayerProgression.h](../../SimpleGame/src/player/PlayerProgression.h), [PlayerProgression.cpp](../../SimpleGame/src/player/PlayerProgression.cpp) | `RecoverMana`, `UpdateManaRecovery` | 소수 회복량을 누적하고 최대 MP에서 제한한다. 자연 회복은 초당 최대 MP의 1%다. 완전 회복·새 게임·디버그 레벨 설정은 누적을 초기화한다. |
 | [GameSessionVerification.cpp](../../SimpleGame/src/verification/GameSessionVerification.cpp) | `VerifyManaRecovery`, `VerifyChapterTransitions` | 두 직업의 소수·자연·명중·빗맞힘·다중 적·상한·초기화·스킬/시체 제외·패배 중 정지 회귀 소스를 기존 C01 검증에 연결한다. 이번 작업에서 실행하지 않았다. |
+
+## 2026-11-05 저장·이어하기·거래·시각 보완
+
+| 파일 | 함수·형식 | 역할 |
+| --- | --- | --- |
+| [GameSave.cpp](../../SimpleGame/src/app/GameSave.cpp), [SaveArchive.cpp](../../SimpleGame/src/app/SaveArchive.cpp) | `GameSave::Save`, `Load`, `SaveArchive::Fields` | 상태를 명시적인 필드로 기록하고 버전·길이·체크섬을 검증한다. 임시 월드에서 완전히 복원한 뒤 현재 월드를 교체한다. 수동 슬롯과 이전 파일 백업을 제공한다. |
+| [PrototypeWorldSaving.cpp](../../SimpleGame/src/app/PrototypeWorldSaving.cpp) | `SaveGame`, `LoadGame` | Esc/F5와 시작 화면 Enter/이어하기를 저장 경로에 연결하고 한국어 결과를 표시한다. |
+| [GameSession.cpp](../../SimpleGame/src/app/GameSession.cpp), [SceneGraph.cpp](../../SimpleGame/src/rendering/SceneGraph.cpp) | `RebindWorldGeometry`, `Swap` | 이동된 지역 지도의 월드 참조를 복구하고 준비된 씬의 소유 컨테이너와 렌더 참조를 함께 교환한다. |
+| [PlayerInventory.cpp](../../SimpleGame/src/player/PlayerInventory.cpp) | `Equip`, `SellEquipment`, `BuyPotion`, `UsePotion` | 장비 선택·판매 후 인덱스, 금화·물약 보유와 단일 소비를 관리한다. |
+| [TradeSystem.cpp](../../SimpleGame/src/ui/TradeSystem.cpp), [PrototypeWorldTrading.cpp](../../SimpleGame/src/app/PrototypeWorldTrading.cpp) | `MouseButton`, `ToggleTrade`, `UsePotion` | 같은 항목에서 누름/놓음을 확인한 거래, 상인 거리·전투 제한, 체력/마나 결손 시 물약 효과를 연결한다. 상품 수치는 미확정 임시값이다. |
+| [InventoryView.cpp](../../SimpleGame/src/ui/InventoryView.cpp), [GameView.cpp](../../SimpleGame/src/ui/GameView.cpp) | `MouseButton`, `InventoryMouseButton`, `DrawHud` | 장비 선택 비교·두 번째 클릭 착용, 물약 수량과 사용 키를 표시한다. |
+| [SceneRenderer.cpp](../../SimpleGame/src/rendering/SceneRenderer.cpp), [Chapter3View.cpp](../../SimpleGame/src/chapters/Chapter3View.cpp) | `DrawActor`, `DrawLandmark` | 플레이어 정지 시 기존 공격 1타의 준비 자세를 표시하고 조사 원고·석재·수도원 기록의 구분을 보강한다. NPC 연속 보행은 미완료다. |
+| [PersistenceVerification.cpp](../../SimpleGame/src/verification/PersistenceVerification.cpp) | `VerifyPersistenceAndTrading` | 사용자 파일을 쓰지 않는 메모리 왕복·두 직업의 진행과 물품·거래 실패·판매 인덱스·소모품·잘린 상태 거절 회귀 소스다. 이번 작업에서 실행하지 않았다. |

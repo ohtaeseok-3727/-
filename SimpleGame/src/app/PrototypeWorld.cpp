@@ -7,6 +7,8 @@
 #include "MageUltimateView.h"
 #include "HudTextLayout.h"
 #include "TitleScreenView.h"
+#include "GameSave.h"
+#include "GameUiTheme.h"
 #include <stdexcept>
 
 void PrototypeWorld::EnableChapterPreview(const std::string& chapter)
@@ -90,6 +92,7 @@ void PrototypeWorld::ToggleInventory()
 {
     if (m_Started)
     {
+        m_Trade.Close();
         m_JournalOpen = false;
         m_MapView.CloseOverview();
         m_Skills.CloseWindow();
@@ -107,6 +110,7 @@ void PrototypeWorld::ToggleMap()
 {
     if (m_Started)
     {
+        m_Trade.Close();
         m_JournalOpen = false;
         m_LevelView.CloseInventory();
         m_Skills.CloseWindow();
@@ -119,6 +123,7 @@ void PrototypeWorld::ToggleSkills()
 {
     if (m_Started && !m_Paused)
     {
+        m_Trade.Close();
         m_JournalOpen = false;
         m_LevelView.CloseInventory();
         m_MapView.CloseOverview();
@@ -182,6 +187,16 @@ void PrototypeWorld::SkillMouseButton(bool down, int x, int y)
 {
     if (m_Started && !m_Paused)
     {
+        if (m_Trade.IsOpen())
+        {
+            m_Trade.MouseButton(down, x, y, m_Width, m_Height, m_Class, m_Level.Inventory());
+            return;
+        }
+        if (m_LevelView.InventoryOpen())
+        {
+            m_LevelView.InventoryMouseButton(down, x, y, m_Width, m_Height, m_Level.Inventory());
+            return;
+        }
         m_Skills.MouseButton(down, x, y, m_Width, m_Height, m_Level.Progress().Level());
     }
 }
@@ -210,6 +225,11 @@ void PrototypeWorld::InspectLandmark()
     const auto* site = m_Map.Layout().NearbyLandmark({m_X, m_Y});
     if (site)
     {
+        if (site->kind == LandmarkKind::Shop || site->kind == LandmarkKind::Trader)
+        {
+            ToggleTrade();
+            return;
+        }
         m_Level.Inspect(*site, m_Map);
     }
 }
@@ -539,6 +559,7 @@ void PrototypeWorld::Draw(Renderer& r, int width, int height)
         {
             m_ExpeditionView.DrawPause(r, width, height, m_InputFocused);
         }
+        m_Trade.Draw(r, m_Level.Inventory(), width, height);
         m_SettingsMenu.Draw(r,
                             width,
                             height,
@@ -550,18 +571,26 @@ void PrototypeWorld::Draw(Renderer& r, int width, int height)
         return;
     }
     m_TitleScreen.Draw(r, width, height);
+    if (!m_SaveMessage.empty())
+    {
+        r.Text(24,
+               float(height) - 75.f,
+               HudTextLayout::Fit(r, m_SaveMessage, float(width) - 48.f),
+               GameUiTheme::Gold());
+    }
     r.Flush();
 }
 
 bool PrototypeWorld::MenuOpen() const
 {
-    return m_SettingsMenu.IsOpen() || m_JournalOpen || m_MapView.IsOpen() ||
+    return m_Trade.IsOpen() || m_SettingsMenu.IsOpen() || m_JournalOpen || m_MapView.IsOpen() ||
            m_LevelView.InventoryOpen() || m_Skills.IsWindowOpen();
 }
 
 bool PrototypeWorld::CloseMenus()
 {
     const bool open = MenuOpen();
+    m_Trade.Close();
     m_SettingsMenu.Close();
     m_JournalOpen = false;
     m_MapView.CloseOverview();
@@ -600,6 +629,8 @@ void PrototypeWorld::SystemMenuMouseMove(int x, int y)
 
 void PrototypeWorld::CancelMenuPress()
 {
+    m_Trade.CancelPress();
+    m_LevelView.CancelInventoryPress();
     m_SettingsMenu.CancelPress();
     m_TitleScreen.CancelPress();
 }
@@ -609,7 +640,11 @@ void PrototypeWorld::TitleMouseButton(bool down, int x, int y)
     if (!m_Started)
     {
         const int profession = m_TitleScreen.MouseButton(down, x, y, m_Width, m_Height);
-        if (profession >= 0)
+        if (profession == 2)
+        {
+            LoadGame();
+        }
+        else if (profession >= 0)
         {
             Select(profession);
         }
@@ -640,6 +675,14 @@ bool PrototypeWorld::SystemMenuMouseButton(
     if (action == SettingsMenu::Action::Quit)
     {
         return true;
+    }
+    if (action == SettingsMenu::Action::Save)
+    {
+        SaveGame();
+    }
+    if (action == SettingsMenu::Action::Load)
+    {
+        LoadGame();
     }
     if (action == SettingsMenu::Action::SkipChapter1 ||
         action == SettingsMenu::Action::SkipChapter2 ||

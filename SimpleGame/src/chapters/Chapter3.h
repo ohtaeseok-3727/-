@@ -123,6 +123,8 @@ struct Chapter3State
 
 class Chapter3 final : public Chapter
 {
+    friend class SaveArchive;
+
   public:
     const char* Title() const override;
     MapId InitialMap() const override;

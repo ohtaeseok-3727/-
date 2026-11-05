@@ -22,5 +22,6 @@
 | [로컬 JSON 월드 모니터링](LOCAL_WORLD_MONITOR.md) | `LOCAL_WORLD_MONITOR.md` |
 | [마법과 검의 노래](MAGE_SWORD_SONG.md) | `MAGE_SWORD_SONG.md` |
 | [연속 오픈월드와 플레이 흐름](OPEN_WORLD_FLOW.md) | `OPEN_WORLD_FLOW.md` |
+| [저장·이어하기와 거래, 시각 보완 — 2026-11-05](SAVE_AND_TRADE.md) | `SAVE_AND_TRADE.md` |
 | [스킬 시스템 구현·테스트 안내](SKILL_SYSTEM_IMPLEMENTATION.md) | `SKILL_SYSTEM_IMPLEMENTATION.md` |
 | [Esc 시스템 메뉴](SYSTEM_MENU.md) | `SYSTEM_MENU.md` |

@@ -16,6 +16,7 @@
 #include "SceneRenderer.h"
 #include "ExpeditionView.h"
 #include "SettingsMenu.h"
+#include "TradeSystem.h"
 #include <utility>
 #include <vector>
 
@@ -59,6 +60,10 @@ class PrototypeWorld
     void ToggleJournal();
     void ReturnToCamp();
     void RetryDefeat();
+    void SaveGame();
+    void LoadGame();
+    void ToggleTrade();
+    void UsePotion(bool mana);
 
     void SetPaused(bool value, bool focused = true)
     {
@@ -79,6 +84,7 @@ class PrototypeWorld
     MonitorSnapshot CaptureMonitoring() const;
 
   private:
+    friend class GameSave;
     friend class VisualPlaytest;
     void UpdatePlayerState();
     void Stream();
@@ -106,6 +112,8 @@ class PrototypeWorld
     MapView m_MapView;
     ExpeditionView m_ExpeditionView;
     SettingsMenu m_SettingsMenu;
+    TradeSystem m_Trade;
+    std::string m_SaveMessage;
     bool m_JournalOpen = false;
     bool m_CompletionShown = false;
     InteractionBubbleView m_InteractionBubbleView;

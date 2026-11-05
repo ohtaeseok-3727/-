@@ -26,6 +26,7 @@ class SceneGraph
     SceneGraph& operator=(SceneGraph&&) = delete;
 
     void Clear();
+    void Swap(SceneGraph& other) noexcept;
     void Stream(const LevelMap& map, float x, float y, int width, int height);
     void BeginDynamicActors();
     void AddDynamicActor(const WorldProp& description);

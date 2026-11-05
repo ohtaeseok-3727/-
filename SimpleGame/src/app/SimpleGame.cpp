@@ -131,7 +131,15 @@ namespace
         }
         if (key == 13 && !world.SystemMenuOpen())
         {
-            world.RetryDefeat();
+            if (!world.Started())
+            {
+                world.LoadGame();
+                ClearInput();
+            }
+            else
+            {
+                world.RetryDefeat();
+            }
             attackInput.Suspend();
             return;
         }
@@ -171,6 +179,16 @@ namespace
         if (key == '1')
         {
             world.DebugLevel20();
+            return;
+        }
+        if (key == 't')
+        {
+            world.ToggleTrade();
+            return;
+        }
+        if (key == '7' || key == '8')
+        {
+            world.UsePotion(key == '8');
             return;
         }
         if (key == 'p')
@@ -264,6 +282,11 @@ namespace
         if (key == GLFW_KEY_F10)
         {
             glfwSetWindowShouldClose(window, GLFW_TRUE);
+            return;
+        }
+        if (key == GLFW_KEY_F5 && !world.SystemMenuOpen())
+        {
+            world.SaveGame();
             return;
         }
         if (world.SystemMenuOpen())

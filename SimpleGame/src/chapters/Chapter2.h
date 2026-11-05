@@ -195,6 +195,8 @@ struct Chapter2Combat
 // One chapter owns story, encounters and companion/boss behavior.
 class Chapter2 final : public Chapter
 {
+    friend class SaveArchive;
+
   public:
     const char* Title() const override;
     MapId InitialMap() const override;

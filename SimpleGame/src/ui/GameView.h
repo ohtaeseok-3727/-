@@ -16,6 +16,9 @@ class GameView
     void DrawInventory(Renderer& renderer, const GameSession& session, int width, int height) const;
     void ToggleInventory();
     void CloseInventory();
+    void InventoryMouseButton(
+        bool down, int x, int y, int width, int height, PlayerInventory& inventory);
+    void CancelInventoryPress();
 
     bool InventoryOpen() const
     {

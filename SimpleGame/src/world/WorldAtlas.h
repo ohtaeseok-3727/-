@@ -22,6 +22,8 @@ struct WorldMarker
 // Authored regions share one world. Only nearby scenery is streamed by SceneGraph.
 class WorldAtlas
 {
+    friend class SaveArchive;
+
   public:
     void Clear();
     void Add(std::string chapter,

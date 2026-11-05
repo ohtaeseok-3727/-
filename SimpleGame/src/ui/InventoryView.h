@@ -20,6 +20,8 @@ class InventoryView
     }
 
     void ChangePage(int direction, int itemCount);
+    void MouseButton(bool down, int x, int y, int width, int height, PlayerInventory& inventory);
+    void CancelPress();
 
   private:
     void DrawEquipmentIcon(Renderer& renderer,
@@ -28,4 +30,6 @@ class InventoryView
                            float centerY) const;
     bool m_IsOpen = false;
     int m_Page = 0;
+    int m_Selected = -1;
+    int m_Pressed = -1;
 };

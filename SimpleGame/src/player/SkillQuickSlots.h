@@ -5,6 +5,8 @@
 
 class SkillQuickSlots
 {
+    friend class SaveArchive;
+
   public:
     void Reset();
     bool IsBound(char key) const;

@@ -43,6 +43,8 @@ struct ChapterGoal
 // Split long implementations into .cpp files, not additional coordinating classes.
 class Chapter
 {
+    friend class SaveArchive;
+
   public:
     virtual ~Chapter() = default;
     virtual const char* Title() const = 0;

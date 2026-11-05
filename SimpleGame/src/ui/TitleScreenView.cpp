@@ -86,6 +86,9 @@ void TitleScreenView::Draw(Renderer& r, int width, int height) const
                             profession == 0 ? "[1] 또는 클릭하여 시작" : "[2] 또는 클릭하여 시작",
                             GameUiTheme::Text());
     }
+    r.Rect(center - 160.f, height - 59.f, 320.f, 28.f, Color(.12f, .16f, .17f));
+    GameUiTheme::Center(
+        r, center, height - 40.f, "[Enter] 저장한 여정 이어하기", GameUiTheme::Gold());
     GameUiTheme::Center(
         r,
         center,
@@ -107,6 +110,10 @@ void TitleScreenView::MouseMove(int x, int y, int width, int height)
         {
             m_Hovered = profession;
         }
+    }
+    if (x >= width * .5f - 160.f && x < width * .5f + 160.f && y >= height - 59 && y < height - 31)
+    {
+        m_Hovered = 2;
     }
 }
 

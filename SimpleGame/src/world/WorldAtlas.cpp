@@ -76,6 +76,19 @@ MapDefinition WorldAtlas::Build() const
                                    0.f,
                                    -1,
                                    static_cast<int>(i)});
+        if ((region.chapter == "chapter1" && region.local.id == 0) ||
+            (region.chapter == "chapter3" && region.local.id == 8))
+        {
+            auto shop = ToWorld(i, region.local.entry);
+            shop.x += 40.f;
+            world.landmarks.push_back({LandmarkKind::Shop,
+                                       shop,
+                                       "보급 상인",
+                                       "Space 또는 T: 구매·판매 · 물약은 7/8로 사용",
+                                       0.f,
+                                       -2,
+                                       static_cast<int>(i)});
+        }
         if (i > 0 && !region.local.portalInterior && !m_Regions[i - 1].local.portalInterior)
         {
             const auto exit = m_Regions[i - 1].departure;

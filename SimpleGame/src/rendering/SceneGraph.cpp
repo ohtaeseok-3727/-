@@ -1,9 +1,25 @@
 #include "stdafx.h"
 #include "SceneGraph.h"
+#include <utility>
 #include "LevelMap.h"
 #include <algorithm>
 #include <cmath>
 #include <iterator>
+
+void SceneGraph::Swap(SceneGraph& other) noexcept
+{
+    m_Chunks.swap(other.m_Chunks);
+    m_StaticOrder.swap(other.m_StaticOrder);
+    m_DynamicActors.swap(other.m_DynamicActors);
+    m_StaticVisible.swap(other.m_StaticVisible);
+    m_DynamicVisible.swap(other.m_DynamicVisible);
+    m_RenderQueue.swap(other.m_RenderQueue);
+    std::swap(m_CenterX, other.m_CenterX);
+    std::swap(m_CenterY, other.m_CenterY);
+    std::swap(m_RadiusX, other.m_RadiusX);
+    std::swap(m_RadiusY, other.m_RadiusY);
+    std::swap(m_DynamicOrigin, other.m_DynamicOrigin);
+}
 
 void SceneGraph::Clear()
 {

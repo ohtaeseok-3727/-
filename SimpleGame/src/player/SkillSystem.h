@@ -21,6 +21,8 @@ struct SkillUseRequest
 
 class SkillSystem
 {
+    friend class SaveArchive;
+
   public:
     void Reset(int profession);
     void Update(float dt);

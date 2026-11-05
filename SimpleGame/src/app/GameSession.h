@@ -14,6 +14,8 @@
 
 class GameSession
 {
+    friend class SaveArchive;
+
   public:
     using ChapterFactory = std::function<std::unique_ptr<Chapter>()>;
     GameSession();
@@ -65,6 +67,8 @@ class GameSession
     const PlayerProgression& Progress() const;
     PlayerProgression& Progress();
     const PlayerInventory& Inventory() const;
+    PlayerInventory& Inventory();
+    void RebindWorldGeometry(LevelMap& map);
     const EnemySystem& Enemies() const;
     const LootSystem& Loot() const;
     int Kills() const;

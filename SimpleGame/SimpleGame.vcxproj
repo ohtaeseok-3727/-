@@ -422,4 +422,17 @@
     <ClCompile Include="src\ui\BuildingView.cpp" />
     <ClCompile Include="src\app\GameSessionPortals.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\app\SaveArchive.cpp" />
+    <ClCompile Include="src\app\GameSave.cpp" />
+    <ClCompile Include="src\app\PrototypeWorldSaving.cpp" />
+    <ClCompile Include="src\app\PrototypeWorldTrading.cpp" />
+    <ClCompile Include="src\ui\TradeSystem.cpp" />
+    <ClCompile Include="src\verification\PersistenceVerification.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\app\SaveArchive.h" />
+    <ClInclude Include="src\app\GameSave.h" />
+    <ClInclude Include="src\ui\TradeSystem.h" />
+  </ItemGroup>
 </Project>

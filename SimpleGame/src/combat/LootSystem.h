@@ -15,6 +15,8 @@ struct LootDrop
 
 class LootSystem
 {
+    friend class SaveArchive;
+
   public:
     void Reset(unsigned seed);
     void Drop(WorldPosition position, int killCount, int level);

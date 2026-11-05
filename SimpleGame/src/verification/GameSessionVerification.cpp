@@ -5,6 +5,8 @@
 #include <limits>
 #include <stdexcept>
 
+void VerifyPersistenceAndTrading();
+
 namespace
 {
     void Require(bool condition, const char* message)
@@ -215,6 +217,7 @@ namespace
 
 void VerifyChapterTransitions()
 {
+    VerifyPersistenceAndTrading();
     VerifyManaRecovery();
     GameSession session;
     LevelMap map;
