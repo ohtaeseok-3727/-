@@ -165,10 +165,10 @@ int EnemySystem::Update(float dt, WorldPosition player, const LevelMap& map, flo
     return incomingDamage;
 }
 
-std::vector<WorldPosition> EnemySystem::Strike(
+MeleeStrikeResult EnemySystem::Strike(
     WorldPosition player, bool faceLeft, int damage, const LevelMap& map, float rangeScale)
 {
-    std::vector<WorldPosition> defeated;
+    MeleeStrikeResult result;
     for (auto& enemy : m_Enemies)
     {
         const float dx = (enemy.position.x - player.x) * (faceLeft ? -1.f : 1.f);
@@ -181,12 +181,13 @@ std::vector<WorldPosition> EnemySystem::Strike(
             continue;
         }
         ApplyHit(enemy, damage);
+        result.hitEnemy = true;
         if (enemy.health == 0)
         {
-            defeated.push_back(enemy.position);
+            result.defeated.push_back(enemy.position);
         }
     }
-    return defeated;
+    return result;
 }
 
 const std::vector<FieldEnemy>& EnemySystem::Enemies() const

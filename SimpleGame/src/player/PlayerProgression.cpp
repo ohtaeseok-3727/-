@@ -2,6 +2,7 @@
 #include "PlayerProgression.h"
 #include "KnightSkillData.h"
 #include <algorithm>
+#include <cmath>
 
 void PlayerProgression::Reset(int profession)
 {
@@ -10,6 +11,7 @@ void PlayerProgression::Reset(int profession)
     m_Experience = 0;
     m_Health = MaxHealth();
     m_Mana = MaxMana();
+    m_ManaRecoveryRemainder = 0.0;
 }
 
 void PlayerProgression::DebugSetLevel(int level)
@@ -18,6 +20,7 @@ void PlayerProgression::DebugSetLevel(int level)
     m_Experience = 0;
     m_Health = MaxHealth();
     m_Mana = MaxMana();
+    m_ManaRecoveryRemainder = 0.0;
 }
 
 int PlayerProgression::AddExperience(int amount)
@@ -48,6 +51,7 @@ void PlayerProgression::Restore()
 {
     m_Health = MaxHealth();
     m_Mana = MaxMana();
+    m_ManaRecoveryRemainder = 0.0;
 }
 
 void PlayerProgression::Damage(int amount)
@@ -98,6 +102,35 @@ bool PlayerProgression::SpendMana(int amount)
     }
     m_Mana -= amount;
     return true;
+}
+
+void PlayerProgression::RecoverMana(double amount)
+{
+    if (!std::isfinite(amount) || amount <= 0.0 || m_Health <= 0)
+    {
+        return;
+    }
+    const int missing = MaxMana() - m_Mana;
+    if (missing <= 0)
+    {
+        m_ManaRecoveryRemainder = 0.0;
+        return;
+    }
+    // Retain sub-point recovery, but never bank regeneration beyond full mana.
+    const double recovered =
+        (std::min)(static_cast<double>(missing), amount + m_ManaRecoveryRemainder);
+    const int whole = static_cast<int>(recovered);
+    m_Mana += whole;
+    m_ManaRecoveryRemainder = recovered - whole;
+}
+
+void PlayerProgression::UpdateManaRecovery(float seconds)
+{
+    if (!std::isfinite(seconds) || seconds <= 0.f)
+    {
+        return;
+    }
+    RecoverMana(MaxMana() * 0.01 * seconds);
 }
 
 int PlayerProgression::Strength() const

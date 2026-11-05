@@ -17,6 +17,8 @@ class PlayerProgression
     int MaxMana() const;
     int Mana() const;
     bool SpendMana(int amount);
+    void RecoverMana(double amount);
+    void UpdateManaRecovery(float seconds);
     int Strength() const;
     int Intelligence() const;
     int Attack() const;
@@ -30,4 +32,5 @@ class PlayerProgression
     int m_Experience = 0;
     int m_Health = 100;
     int m_Mana = 0;
+    double m_ManaRecoveryRemainder = 0.0;
 };

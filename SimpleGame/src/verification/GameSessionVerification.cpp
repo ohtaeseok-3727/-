@@ -20,6 +20,8 @@ namespace
     {
       public:
         int entries = 0;
+        int enemyCount = 1;
+        int enemyHealth = LevelTuning::EnemyHealth;
 
         const char* Title() const override
         {
@@ -65,7 +67,13 @@ namespace
         {
             if (enemies.Enemies().empty())
             {
-                enemies.Add({40.f, 0.f}, 1);
+                EnemyStats stats;
+                stats.health = enemyHealth;
+                for (int i = 0; i < enemyCount; ++i)
+                {
+                    enemies.Add(
+                        {40.f + static_cast<float>(i) * 5.f, 0.f}, 1, EnemyRole::Melee, stats);
+                }
             }
         }
 
@@ -121,10 +129,93 @@ namespace
       private:
         std::string m_Message = "검증 중";
     };
+
+    void VerifyManaRecovery()
+    {
+        for (int profession = 0; profession < 2; ++profession)
+        {
+            PlayerProgression progress;
+            progress.Reset(profession);
+            progress.SpendMana(progress.MaxMana());
+            for (int tick = 0; tick < 32; ++tick)
+            {
+                progress.UpdateManaRecovery(.125f);
+            }
+            Require(progress.Mana() == progress.MaxMana() * 4 / 100,
+                    "Sub-point natural recovery was lost between frames");
+            progress.UpdateManaRecovery(1000.f);
+            Require(progress.Mana() == progress.MaxMana(), "Natural recovery exceeded max mana");
+            progress.SpendMana(progress.MaxMana());
+            progress.UpdateManaRecovery(.125f);
+            Require(progress.Mana() == 0, "Full mana banked excess natural recovery");
+            progress.RecoverMana(.75);
+            progress.Restore();
+            progress.SpendMana(progress.MaxMana());
+            progress.RecoverMana(.5);
+            Require(progress.Mana() == 0, "Full restoration retained fractional recovery");
+            progress.DebugSetLevel(2);
+            progress.SpendMana(progress.MaxMana());
+            for (int hit = 0; hit < 4; ++hit)
+            {
+                progress.RecoverMana(progress.MaxMana() * .05);
+            }
+            Require(progress.Mana() == progress.MaxMana() / 5,
+                    "Percentage recovery lost fractional mana at higher levels");
+            const int beforeInvalidTime = progress.Mana();
+            progress.UpdateManaRecovery(0.f);
+            progress.UpdateManaRecovery(-1.f);
+            progress.UpdateManaRecovery(std::numeric_limits<float>::quiet_NaN());
+            progress.UpdateManaRecovery(std::numeric_limits<float>::infinity());
+            Require(progress.Mana() == beforeInvalidTime, "Invalid time changed mana");
+
+            LevelMap map;
+            map.Generate(743);
+            GameSession session;
+            session.Reset(profession, map.Seed(), map);
+            session.RegisterChapter("mana-fixture",
+                                    []
+                                    {
+                                        auto chapter = std::make_unique<FixtureChapter>();
+                                        chapter->enemyCount = 2;
+                                        chapter->enemyHealth = 1000;
+                                        return chapter;
+                                    });
+            WorldPosition destination;
+            Require(session.TravelTo({"mana-fixture", 0, std::nullopt}, map, destination),
+                    "Mana recovery fixture could not be entered");
+            session.Update(0.f, {0.f, 0.f}, map);
+            auto& player = session.Progress();
+            const int maximum = player.MaxMana();
+            player.SpendMana(maximum);
+            session.Strike(1, {100.f, 0.f}, false, map);
+            Require(player.Mana() == 0, "A missed basic attack restored mana");
+            session.Strike(1, {0.f, 0.f}, false, map);
+            Require(player.Mana() == maximum * 5 / 100 && session.Kills() == 0,
+                    "First hit must restore 5% once even against multiple surviving enemies");
+            session.Strike(2, {0.f, 0.f}, false, map);
+            Require(player.Mana() == maximum * 10 / 100, "Second hit did not restore 5%");
+            session.Strike(3, {0.f, 0.f}, false, map);
+            Require(player.Mana() == maximum * 40 / 100, "Final hit did not restore 30%");
+            session.Update(1.25f, {0.f, 0.f}, map);
+            session.Update(1.25f, {0.f, 0.f}, map);
+            Require(player.Mana() == maximum * 40 / 100 + maximum / 40,
+                    "Session update did not regenerate 1% of max mana per second");
+            const int beforeSpell = player.Mana();
+            session.StrikeArea({40.f, 0.f}, 100.f, 2000);
+            Require(player.Mana() == beforeSpell, "A skill hit restored basic-attack mana");
+            session.Strike(1, {0.f, 0.f}, false, map);
+            Require(player.Mana() == beforeSpell, "Striking a corpse restored mana");
+            player.Damage(player.MaxHealth());
+            session.Update(10.f, {0.f, 0.f}, map);
+            Require(player.Mana() == beforeSpell, "Mana regenerated after defeat");
+        }
+        std::cout << "PASS mana regeneration / combo hits / misses / multi-target / cap / defeat\n";
+    }
 }
 
 void VerifyChapterTransitions()
 {
+    VerifyManaRecovery();
     GameSession session;
     LevelMap map;
     map.Generate(743);

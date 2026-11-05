@@ -82,6 +82,12 @@ struct FieldEnemy
     float attackSpeedTime = 0.f;
 };
 
+struct MeleeStrikeResult
+{
+    bool hitEnemy = false;
+    std::vector<WorldPosition> defeated;
+};
+
 class EnemySystem
 {
   public:
@@ -105,11 +111,11 @@ class EnemySystem
     std::vector<WorldPosition> ConsumeScriptDefeats();
     void SetSupportEnabled(bool enabled);
     int Update(float dt, WorldPosition player, const LevelMap& map, float simulationRadius = 0.f);
-    std::vector<WorldPosition> Strike(WorldPosition player,
-                                      bool faceLeft,
-                                      int damage,
-                                      const LevelMap& map,
-                                      float rangeScale = 1.f);
+    MeleeStrikeResult Strike(WorldPosition player,
+                             bool faceLeft,
+                             int damage,
+                             const LevelMap& map,
+                             float rangeScale = 1.f);
     const std::vector<FieldEnemy>& Enemies() const;
     std::vector<WorldPosition> StrikeProjectile(
         WorldPosition from,

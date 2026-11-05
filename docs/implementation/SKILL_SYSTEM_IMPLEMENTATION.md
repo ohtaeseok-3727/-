@@ -4,6 +4,17 @@
 
 > 아래 초기 구현 기록의 미연결·임시 데이터 설명은 당시 상태다. 현재 마법사 연결은 [미리보기 스킬 연결](../design/12-skill-integration.md), 2026-10-08 기사 3종의 실제 공격·패시브 연결은 [기사 스킬 런타임](KNIGHT_SKILLS.md)을 따른다.
 
+## 마나 회복 — 2026-11-05
+
+사용자 확정은 [기획의 마나 회복 규칙](../design/02-world-and-player.md#마나-회복--사용자-확정-2026-11-05)을 따른다. 두 직업 모두 기본 공격 명중 시 1·2타 5%, 3타 30%, 자연 회복은 최대 MP의 초당 1%다.
+
+- [EnemySystem::Strike](../../SimpleGame/src/combat/EnemySystem.cpp)는 `MeleeStrikeResult`에 적 명중 여부와 기존 처치 위치 목록을 함께 반환한다. 살아 있는 적에 대한 기존 범위·방향·벽 가림 검사를 통과해야 명중으로 센다. 처치하지 못한 공격과 처치한 공격 모두 대상이다.
+- [GameSession::Strike](../../SimpleGame/src/app/GameSession.cpp)는 활성·인접 지역의 명중 여부를 합쳐 회복을 한 번 적용하고 기존 경험치·전리품 처리를 유지한다. [BasicAttack::ConsumeHits](../../SimpleGame/src/combat/BasicAttack.cpp)가 각 타격 시점을 한 번 전달한다. 장치만 공격하거나 허공·시체를 공격한 경우와 스킬의 투사체·범위 피해에는 이 회복을 적용하지 않는다.
+- [PlayerProgression](../../SimpleGame/src/player/PlayerProgression.cpp)의 `RecoverMana`가 정수 이하 회복량을 `double`로 누적하고 최대 MP에서 제한한다. `UpdateManaRecovery`는 `GameSession::Update`에서 전달받은 게임 시간에 현재 최대 MP의 1%를 곱한다. 새 게임·디버그 레벨 설정·완전 회복은 소수 누적도 초기화한다.
+- 구현 가정: 한 타격으로 여러 적 또는 경계 양쪽의 적을 맞혀도 회복은 타격당 한 번이다. 기본 공격의 비율 기준은 타격 순간의 최대 MP이며 해당 처치로 레벨이 오르기 전 값을 사용한다. 최대 MP를 넘는 회복을 비축하지 않는다. 자연 회복은 전투·이동 중에도 적용하되 기존 시뮬레이션이 멈추는 메뉴·일시정지·포커스 상실·패배 중에는 진행하지 않는다. 체력이 0인 스토리 연출 중에도 회복하지 않는다.
+
+검증 범위: 소스의 타격 이벤트, 지역별 명중 집계, 최대치·소수 누적, 정지·패배 경로와 기존 호출부를 정적으로 검토했다. [GameSessionVerification](../../SimpleGame/src/verification/GameSessionVerification.cpp)의 기존 챕터 검증 경로에 두 직업의 자연 회복, 비정수 회복, 최대치와 초과 비축 방지, 완전 회복 초기화, 잘못된 시간, 빗맞힘, 5/5/30% 명중 회복, 다중 적 1회 적용, 스킬·시체 제외, 패배 중 정지를 검사하는 회귀 소스를 추가했다. 사용자 지침에 따라 빌드·게임·C++ 검증 프로그램은 실행하지 않았다. 실제 HUD의 증가와 체감 밸런스는 사용자 실행 확인이 남아 있다.
+
 ## 확정 설정
 
 - `K`로 스킬 창을 열고 닫는다.

@@ -170,6 +170,10 @@ void GameSession::Reset(int profession, unsigned seed, LevelMap& map)
 
 void GameSession::Strike(int step, WorldPosition player, bool faceLeft, const LevelMap& sourceMap)
 {
+    if (step < 1 || step > 3 || m_Chapter->ControlLocked() || IsDefeated())
+    {
+        return;
+    }
     const auto& map = m_OpenWorld ? m_Regions[m_Region].map : sourceMap;
     const auto worldPlayer = player;
     player = LocalPlayer(player);
@@ -178,12 +182,12 @@ void GameSession::Strike(int step, WorldPosition player, bool faceLeft, const Le
     const int damage = m_Progress.KnightAuraActive() ? static_cast<int>(std::lround(rawDamage))
                                                      : static_cast<int>(rawDamage);
     const float rangeScale = m_Progress.AttackRangeScale();
-    if (m_Chapter->ControlLocked() || IsDefeated())
-    {
-        return;
-    }
+    // Use the maximum at impact, before a kill can grant a level-up.
+    const double manaRecovery = m_Progress.MaxMana() * (step == 3 ? 0.30 : 0.05);
     m_Chapter->StrikeObjects(player, faceLeft, damage, map, rangeScale);
-    RewardDefeated(m_Enemies.Strike(player, faceLeft, damage, map, rangeScale));
+    const auto strike = m_Enemies.Strike(player, faceLeft, damage, map, rangeScale);
+    bool hitEnemy = strike.hitEnemy;
+    RewardDefeated(strike.defeated);
     if (m_OpenWorld)
     {
         for (std::size_t i = 0; i < m_Regions.size(); ++i)
@@ -191,12 +195,16 @@ void GameSession::Strike(int step, WorldPosition player, bool faceLeft, const Le
             if (i != m_Region)
             {
                 auto& region = m_Regions[i];
-                RewardDefeated(
-                    region.enemies.Strike(
-                        m_Atlas.ToLocal(i, worldPlayer), faceLeft, damage, region.map, rangeScale),
-                    region.loot);
+                const auto adjacentStrike = region.enemies.Strike(
+                    m_Atlas.ToLocal(i, worldPlayer), faceLeft, damage, region.map, rangeScale);
+                hitEnemy = hitEnemy || adjacentStrike.hitEnemy;
+                RewardDefeated(adjacentStrike.defeated, region.loot);
             }
         }
+    }
+    if (hitEnemy)
+    {
+        m_Progress.RecoverMana(manaRecovery);
     }
 }
 
@@ -296,6 +304,7 @@ void GameSession::Update(float dt,
     {
         return;
     }
+    m_Progress.UpdateManaRecovery(dt);
     const auto& map = m_OpenWorld ? m_Regions[m_Region].map : sourceMap;
     const auto worldPlayer = player;
     player = LocalPlayer(player);

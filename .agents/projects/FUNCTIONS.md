@@ -339,3 +339,12 @@ Chapter1Sprites::Load는 챕터 3 인물 시트의 다섯 대기 자세를 알�
 | 영역 | 선언·구현 | 함수 | 현재 동작 |
 | --- | --- | --- | --- |
 | 프레임 대기 | [GlfwWindow.cpp](../../SimpleGame/src/app/GlfwWindow.cpp) | WaitForNextFrame | active=true이면 즉시 반환한다. 비활성에서만 100ms 이벤트 대기와 포커스 복귀 조기 종료를 적용한다. 앞선 활성 4ms 설명을 대체한다. |
+
+## 2026-11-05 기본 공격 명중과 마나 회복
+
+| 파일 | 함수·형식 | 역할 |
+| --- | --- | --- |
+| [EnemySystem.h](../../SimpleGame/src/combat/EnemySystem.h), [EnemySystem.cpp](../../SimpleGame/src/combat/EnemySystem.cpp) | `MeleeStrikeResult`, `Strike` | 기존 근접 판정 안에서 살아 있는 적 명중 여부와 처치 위치 목록을 함께 반환한다. |
+| [GameSession.cpp](../../SimpleGame/src/app/GameSession.cpp) | `Strike`, `Update` | 모든 지역의 명중을 합쳐 기본 공격 1·2·3타에 최대 MP의 5·5·30%를 한 번 회복하고 게임 시간에 자연 회복을 연결한다. |
+| [PlayerProgression.h](../../SimpleGame/src/player/PlayerProgression.h), [PlayerProgression.cpp](../../SimpleGame/src/player/PlayerProgression.cpp) | `RecoverMana`, `UpdateManaRecovery` | 소수 회복량을 누적하고 최대 MP에서 제한한다. 자연 회복은 초당 최대 MP의 1%다. 완전 회복·새 게임·디버그 레벨 설정은 누적을 초기화한다. |
+| [GameSessionVerification.cpp](../../SimpleGame/src/verification/GameSessionVerification.cpp) | `VerifyManaRecovery`, `VerifyChapterTransitions` | 두 직업의 소수·자연·명중·빗맞힘·다중 적·상한·초기화·스킬/시체 제외·패배 중 정지 회귀 소스를 기존 C01 검증에 연결한다. 이번 작업에서 실행하지 않았다. |
