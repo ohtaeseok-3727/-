@@ -10,4 +10,3 @@
 | 묶음 | 위치 |
 | --- | --- |
 | Props | [문서 목록](Props/INDEX.md) |
-| Tiles | [문서 목록](Tiles/INDEX.md) |

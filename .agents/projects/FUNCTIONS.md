@@ -394,12 +394,3 @@ Chapter1Sprites::Load는 챕터 3 인물 시트의 다섯 대기 자세를 알�
 | [VisualPlaytest](../../SimpleGame/src/verification/VisualPlaytest.cpp) | `RunChapter3`, `RunChapter3VisualPlaytest` | 숨김 WGL의 88프레임 렌더·확대표, 두 직업의 실제 도보/포탈/전투 완주, 5단계 파일 저장/복원·사망 재도전·새 프로세스 이어하기를 검사한다. LOCALAPPDATA가 지정 산출물/profile인지 선검사한다. |
 
 Release x64, C01/C02/C03/오픈월드 회귀와 C03 자동 완주·저장 복원 실행 통과. 마법사 사망 후 장거리 복귀는 검사기에서 기존 도로를 경유하며 게임 A* 예산은 유지한다. 브라우저 자동 제어는 URL 확인 실패로 중단되어 HTML 연속 재생 육안 통과로 주장하지 않는다. [자산·재생](../../SimpleGame/Assets/Chapter3/StateSheets-v2/README.md), [전체 검증과 한계](../../docs/implementation/CHAPTER_03_IMPLEMENTATION.md)를 따른다.
-
-## 2026-11-11 챕터 1~18 오픈월드 타일 시안
-
-| 파일 | 함수·형식 | 역할 |
-| --- | --- | --- |
-| [타일 제작기](../../tools/sprites/build_chapter_tile_drafts.py) | `surface`, `route_tile`, `shore_tile`, `decal`, `Atlas` | 원본 픽셀 지형·접합 가능한 방향 마스크·투명 장식과 숫자 ID 아틀라스를 생성한다. |
-| [타일 제작기](../../tools/sprites/build_chapter_tile_drafts.py) | `place_tiles`, `map_image`, `return_variant`, `assert_tiles` | 대표 배치를 숫자 CSV 네 레이어로 작성하고 60도 지면 투영 시안을 그린다. C18 귀환은 C14 바닥·물가·도로를 참조하며 새 표식만 둔다. 바닥 변형 테두리와 도로 알파 접합을 확인한다. |
-
-[타일 시안과 검사 범위](../../SimpleGame/Assets/Environment/Tiles/ChapterDraft-v1/README.md). 독립 검사에서 PNG 알파·숫자 격자 73장·합성 이미지 19장의 픽셀 일치, 내부 도로 연결과 강의 연속성을 확인했다.
