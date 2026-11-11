@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Chapter.h"
-#include "Chapter1Sprites.h"
+#include "Chapter3Sprites.h"
 #include <array>
 #include <bitset>
 
@@ -185,7 +185,12 @@ class Chapter3 final : public Chapter
     static WorldPosition Patrol(int index, float time);
     WorldPosition Cart() const;
     Chapter3State m_State;
-    mutable Chapter1Sprites m_Sprites;
+    mutable Chapter3Sprites m_People;
+    // Presentation-only values; intentionally excluded from the persistent archive.
+    float m_VisualTime = 0.f;
+    bool m_BossMoving = false;
+    bool m_BossFaceLeft = false;
+    int m_ThreateningGuard = -1;
     ChapterImpact m_Impact;
     std::string m_Message;
     WorldPosition m_Courier{360.f, -250.f};

@@ -184,6 +184,7 @@
     <ClInclude Include="src\ui\SkillView.h" />
     <ClInclude Include="src\player\SkillLayout.h" />
     <ClInclude Include="src\combat\EnemySystem.h" />
+    <ClInclude Include="src\combat\DamageNumbers.h" />
     <ClInclude Include="src\combat\FieldPopulation.h" />
     <ClInclude Include="src\combat\LootSystem.h" />
     <ClInclude Include="src\app\GameSession.h" />
@@ -228,6 +229,7 @@
     <ClCompile Include="src\player\SkillDragController.cpp" />
     <ClCompile Include="src\ui\SkillView.cpp" />
     <ClCompile Include="src\combat\EnemySystem.cpp" />
+    <ClCompile Include="src\combat\DamageNumbers.cpp" />
     <ClCompile Include="src\combat\FieldPopulation.cpp" />
     <ClCompile Include="src\combat\LootSystem.cpp" />
     <ClCompile Include="src\app\GameSession.cpp" />
@@ -342,6 +344,12 @@
     <ClCompile Include="src\chapters\Chapter3Gameplay.cpp" />
     <ClCompile Include="src\chapters\Chapter3Map.cpp" />
     <ClCompile Include="src\chapters\Chapter3View.cpp" />
+    <ClInclude Include="src\chapters\Chapter3Sprites.h" />
+    <ClCompile Include="src\chapters\Chapter3Sprites.cpp" />
+    <ClInclude Include="src\chapters\Chapter3Props.h" />
+    <ClCompile Include="src\chapters\Chapter3Props.cpp" />
+    <ClInclude Include="src\generated\Chapter3PropData.h" />
+    <ClInclude Include="src\generated\Chapter3SpriteData.h" />
     <ClInclude Include="src\verification\Chapter3Verification.h" />
     <ClCompile Include="src\verification\Chapter3Verification.cpp" />
     <ClCompile Include="src\chapters\Chapter2.cpp" />

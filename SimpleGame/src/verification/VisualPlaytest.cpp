@@ -4,12 +4,18 @@
 #include "FrameProfiler.h"
 #include "EnemyPathfinder.h"
 #include "Chapter2.h"
+#include "Chapter3.h"
+#include "Chapter3Sprites.h"
+#include "Chapter3SpriteData.h"
+#include "GameSave.h"
+#include "SpriteImage.h"
 #include <Windows.h>
 #include <algorithm>
 #include <cmath>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <set>
 #include <stdexcept>
 
 namespace
@@ -88,6 +94,316 @@ namespace
 class VisualPlaytest
 {
   public:
+    void RunChapter3(const std::filesystem::path& output, int mode)
+    {
+        std::filesystem::create_directories(output);
+        Require(
+            GameSave::Path().lexically_normal() ==
+                (output / "profile" / "SimpleGame" / "Saves" / "journey-v1.sav").lexically_normal(),
+            "Set process LOCALAPPDATA to the playtest output/profile before running");
+        HiddenRenderContext context;
+        FrameProfiler profiler;
+        Renderer renderer(1280, 720, profiler);
+        Require(renderer.IsInitialized() && renderer.LoadCharacterSprites(),
+                "C03 renderer/assets failed");
+        Chapter3Sprites people;
+        const auto effects = renderer.Effects();
+        renderer.Effects().enabled = false;
+        for (int index = 0; index < static_cast<int>(Chapter3Person::Count); ++index)
+        {
+            for (const auto motion : {Chapter3Motion::Idle,
+                                      Chapter3Motion::Walk,
+                                      Chapter3Motion::Attack,
+                                      Chapter3Motion::Ranged})
+            {
+                const auto& data = Chapter3SpriteData::atlases[index];
+                if (Chapter3Sprites::Frame(motion, 0.f) >= data.count)
+                {
+                    continue;
+                }
+                for (int frame = 0; frame < (motion == Chapter3Motion::Walk ? 8 : 4); ++frame)
+                {
+                    renderer.Begin();
+                    const float time = frame / (motion == Chapter3Motion::Walk ? 10.f : 4.f);
+                    Require(
+                        people.Draw(
+                            renderer, static_cast<Chapter3Person>(index), motion, time, {640, 400}),
+                        "NPC atlas failed to load/draw");
+                    renderer.FinishWorld();
+                    if (index == 4 || index == 2)
+                    {
+                        Save(renderer,
+                             output / ("sprite-" + std::to_string(index) + "-" +
+                                       std::to_string(static_cast<int>(motion)) + "-" +
+                                       std::to_string(frame) + ".bmp"),
+                             1280,
+                             720);
+                    }
+                }
+            }
+            renderer.Begin();
+            renderer.Rect(0, 0, 1280, 720, Color(.08f, .12f, .16f));
+            for (int row = 0; row < 4; ++row)
+            {
+                const auto motion = static_cast<Chapter3Motion>(row);
+                const int count = row == 1 ? 8 : 4;
+                const char* names[] = {"IDLE", "WALK", "ATTACK", "RANGED"};
+                renderer.Text(10, 18.f + row * 175.f, names[row], Color(1, 1, 1));
+                for (int f = 0; f < count; ++f)
+                {
+                    const float seconds = f / (row == 1 ? 10.f : 4.f);
+                    if (Chapter3Sprites::Frame(motion, seconds) >=
+                        Chapter3SpriteData::atlases[index].count)
+                    {
+                        continue;
+                    }
+                    const Point foot{85.f + f * 155.f, 165.f + row * 175.f};
+                    renderer.Rect(foot.x - 65, foot.y, 130, 1, Color(.4f, .5f, .6f));
+                    Require(people.Draw(renderer,
+                                        static_cast<Chapter3Person>(index),
+                                        motion,
+                                        seconds,
+                                        foot,
+                                        false,
+                                        130.f),
+                            "NPC contact frame missing");
+                }
+            }
+            renderer.FinishWorld();
+            Save(renderer, output / ("contact-" + std::to_string(index) + ".bmp"), 1280, 720);
+        }
+        renderer.Effects() = effects;
+        for (int profession = 0; profession < (mode == 0 ? 2 : 1); ++profession)
+        {
+            PrototypeWorld world;
+            world.Reset();
+            world.EnableChapterPreview("chapter3");
+            world.Select(profession);
+            if (mode == 2)
+            {
+                std::string message;
+                Require(GameSave::Load(world, message), "Fresh-process save load failed");
+                Require(world.m_Level.FindChapter("chapter3")->Goal()->object ==
+                            Chapter3Objects::ManuscriptEarly,
+                        "Fresh-process restore lost research goal");
+            }
+            std::ofstream log(output / ("flow-" + std::to_string(mode) + "-" +
+                                        std::to_string(profession) + ".log"));
+            std::string lastObjective;
+            EnemyPathfinder pathfinder;
+            std::vector<WorldPosition> path;
+            std::size_t waypoint = 0;
+            WorldPosition lastTarget{1000000, 1000000};
+            std::set<std::string> savedPhases;
+            if (mode == 2)
+            {
+                savedPhases.insert(world.m_Level.FindChapter("chapter3")->Objective());
+            }
+            int captures = 0, lastChange = 0;
+            bool retried = false;
+            bool capturedMelee = false, capturedRanged = false;
+            for (int frame = 0; frame < 90000 && !world.m_Level.FindChapter("chapter3")->Complete();
+                 ++frame)
+            {
+                Require(!world.m_Level.IsDefeated(), "C03 automatic player died");
+                const auto goal = world.m_Level.TrackedGoal();
+                Require(goal.has_value(), "C03 world goal disappeared");
+                const auto objective = world.m_Level.FindChapter("chapter3")->Objective();
+                if (objective != lastObjective)
+                {
+                    log << frame / 60.f << "s " << objective << '\n' << std::flush;
+                    std::cout << "C03 profession=" << profession << " " << objective << '\n'
+                              << std::flush;
+                    lastObjective = objective;
+                    lastChange = frame;
+                    world.m_CameraX = world.m_X;
+                    world.m_CameraY = world.m_Y;
+                    Capture(world,
+                            renderer,
+                            output / ("scene-" + std::to_string(mode) + "-" +
+                                      std::to_string(profession) + "-" +
+                                      std::to_string(captures++) + ".bmp"));
+                }
+                if (frame - lastChange > 18000)
+                {
+                    log << "STALLED " << goal->label << " player=" << world.m_X << ',' << world.m_Y
+                        << " target=" << goal->position.x << ',' << goal->position.y << '\n';
+                    throw std::runtime_error("C03 automatic flow stalled; inspect flow log");
+                }
+                const auto localGoal = world.m_Level.FindChapter("chapter3")->Goal();
+                const bool checkpoint =
+                    localGoal && (localGoal->object == Chapter3Objects::ManuscriptEarly ||
+                                  localGoal->object == Chapter3Objects::MovementList ||
+                                  localGoal->label == "움직이는 원본 운반대" ||
+                                  localGoal->object == Chapter3Objects::ConfirmedNotice ||
+                                  localGoal->object == Chapter3Objects::Hearing);
+                if (checkpoint && savedPhases.count(objective) == 0)
+                {
+                    // Command runner supplies a sandbox LOCALAPPDATA; never use the real user slot.
+                    const auto expected =
+                        (output / "profile" / "SimpleGame" / "Saves" / "journey-v1.sav")
+                            .lexically_normal();
+                    Require(GameSave::Path().lexically_normal() == expected,
+                            "Test profile path not isolated");
+                    std::string message;
+                    Require(GameSave::Save(world, message), "Mid-chapter file save failed");
+                    if (mode == 1)
+                    {
+                        std::cout << "PASS C03 file saved for fresh-process restart\n";
+                        return;
+                    }
+                    const auto before = world.m_Level.FindChapter("chapter3")->ExportFlags();
+                    Require(GameSave::Load(world, message) &&
+                                world.m_Level.FindChapter("chapter3")->ExportFlags() == before,
+                            "Mid-chapter restore changed evidence");
+                    savedPhases.insert(objective);
+                    log << "SAVE/LOAD " << objective << '\n';
+                    path.clear();
+                    lastTarget = {1000000, 1000000};
+                }
+                WorldPosition target = goal->position;
+                const bool fighting = localGoal && localGoal->label == "세라드 생존 제압";
+                if (mode == 0 && profession == 1 && fighting && !retried)
+                {
+                    const auto evidence = world.m_Level.FindChapter("chapter3")
+                                              ->ExportFlags()
+                                              .at("C03_PREWAR_EXPEDITION");
+                    world.m_Level.Progress().Damage(world.m_Level.Progress().MaxHealth());
+                    world.Update(1.f / 60.f, 0, 0, false, false);
+                    Require(world.m_Level.IsDefeated(), "C03 defeat state not entered");
+                    world.RetryDefeat();
+                    Require(!world.m_Level.IsDefeated() &&
+                                world.m_Level.FindChapter("chapter3")
+                                        ->ExportFlags()
+                                        .at("C03_PREWAR_EXPEDITION") == evidence,
+                            "C03 retry lost evidence or remained defeated");
+                    retried = true;
+                    log << "DEFEAT/RETRY evidence preserved\n";
+                    path.clear();
+                    lastTarget = {1000000, 1000000};
+                    continue;
+                }
+                const auto& enemies = world.m_Level.Enemies().Enemies();
+                const auto foundBoss =
+                    std::find_if(enemies.begin(),
+                                 enemies.end(),
+                                 [](const FieldEnemy& enemy)
+                                 {
+                                     return enemy.role == EnemyRole::Boss && enemy.health > 0;
+                                 });
+                const auto* boss = foundBoss == enemies.end() ? nullptr : &*foundBoss;
+                if (fighting && boss && boss->windup > .2f)
+                {
+                    bool& captured = boss->windup > .9f ? capturedRanged : capturedMelee;
+                    if (!captured)
+                    {
+                        world.m_CameraX = world.m_X;
+                        world.m_CameraY = world.m_Y;
+                        Capture(world,
+                                renderer,
+                                output / (std::string(boss->windup > .9f ? "serad-ranged-"
+                                                                         : "serad-melee-") +
+                                          std::to_string(profession) + ".bmp"));
+                        captured = true;
+                    }
+                }
+                bool attack = false, held = true;
+                float tolerance = 32.f;
+                if (fighting && boss && boss->health > 1)
+                {
+                    const auto origin = world.m_Level.WorldOrigin();
+                    target = {origin.x + boss->position.x - 42.f, origin.y + boss->position.y};
+                    tolerance = 14.f;
+                    attack = std::hypot(target.x - world.m_X, target.y - world.m_Y) < 30.f &&
+                             frame % 24 == 0;
+                    // A fresh press just before impact exercises the real parry window.
+                    held = boss->windup > 0.f && boss->windup < .18f;
+                    world.m_FaceLeft = false;
+                }
+                const float distance = std::hypot(target.x - world.m_X, target.y - world.m_Y);
+                float dx = 0.f, dy = 0.f;
+                if (distance > tolerance)
+                {
+                    if (std::hypot(target.x - lastTarget.x, target.y - lastTarget.y) > 30.f ||
+                        path.empty())
+                    {
+                        if (!pathfinder.FindPath({world.m_X, world.m_Y}, target, world.m_Map, path))
+                        {
+                            // Enemy A* deliberately bounds long searches. Walk authored road legs
+                            // after a distant camp return instead of increasing the gameplay budget.
+                            std::vector<WorldPosition> stops;
+                            for (const auto& road : world.m_Map.Layout().Definition().roads)
+                            {
+                                for (const auto point : {road.from, road.to})
+                                {
+                                    if (std::hypot(point.x - target.x, point.y - target.y) <
+                                            distance - 200.f &&
+                                        std::hypot(point.x - world.m_X, point.y - world.m_Y) <
+                                            2000.f)
+                                    {
+                                        stops.push_back(point);
+                                    }
+                                }
+                            }
+                            std::sort(stops.begin(),
+                                      stops.end(),
+                                      [&](WorldPosition a, WorldPosition b)
+                                      {
+                                          return std::hypot(a.x - target.x, a.y - target.y) <
+                                                 std::hypot(b.x - target.x, b.y - target.y);
+                                      });
+                            for (const auto stop : stops)
+                            {
+                                if (pathfinder.FindPath(
+                                        {world.m_X, world.m_Y}, stop, world.m_Map, path))
+                                {
+                                    break;
+                                }
+                            }
+                            Require(!path.empty(), "C03 authored-road route unavailable");
+                        }
+                        waypoint = 0;
+                        lastTarget = target;
+                    }
+                    while (waypoint < path.size() && std::hypot(path[waypoint].x - world.m_X,
+                                                                path[waypoint].y - world.m_Y) < 6.f)
+                    {
+                        ++waypoint;
+                    }
+                    if (waypoint == path.size())
+                    {
+                        path.clear();
+                        continue;
+                    }
+                    const auto next = path[waypoint];
+                    dx = next.x - world.m_X;
+                    dy = next.y - world.m_Y;
+                }
+                else
+                {
+                    path.clear();
+                    if (frame % 12 == 0 && !fighting)
+                    {
+                        world.InspectLandmark();
+                    }
+                }
+                world.Update(1.f / 60.f, dx, dy, true, attack, distance < 80.f && held);
+            }
+            Require(world.m_Level.FindChapter("chapter3")->Complete(),
+                    "C03 did not complete in budget");
+            const auto flags = world.m_Level.FindChapter("chapter3")->ExportFlags();
+            Require(flags.at("C03_SERAD_SURVIVED") == 1 &&
+                        flags.at("C03_DISTRIBUTED_COPIES") == 3 &&
+                        flags.at("C03_LIMITED_FIELD_PERMIT") == 1 && flags.at("C03_WANTED") == 0,
+                    "C03 automatic flow final state incorrect");
+            Capture(world, renderer, output / ("complete-" + std::to_string(profession) + ".bmp"));
+            log << "COMPLETE health=" << world.m_Level.Progress().Health()
+                << " gold=" << world.m_Level.Inventory().Gold() << '\n';
+            std::cout << "PASS C03 physical movement/interaction/combat/save flow profession="
+                      << profession << '\n';
+        }
+    }
+
     void Run(const std::filesystem::path& output)
     {
         std::filesystem::create_directories(output);
@@ -374,6 +690,21 @@ int RunVisualPlaytest(const std::string& outputDirectory)
     catch (const std::exception& error)
     {
         std::cerr << "FAIL visual playtest: " << error.what() << '\n';
+        return 1;
+    }
+}
+
+int RunChapter3VisualPlaytest(const std::string& outputDirectory, int mode)
+{
+    try
+    {
+        VisualPlaytest().RunChapter3(
+            std::filesystem::absolute(std::filesystem::u8path(outputDirectory)), mode);
+        return 0;
+    }
+    catch (const std::exception& error)
+    {
+        std::cerr << "FAIL C03 visual/flow playtest: " << error.what() << '\n';
         return 1;
     }
 }

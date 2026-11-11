@@ -1,4 +1,5 @@
 #pragma once
+#include "DamageNumbers.h"
 #include "LevelTypes.h"
 #include <cstdint>
 #include <string>
@@ -26,6 +27,7 @@ struct KnightSkillShot
     float age = 0, delay = 0, height = 0, scale = 1, distance = 0;
     int damage = 0;
     bool faceLeft = false, blocked = false;
+    DamageCast damageCast;
     std::unordered_set<std::uint64_t> hitTargets;
     bool Visible() const;
     int Phase() const;

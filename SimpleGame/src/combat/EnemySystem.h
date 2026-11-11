@@ -1,5 +1,6 @@
 #pragma once
 #include <optional>
+#include "DamageNumbers.h"
 #include "LevelMap.h"
 #include "EnemyAIState.h"
 #include "EnemyStateMachine.h"
@@ -93,6 +94,12 @@ class EnemySystem
     friend class SaveArchive;
 
   public:
+    enum class DamageSource
+    {
+        Script,
+        Player
+    };
+
     void Reset(unsigned seed, const LevelMap& map);
     void Clear();
 
@@ -108,8 +115,11 @@ class EnemySystem
     bool Alive(std::size_t encounter) const;
     void RemoveEncounter(std::size_t encounter);
     FieldEnemy* Boss();
-    bool DamageEnemy(std::uint64_t id, int damage);
-    std::vector<WorldPosition> StrikeArea(WorldPosition center, float radius, int damage);
+    bool DamageEnemy(std::uint64_t id, int damage, DamageSource source = DamageSource::Script);
+    std::vector<WorldPosition> StrikeArea(WorldPosition center,
+                                         float radius,
+                                         int damage,
+                                         const DamageCast& cast = {});
     std::vector<WorldPosition> ConsumeScriptDefeats();
     void SetSupportEnabled(bool enabled);
     int Update(float dt, WorldPosition player, const LevelMap& map, float simulationRadius = 0.f);
@@ -119,6 +129,8 @@ class EnemySystem
                              const LevelMap& map,
                              float rangeScale = 1.f);
     const std::vector<FieldEnemy>& Enemies() const;
+    DamageNumbers& HitNumbers();
+    const DamageNumbers& HitNumbers() const;
     std::vector<WorldPosition> StrikeProjectile(
         WorldPosition from,
         WorldPosition to,
@@ -128,11 +140,16 @@ class EnemySystem
         std::unordered_set<std::uint64_t>& hitTargets,
         const LevelMap& map,
         float height = LevelTuning::ProjectileHeight,
-        std::optional<WorldPosition> sightOrigin = std::nullopt);
+        std::optional<WorldPosition> sightOrigin = std::nullopt,
+        const DamageCast& cast = {});
 
   private:
-    void ApplyHit(FieldEnemy& enemy, int damage);
+    void ApplyHit(FieldEnemy& enemy,
+                  int damage,
+                  const DamageCast& cast,
+                  DamageSource source = DamageSource::Player);
 
+    DamageNumbers m_HitNumbers;
     EnemyStateMachine m_StateMachine;
     std::size_t m_UpdateStart = 0;
     bool m_SupportEnabled = true;

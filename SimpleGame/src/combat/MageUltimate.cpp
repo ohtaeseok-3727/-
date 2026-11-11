@@ -7,6 +7,7 @@
 
 void MageUltimate::Reset()
 {
+    m_DamageCast.reset();
     m_Time = Duration;
     m_Pulses = 0;
     m_Exploded = false;
@@ -16,6 +17,7 @@ void MageUltimate::Cast(const SkillUseRequest& request, WorldPosition player, bo
 {
     if (request.skillId != "mage_sword_song")
         return;
+    m_DamageCast = std::make_shared<const DamageNumberCast>();
     m_Center = player;
     m_FaceLeft = faceLeft;
     m_Time = 0;
@@ -38,12 +40,13 @@ void MageUltimate::Update(float dt, GameSession& session)
     // Integer event cursor handles crossed boundaries without skipped or repeated ticks.
     while (m_Pulses < PulseCount && m_Time + 1.e-7 >= PulseTime(m_Pulses))
     {
-        session.StrikeArea(m_Center, Radius, m_Damage);
+        session.StrikeArea(m_Center, Radius, m_Damage, m_DamageCast);
         ++m_Pulses;
     }
     if (!m_Exploded && m_Time + 1.e-7 >= ExplosionTime)
     {
-        session.StrikeArea(m_Center, Radius, m_BurstDamage);
+        session.StrikeArea(m_Center, Radius, m_BurstDamage, m_DamageCast);
         m_Exploded = true;
+        m_DamageCast.reset();
     }
 }

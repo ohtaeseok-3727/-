@@ -1,4 +1,5 @@
 #pragma once
+#include "DamageNumbers.h"
 #include "LevelMap.h"
 #include <cstdint>
 #include <unordered_set>
@@ -21,6 +22,7 @@ struct MageProjectile
     float speed = 0.f, range = 0.f;
     int variant = 0, damage = 0;
     bool faceLeft = false;
+    DamageCast damageCast;
     std::unordered_set<std::uint64_t> hitTargets;
     bool Visible() const;
 };

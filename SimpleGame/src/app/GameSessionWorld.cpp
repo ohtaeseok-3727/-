@@ -331,6 +331,30 @@ void GameSession::DrawWorldEnemy(Renderer& renderer, int region, int enemy, Poin
         ->DrawEnemy(renderer, enemies.Enemies().at(enemy), p);
 }
 
+void GameSession::UpdateDamageNumbers(float dt)
+{
+    m_Enemies.HitNumbers().Update(dt);
+    for (std::size_t i = 0; i < m_Regions.size(); ++i)
+    {
+        if (i != m_Region)
+        {
+            m_Regions[i].enemies.HitNumbers().Update(dt);
+        }
+    }
+}
+
+void GameSession::DrawDamageNumbers(Renderer& renderer, const SceneCamera& camera) const
+{
+    m_Enemies.HitNumbers().Draw(renderer, camera, WorldOrigin());
+    for (std::size_t i = 0; i < m_Regions.size(); ++i)
+    {
+        if (i != m_Region)
+        {
+            m_Regions[i].enemies.HitNumbers().Draw(renderer, camera, m_Atlas.Regions()[i].origin);
+        }
+    }
+}
+
 const LootDrop& GameSession::WorldDrop(int region, int drop) const
 {
     const auto& loot = region < 0 || static_cast<std::size_t>(region) == m_Region

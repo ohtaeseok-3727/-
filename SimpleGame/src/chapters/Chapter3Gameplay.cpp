@@ -80,6 +80,8 @@ void Chapter3::Update(float dt,
         return;
     }
     dt = (std::min)(dt, .1f);
+    m_VisualTime = std::fmod(m_VisualTime + dt, 3600.f);
+    m_BossMoving = false;
     m_Impact = {};
     m_ParryWindow = (std::max)(0.f, m_ParryWindow - dt);
     m_ParryCooldown = (std::max)(0.f, m_ParryCooldown - dt);
@@ -176,6 +178,7 @@ void Chapter3::UpdateInfiltration(float dt, WorldPosition player, bool held, con
 {
     m_PatrolTime += dt;
     bool detected = false;
+    m_ThreateningGuard = -1;
     bool working = false;
     for (int i = 0; i < 2; ++i)
     {
@@ -196,7 +199,11 @@ void Chapter3::UpdateInfiltration(float dt, WorldPosition player, bool held, con
                 continue;
             }
         }
-        detected = detected || (distance < 145.f && map.ClearPath(p, player));
+        if (distance < 145.f && map.ClearPath(p, player))
+        {
+            detected = true;
+            m_ThreateningGuard = i;
+        }
     }
     if (!working)
     {
@@ -311,6 +318,7 @@ void Chapter3::UpdateInterception(
         m_Hold = 0.f;
     }
     boss->hitFlash = (std::max)(0.f, boss->hitFlash - dt);
+    m_BossFaceLeft = player.x < boss->position.x;
     if (boss->health == 1)
     {
         m_AttackTime = 0.f;
@@ -329,7 +337,7 @@ void Chapter3::UpdateInterception(
             {
                 if (m_ParryWindow > 0.f)
                 {
-                    enemies.DamageEnemy(boss->id, 45);
+                    enemies.DamageEnemy(boss->id, 45, EnemySystem::DamageSource::Player);
                     m_Message = "패링 성공! 세라드의 자세가 무너졌다. 운반대를 차단할 틈이다.";
                     m_Recovery = 2.f;
                 }
@@ -350,7 +358,9 @@ void Chapter3::UpdateInterception(
         m_Recovery -= dt;
         if (Distance(player, boss->position) > 95.f && player.y < -1000.f)
         {
+            const auto previous = boss->position;
             Move(boss->position, player, dt * 90.f, map);
+            m_BossMoving = Distance(previous, boss->position) > .001f;
         }
     }
     else if (Distance(player, boss->position) < 600.f)

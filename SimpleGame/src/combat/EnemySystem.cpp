@@ -12,6 +12,7 @@ void EnemySystem::Reset(unsigned, const LevelMap&)
 
 void EnemySystem::Clear()
 {
+    m_HitNumbers.Clear();
     m_Enemies.clear();
     m_ScriptDefeats.clear();
     m_UpdateStart = 0;
@@ -99,23 +100,16 @@ std::vector<WorldPosition> EnemySystem::ConsumeScriptDefeats()
     return defeated;
 }
 
-bool EnemySystem::DamageEnemy(std::uint64_t id, int damage)
+bool EnemySystem::DamageEnemy(std::uint64_t id, int damage, DamageSource source)
 {
     for (auto& enemy : m_Enemies)
     {
         if (enemy.id == id && enemy.health > 0)
         {
-            enemy.health =
-                (std::max)(enemy.stats.minimumHealth, enemy.health - (std::max)(0, damage));
+            ApplyHit(enemy, (std::max)(0, damage), {}, source);
             if (enemy.health == 0)
             {
                 m_ScriptDefeats.push_back(enemy.position);
-            }
-            enemy.hitFlash = .18f;
-            if (!enemy.stats.scriptedAI)
-            {
-                m_StateMachine.Interrupt(enemy);
-                enemy.cooldown = .8f;
             }
             return true;
         }
@@ -180,7 +174,7 @@ MeleeStrikeResult EnemySystem::Strike(
         {
             continue;
         }
-        ApplyHit(enemy, damage);
+        ApplyHit(enemy, damage, {});
         result.hitEnemy = true;
         if (enemy.health == 0)
         {
@@ -195,6 +189,16 @@ const std::vector<FieldEnemy>& EnemySystem::Enemies() const
     return m_Enemies;
 }
 
+DamageNumbers& EnemySystem::HitNumbers()
+{
+    return m_HitNumbers;
+}
+
+const DamageNumbers& EnemySystem::HitNumbers() const
+{
+    return m_HitNumbers;
+}
+
 std::vector<WorldPosition> EnemySystem::StrikeProjectile(
     WorldPosition from,
     WorldPosition to,
@@ -204,7 +208,8 @@ std::vector<WorldPosition> EnemySystem::StrikeProjectile(
     std::unordered_set<std::uint64_t>& hitTargets,
     const LevelMap& map,
     float height,
-    std::optional<WorldPosition> sightOrigin)
+    std::optional<WorldPosition> sightOrigin,
+    const DamageCast& cast)
 {
     std::vector<WorldPosition> defeated;
     for (auto& enemy : m_Enemies)
@@ -221,7 +226,7 @@ std::vector<WorldPosition> EnemySystem::StrikeProjectile(
             continue;
         }
         hitTargets.insert(enemy.id);
-        ApplyHit(enemy, damage);
+        ApplyHit(enemy, damage, cast);
         if (enemy.health == 0)
         {
             defeated.push_back(enemy.position);
@@ -230,9 +235,15 @@ std::vector<WorldPosition> EnemySystem::StrikeProjectile(
     return defeated;
 }
 
-void EnemySystem::ApplyHit(FieldEnemy& enemy, int damage)
+void EnemySystem::ApplyHit(FieldEnemy& enemy, int damage, const DamageCast& cast, DamageSource source)
 {
+    const int previousHealth = enemy.health;
     enemy.health = (std::max)(enemy.stats.minimumHealth, enemy.health - damage);
+    if (source == DamageSource::Player)
+    {
+        const float numberHeight = enemy.role == EnemyRole::Boss ? 128.f : 96.f;
+        m_HitNumbers.Add(enemy.id, enemy.position, numberHeight, previousHealth - enemy.health, cast);
+    }
     enemy.hitFlash = .18f;
     if (!enemy.stats.scriptedAI)
     {
@@ -241,7 +252,10 @@ void EnemySystem::ApplyHit(FieldEnemy& enemy, int damage)
     }
 }
 
-std::vector<WorldPosition> EnemySystem::StrikeArea(WorldPosition center, float radius, int damage)
+std::vector<WorldPosition> EnemySystem::StrikeArea(WorldPosition center,
+                                                 float radius,
+                                                 int damage,
+                                                 const DamageCast& cast)
 {
     std::vector<WorldPosition> defeated;
     if (!std::isfinite(radius) || radius <= 0.f || damage <= 0)
@@ -257,7 +271,7 @@ std::vector<WorldPosition> EnemySystem::StrikeArea(WorldPosition center, float r
             continue;
         }
         // Ground circle membership is sufficient: no sword, facing or sight-line test.
-        ApplyHit(enemy, damage);
+        ApplyHit(enemy, damage, cast);
         if (enemy.health == 0)
         {
             defeated.push_back(enemy.position);

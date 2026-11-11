@@ -4,6 +4,8 @@
 
 ## 현재 상태와 입력
 
+2026-11-10 최신 적용: [NPC 상태 통합 6시트·88프레임과 조사 소품](../../SimpleGame/Assets/Chapter3/StateSheets-v2/README.md)을 연결하고 [C03 전체 자동 완주·파일 저장/복원 검사](../../docs/implementation/CHAPTER_03_IMPLEMENTATION.md)를 실행했다. 아래 최초 `ART_PARTIAL`·`SPEC_ONLY`는 제작 준비 시점의 기록이며 현재 인물 애니메이션·주요 소품 상태를 나타내지 않는다. 별도 음성·시네마틱·문서 확대 UI는 이번 범위에 추가하지 않았다.
+
 `CODE_EXISTS / ART_PARTIAL` — [기존 구현](../../docs/implementation/CHAPTER_03_IMPLEMENTATION.md)과 [최신 도시·포탈](../../docs/implementation/CHAPTER_03_CITY.md)이 기준. C02 완료·손실·벽화 탁본을 수신한다. C03 전체 재작성 대신 누락된 표현/개발 요구만 보완한다. 현재 정상 시작·스킵 정책과 기존 플래그 이름을 보존한다.
 
 ## 맵·연결·재사용
@@ -29,11 +31,11 @@
 
 | ID | 제작/연결 요구 | 상태 |
 | --- | --- | --- |
-| C03-ELIAN / C03-EDRIC | 학자·추방민 대표, 대기/대화/직위 변화. 중요한 NPC 고유 실루엣 | SPEC_ONLY(현재 도형 표현) |
-| C03-SERAD | 인간 대장, 검격·쇠뇌 예고/공격·연막·패링 경직·무장 해제·생존 | CODE_EXISTS / 고유 스프라이트 SPEC_ONLY |
-| C03-COURIER / C03-GUARD | 연락책 이동/제압·기록수호대 순찰/경계/비살상 퇴장 | CODE_EXISTS / 모션 SPEC_ONLY |
-| C03-RECORD | 탁본·필사본 3시대·석상 기초/장부·필체/설교·원정 원본·공개문·사본·승인서 | 상호작용 존재 / 최종 시각 자산 SPEC_ONLY |
-| C03-TRANSPORT | 상자·바퀴 잠금·두 운반조·승강대 브레이크·봉인 수레 | 로직 존재 / 전용 자산 SPEC_ONLY |
+| C03-ELIAN / C03-EDRIC | 학자·추방민 대표, 대기/대화/직위 변화. 중요한 NPC 고유 실루엣 | APPLIED: 각 IDLE 4/WALK 8, 직위 변화는 기존 등장/명패 상태 |
+| C03-SERAD | 인간 대장, 검격·쇠뇌 예고/공격·연막·패링 경직·무장 해제·생존 | APPLIED: IDLE/WALK/검격/쇠뇌, 기존 경고·연막·생존 규칙 |
+| C03-COURIER / C03-GUARD | 연락책 이동/제압·기록수호대 순찰/경계/비살상 퇴장 | APPLIED: IDLE/WALK, 경비 ATTACK 및 비살상 퇴장 |
+| C03-RECORD | 탁본·필사본 3시대·석상 기초/장부·필체/설교·원정 원본·공개문·사본·승인서 | APPLIED: 원고/기초/기록판/승인서 도트 소품, 기존 기록 텍스트·완료 UI |
+| C03-TRANSPORT | 상자·바퀴 잠금·두 운반조·승강대 브레이크·봉인 수레 | APPLIED: 전용 상자/운반대/브레이크/수레, 경비 운반조 |
 
 공유: GP-HERO/CIVILIAN/HUMAN, GP-KIT-CITY, GP-RECORD/LOGISTICS/UI/VFX/AUDIO.고유명은 최종본의 잠정 이름이며 새 확정으로 취급하지 않는다.
 

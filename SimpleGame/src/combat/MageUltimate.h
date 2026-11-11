@@ -1,4 +1,5 @@
 #pragma once
+#include "DamageNumbers.h"
 #include "LevelTypes.h"
 
 class GameSession;
@@ -61,6 +62,7 @@ class MageUltimate
     }
 
   private:
+    DamageCast m_DamageCast;
     double m_Time = Duration;
     WorldPosition m_Center{};
     int m_Pulses = 0, m_Damage = 0, m_BurstDamage = 0;

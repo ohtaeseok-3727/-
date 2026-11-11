@@ -135,6 +135,9 @@
     <ClInclude Include="src\combat\EnemySystem.h">
       <Filter>src\combat</Filter>
     </ClInclude>
+    <ClInclude Include="src\combat\DamageNumbers.h">
+      <Filter>src\combat</Filter>
+    </ClInclude>
     <ClInclude Include="src\combat\FieldPopulation.h">
       <Filter>src\combat</Filter>
     </ClInclude>
@@ -243,6 +246,9 @@
       <Filter>src\ui</Filter>
     </ClCompile>
     <ClCompile Include="src\combat\EnemySystem.cpp">
+      <Filter>src\combat</Filter>
+    </ClCompile>
+    <ClCompile Include="src\combat\DamageNumbers.cpp">
       <Filter>src\combat</Filter>
     </ClCompile>
     <ClCompile Include="src\combat\FieldPopulation.cpp">
@@ -576,5 +582,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ui\GameUiControls.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\chapters\Chapter3Sprites.cpp"><Filter>src\chapters</Filter></ClCompile>
+    <ClCompile Include="src\chapters\Chapter3Props.cpp"><Filter>src\chapters</Filter></ClCompile>
+    <ClInclude Include="src\chapters\Chapter3Props.h"><Filter>src\chapters</Filter></ClInclude>
+    <ClInclude Include="src\generated\Chapter3PropData.h"><Filter>src\generated</Filter></ClInclude>
+    <ClInclude Include="src\chapters\Chapter3Sprites.h"><Filter>src\chapters</Filter></ClInclude>
+    <ClInclude Include="src\generated\Chapter3SpriteData.h"><Filter>src\generated</Filter></ClInclude>
   </ItemGroup>
 </Project>

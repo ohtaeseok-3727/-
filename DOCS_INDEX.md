@@ -42,6 +42,7 @@
 | 문서 제목 | 위치 |
 | --- | --- |
 | [챕터 2 오크 전투 스프라이트 시안 — 2026-09-24](output/chapter2-orc-combat-sprites/README.md) | `output/chapter2-orc-combat-sprites/README.md` |
+| [GLFW-LICENSE](output/chapter3-completion/bin/licenses/GLFW-LICENSE.md) | `output/chapter3-completion/bin/licenses/GLFW-LICENSE.md` |
 | [천단참 사선 베기·화면 균열 미리보기](output/cheondan-preview-v2/README.md) | `output/cheondan-preview-v2/README.md` |
 | [후속 교정 및 정밀 검사](output/knight-skills-v1/QA-v3.md) | `output/knight-skills-v1/QA-v3.md` |
 | [기사 스킬 미리보기](output/knight-skills-v1/README-preview.md) | `output/knight-skills-v1/README-preview.md` |

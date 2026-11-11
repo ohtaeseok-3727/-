@@ -84,11 +84,13 @@ void KnightSkills::Cast(const SkillUseRequest& request,
     const float sign = faceLeft ? -1.f : 1.f;
     const float ratio = KnightSkillData::PreviewScale * rangeScale;
     const int count = m_Kind == KnightSkillKind::Thrust ? 6 : 1;
+    const auto damageCast = std::make_shared<const DamageNumberCast>();
     for (int i = 0; i < count; ++i)
     {
         KnightSkillShot shot;
         shot.kind = m_Kind;
         shot.damage = static_cast<int>(std::lround(request.calculatedDamage));
+        shot.damageCast = damageCast;
         shot.faceLeft = faceLeft;
         shot.scale = rangeScale;
         shot.caster = player;
@@ -183,7 +185,8 @@ void KnightSkills::Step(float dt, GameSession& level, const LevelMap& map)
                                    shot.hitTargets,
                                    map,
                                    -centerY,
-                                   shot.kind == KnightSkillKind::Thrust ? shot.caster : previous);
+                                   shot.kind == KnightSkillKind::Thrust ? shot.caster : previous,
+                                   shot.damageCast);
         }
     }
     m_Shots.erase(std::remove_if(m_Shots.begin(),

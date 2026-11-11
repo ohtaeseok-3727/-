@@ -31,12 +31,14 @@ void MageProjectiles::Cast(const SkillUseRequest& request, WorldPosition player,
     const float swordX[] = {30.f, -8.f, 60.f, 15.f, 75.f};
     const float swordY[] = {-85.f, -134.f, -30.f, -54.f, -110.f};
     const int count = (std::min)(request.projectileCount, wind ? 3 : 5);
+    const auto damageCast = std::make_shared<const DamageNumberCast>();
     for (int index = 0; index < count; ++index)
     {
         MageProjectile shot;
         shot.kind = wind ? MageProjectileKind::Wind : MageProjectileKind::Sword;
         shot.variant = index;
         shot.faceLeft = faceLeft;
+        shot.damageCast = damageCast;
         shot.damage = static_cast<int>(std::lround(request.calculatedDamage));
         shot.delay = .340f + index * (wind ? .120f : .080f);
         // Wind uses the preview's 900px viewport as a fixed world-distance reference.
@@ -98,8 +100,16 @@ void MageProjectiles::Update(float dt, GameSession& level, const LevelMap& map)
             collisionScale * (shot.kind == MageProjectileKind::Sword ? 40.f : 83.f);
         if (!blocked || shot.position.x != previous.x)
         {
-            level.StrikeProjectile(
-                previous, shot.position, radiusX, radiusY, shot.damage, shot.hitTargets, map);
+            level.StrikeProjectile(previous,
+                                   shot.position,
+                                   radiusX,
+                                   radiusY,
+                                   shot.damage,
+                                   shot.hitTargets,
+                                   map,
+                                   Height,
+                                   std::nullopt,
+                                   shot.damageCast);
         }
     }
     m_Projectiles.erase(std::remove_if(m_Projectiles.begin(),

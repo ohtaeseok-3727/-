@@ -1,9 +1,11 @@
 #include "stdafx.h"
 #include "Chapter3.h"
+#include "Chapter3Props.h"
 #include "Renderer.h"
 #include "SceneGraph.h"
 #include "CombatCueView.h"
 #include <algorithm>
+#include <cmath>
 
 namespace
 {
@@ -46,7 +48,7 @@ std::string Chapter3::InteractionPrompt(const MapLandmark& site) const
     return Chapter::InteractionPrompt(site);
 }
 
-bool Chapter3::DrawLandmark(Renderer& r, const MapLandmark& site, Point p, float) const
+bool Chapter3::DrawLandmark(Renderer& r, const MapLandmark& site, Point p, float time) const
 {
     using namespace Chapter3Objects;
     const auto id = site.object;
@@ -70,6 +72,67 @@ bool Chapter3::DrawLandmark(Renderer& r, const MapLandmark& site, Point p, float
         r.Text(p.x - 58, p.y - 87, "[Space] 기록관 포탈", Paper);
         return true;
     }
+    std::optional<Chapter3Prop> prop;
+    bool complete = false;
+    if (id >= ManuscriptEarly && id <= ManuscriptLate)
+    {
+        prop = Chapter3Prop::Manuscript;
+        complete = m_State.manuscripts > id - ManuscriptEarly;
+    }
+    else if (id >= FoundationWest && id <= FoundationEast)
+    {
+        prop = Chapter3Prop::Foundation;
+        complete = m_State.foundations.test(id - FoundationWest);
+    }
+    else if (id >= RefugeRoom && id <= LastSermon)
+    {
+        prop = Chapter3Prop::Record;
+        complete = m_State.monastery > id - RefugeRoom;
+    }
+    else if (id >= WrongDateBox && id <= OriginalBox)
+    {
+        prop = Chapter3Prop::Crate;
+    }
+    else if (id == Brake)
+    {
+        prop = Chapter3Prop::Brake;
+        complete = m_State.brake;
+    }
+    else if (id == SealedWagon)
+    {
+        prop = Chapter3Prop::Wagon;
+    }
+    else if (id == FieldPermit || id == CommandSeal || id == Testimony)
+    {
+        prop = Chapter3Prop::Permit;
+        complete = id == FieldPermit ? Complete()
+                   : id == Testimony ? m_State.testimony
+                                     : m_State.hearing;
+    }
+    else if (id == MovementList || id == StorageDate || id == WorkshopLedger ||
+             id == TransferSeal || (id >= ConfirmedNotice && id <= ExtraGuild))
+    {
+        prop = Chapter3Prop::Record;
+    }
+    if (prop)
+    {
+        Chapter3Props::Draw(r, *prop, p, *prop == Chapter3Prop::Wagon ? 76.f : 56.f);
+        r.Text(p.x - r.TextWidth(site.name) * .5f, p.y - 76.f, site.name, Paper);
+        if (complete)
+        {
+            r.Text(p.x - 24, p.y + 18, "확인 완료", Green);
+        }
+        if (id == SealedWagon && m_State.hearing)
+        {
+            r.Text(p.x - 27, p.y + 18, "왕실 봉인", Paper);
+        }
+        if (m_Hold > 0.f && m_HoldAction == id)
+        {
+            r.Rect(p.x - 30, p.y + 25, 60, 5, Stone);
+            r.Rect(p.x - 30, p.y + 25, 60 * std::clamp(m_Hold / 2.f, 0.f, 1.f), 5, Green);
+        }
+        return true;
+    }
     r.Rect(p.x - 23, p.y - 25, 46, 25, Stone);
     r.Rect(p.x - 19, p.y - 32, 38, 7, Paper);
     if (id == Ceremony)
@@ -82,80 +145,22 @@ bool Chapter3::DrawLandmark(Renderer& r, const MapLandmark& site, Point p, float
         }
         r.Text(p.x - 70, p.y - 85, "일곱 불 / 여섯 이름", Paper);
     }
-    else if (id >= ManuscriptEarly && id <= ManuscriptLate)
-    {
-        const int index = id - ManuscriptEarly;
-        // The bindings and writing remain visible after an entry has been examined.
-        r.Rect(p.x - 31, p.y - 64, 62, 34, Color(.24f, .16f, .12f));
-        r.Rect(p.x - 27, p.y - 61, 25, 27, Paper);
-        r.Rect(p.x + 2, p.y - 61, 25, 27, Paper);
-        r.Rect(p.x - 1, p.y - 61, 2, 27, Color(.42f, .31f, .20f));
-        for (int i = 0; i < 4; ++i)
-        {
-            r.Rect(p.x - 23, p.y - 56 + i * 5.f, 17, 2, Stone);
-            r.Rect(p.x + 6, p.y - 56 + i * 5.f, i == 3 && index > 0 ? 8.f : 17.f, 2, Stone);
-        }
-        if (m_State.manuscripts > index)
-        {
-            r.Rect(p.x + 22, p.y - 66, 7, 7, Green);
-        }
-        r.Text(p.x - 38, p.y - 78, (std::to_string(index + 1) + "번째 시대"), Paper);
-    }
-    else if (id >= FoundationWest && id <= FoundationEast)
-    {
-        const int index = id - FoundationWest;
-        r.Rect(p.x - 34, p.y - 29, 68, 26, Color(.22f, .27f, .29f));
-        for (int i = -1; i <= 1; ++i)
-        {
-            const float x = p.x + i * 20.f;
-            r.Rect(x - 8, p.y - 25, 16, 19, Stone);
-            r.Rect(x - 5, p.y - 22, 10, 4, Color(.18f, .21f, .22f));
-            if (m_State.foundations.test(index))
-            {
-                r.Rect(x - 3, p.y - 21, 6, 3, Green);
-            }
-        }
-        r.Text(p.x - 40,
-               p.y - 49,
-               m_State.foundations.test(index) ? "복원 완료" : "석재·홈 복원",
-               Paper);
-    }
-    else if (id >= RefugeRoom && id <= LastSermon)
-    {
-        const int index = id - RefugeRoom;
-        for (int i = 0; i < 4; ++i)
-        {
-            r.Ellipse(p.x - 35 + i * 20.f,
-                      p.y + (i % 2) * 9.f,
-                      4,
-                      7,
-                      m_State.monastery > index ? Green : Paper);
-        }
-        r.Rect(p.x - 22, p.y - 60, 44, 27, Color(.24f, .17f, .14f));
-        r.Rect(p.x - 18, p.y - 57, 36, 20, Paper);
-        r.Rect(p.x - 14, p.y - 53, 20, 2, Stone);
-        r.Rect(p.x - 14, p.y - 48, 27, 2, Stone);
-        r.Rect(p.x - 14, p.y - 43, 16, 2, Stone);
-        r.Ellipse(p.x + 12, p.y - 42, 6, 6, Color(.6f, .15f, .18f));
-        r.Text(p.x - 32, p.y - 72, "같은 인장", Paper);
-    }
     else if (id == Rations)
     {
         for (int i = 0; i < 2 + (std::min)(3, m_State.supplyLoss); ++i)
         {
-            Person(r, {p.x + 48 + i * 28.f, p.y + 14}, Stone, "");
+            m_People.Draw(r,
+                          i % 2 ? Chapter3Person::Edric : Chapter3Person::Courier,
+                          Chapter3Motion::Idle,
+                          time + i * .25f,
+                          {p.x + 48 + i * 28.f, p.y + 14});
         }
         r.Text(p.x - 65,
                p.y - 65,
                m_State.supplyLoss >= 2 ? "보급 부족 · 긴 대기" : "제한 배급",
                Paper);
     }
-    else if (id == Brake)
-    {
-        r.Rect(p.x - 4, p.y - 65, 8, 38, m_State.brake ? Green : Paper);
-        r.Text(p.x - 55, p.y - 84, m_State.brake ? "승강대 정지" : "승강 브레이크", Paper);
-    }
-    else if (m_State.hearing && (id == RestrictedDoor || id == SealedWagon))
+    else if (m_State.hearing && id == RestrictedDoor)
     {
         r.Rect(p.x - 38, p.y - 53, 76, 16, Color(.65f, .17f, .19f));
         r.Text(p.x - 35, p.y - 70, "왕실 봉인", Paper);
@@ -176,11 +181,6 @@ bool Chapter3::DrawLandmark(Renderer& r, const MapLandmark& site, Point p, float
         }
         r.Text(
             p.x - 65, p.y - 75, m_State.hearing ? "치료품·여비만 지급" : "중앙 지원 대기", Paper);
-    }
-    else if (id == CommandSeal || id == Testimony)
-    {
-        r.Ellipse(p.x, p.y - 48, 16, 16, Green);
-        r.Text(p.x - 55, p.y - 76, "용사의 유효 인장", Paper);
     }
     if (m_Hold > 0.f && m_HoldAction == id)
     {
@@ -248,7 +248,7 @@ void Chapter3::AddActors(SceneGraph& scene, WorldPosition) const
             {
                 if (!m_Subdued.test(i))
                 {
-                    add(Patrol(i, m_PatrolTime), 1);
+                    add(Patrol(i, m_PatrolTime), i == 0 ? 1 : 6);
                 }
             }
         }
@@ -269,21 +269,25 @@ void Chapter3::AddActors(SceneGraph& scene, WorldPosition) const
     }
 }
 
-void Chapter3::DrawActor(Renderer& r, int actor, Point p, float) const
+void Chapter3::DrawActor(Renderer& r, int actor, Point p, float time) const
 {
     if (actor == 11)
     {
-        const bool drawn = m_Sprites.Draw(r, ChapterSprite::Hero, 0, p, 52.f);
+        const bool fighting = m_State.map == Chapter3Maps::Archive &&
+                              m_State.phase == Chapter3Phase::Interception && !m_State.seradAlive;
+        const bool drawn = m_People.Draw(r,
+                                         Chapter3Person::Hero,
+                                         fighting ? Chapter3Motion::Attack : Chapter3Motion::Idle,
+                                         fighting ? std::fmod(time, 1.f) : time,
+                                         p);
         r.Text(p.x - 25, p.y - 66, drawn ? "용사" : "용사 이미지 로드 실패", Paper);
     }
     else if (actor == 2)
     {
-        r.Rect(p.x - 28, p.y - 32, 56, 28, Color(.48f, .3f, .15f));
-        r.Rect(p.x - 23, p.y - 36, 46, 7, Paper);
-        r.Ellipse(p.x - 24, p.y, 8, 8, Stone);
-        r.Ellipse(p.x + 24, p.y, 8, 8, Stone);
-        Person(r, {p.x - 52, p.y}, Stone, "");
-        Person(r, {p.x + 52, p.y}, Stone, "");
+        Chapter3Props::Draw(r, Chapter3Prop::Cart, p, 62.f);
+        const auto motion = m_State.brake ? Chapter3Motion::Idle : Chapter3Motion::Walk;
+        m_People.Draw(r, Chapter3Person::Guard, motion, time, {p.x - 52, p.y});
+        m_People.Draw(r, Chapter3Person::Guard, motion, time + .3f, {p.x + 52, p.y});
         r.Text(p.x - 90,
                p.y - 72,
                m_State.brake           ? "반출 정지"
@@ -305,25 +309,40 @@ void Chapter3::DrawActor(Renderer& r, int actor, Point p, float) const
             r.Ellipse(p.x, p.y - 15, 75, 45, Color(.42f, .45f, .49f, .35f));
         }
         r.Text(p.x - 70,
-               p.y - 30,
+               p.y - 105,
                m_Ranged ? "쇠뇌 · 회피/Space 패링" : "검격 · 직전 Space 패링",
                Paper);
     }
     else
     {
-        const char* label = actor == 0    ? "탁본 연락책"
-                            : actor == 1  ? "순찰대 · Space 제압"
-                            : actor == 3  ? "호위대 · 용사가 저지"
-                            : actor == 5  ? "세라드 · 생존"
-                            : actor == 10 ? "엘리안"
-                            : actor == 12 ? "에드릭"
-                                          : "공증 사본 운반자";
-        const int frame = actor == 10                 ? 0
-                          : actor == 12               ? 1
-                          : actor == 5                ? 2
-                          : actor == 0 || actor >= 20 ? 3
-                                                      : 4;
-        if (m_Sprites.Draw(r, ChapterSprite::Chapter3People, frame, p, 52.f))
+        const char* label = actor == 0                 ? "탁본 연락책"
+                            : actor == 1 || actor == 6 ? "순찰대 · Space 제압"
+                            : actor == 3               ? "호위대 · 용사가 저지"
+                            : actor == 5               ? "세라드 · 생존"
+                            : actor == 10              ? "엘리안"
+                            : actor == 12              ? "에드릭"
+                                                       : "공증 사본 운반자";
+        const auto person = actor == 10                 ? Chapter3Person::Elian
+                            : actor == 12               ? Chapter3Person::Edric
+                            : actor == 5                ? Chapter3Person::Serad
+                            : actor == 0 || actor >= 20 ? Chapter3Person::Courier
+                                                        : Chapter3Person::Guard;
+        auto motion = actor == 0 || actor == 1 || actor == 6 || actor >= 20 ? Chapter3Motion::Walk
+                                                                            : Chapter3Motion::Idle;
+        bool flip = actor == 0 ? m_CourierLeg == 1 : actor >= 20 ? actor % 2 == 0 : false;
+        float seconds = time;
+        const int guard = actor == 1 ? 0 : actor == 6 ? 1 : -1;
+        if (guard >= 0 && guard == m_ThreateningGuard && m_Alarm > 1.f)
+        {
+            motion = Chapter3Motion::Attack;
+            seconds = (m_Alarm - 1.f) * 2.f;
+        }
+        if (actor == 3)
+        {
+            motion = Chapter3Motion::Attack;
+            seconds = std::fmod(time + .5f, 1.f);
+        }
+        if (m_People.Draw(r, person, motion, seconds, p, flip))
         {
             r.Text(p.x - 35, p.y - 66, label, Paper);
         }
@@ -331,7 +350,7 @@ void Chapter3::DrawActor(Renderer& r, int actor, Point p, float) const
         {
             Person(r, p, Stone, label);
         }
-        if (actor == 1)
+        if (actor == 1 || actor == 6)
         {
             r.Ellipse(p.x, p.y, 145, 125.5f, Color(.9f, .55f, .16f, .08f));
         }
@@ -340,7 +359,14 @@ void Chapter3::DrawActor(Renderer& r, int actor, Point p, float) const
 
 void Chapter3::DrawEnemy(Renderer& r, const FieldEnemy& enemy, Point p) const
 {
-    if (m_Sprites.Draw(r, ChapterSprite::Chapter3People, 2, p, 52.f))
+    const auto motion = enemy.health == 1 ? Chapter3Motion::Idle
+                        : m_AttackTime > 0.f
+                            ? (m_Ranged ? Chapter3Motion::Ranged : Chapter3Motion::Attack)
+                        : m_BossMoving ? Chapter3Motion::Walk
+                                       : Chapter3Motion::Idle;
+    const float seconds =
+        m_AttackTime > 0.f ? 1.f - m_AttackTime / (m_Ranged ? 1.2f : .9f) : m_VisualTime;
+    if (m_People.Draw(r, Chapter3Person::Serad, motion, seconds, p, m_BossFaceLeft))
     {
         r.Text(p.x - 35, p.y - 66, "세라드 · 기력", Paper);
     }

@@ -483,6 +483,15 @@ namespace
 int main(int argc, char** argv)
 {
     SetConsoleOutputCP(CP_UTF8);
+    if (argc == 3 && (std::strcmp(argv[1], "--playtest-chapter3") == 0 ||
+                      std::strcmp(argv[1], "--playtest-chapter3-save") == 0 ||
+                      std::strcmp(argv[1], "--playtest-chapter3-resume") == 0))
+    {
+        const int mode = std::strcmp(argv[1], "--playtest-chapter3-save") == 0     ? 1
+                         : std::strcmp(argv[1], "--playtest-chapter3-resume") == 0 ? 2
+                                                                                   : 0;
+        return RunChapter3VisualPlaytest(argv[2], mode);
+    }
     if (argc == 3 && std::strcmp(argv[1], "--playtest-visual") == 0)
     {
         return RunVisualPlaytest(argv[2]);

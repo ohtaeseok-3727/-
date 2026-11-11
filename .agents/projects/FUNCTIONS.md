@@ -9,6 +9,9 @@
 | 챕터 2 목표 | [Chapter2.h](../../SimpleGame/src/chapters/Chapter2.h), [Chapter2.cpp](../../SimpleGame/src/chapters/Chapter2.cpp) | `ChooseTarget` | 협곡 목표의 우선순위를 기록한다. 연속 월드에서는 위치를 유지하며 기존 지역 검증에서만 진입 지점 이동을 예약한다. |
 | 전투 입력 | [BasicAttack.h](../../SimpleGame/src/combat/BasicAttack.h), [BasicAttack.cpp](../../SimpleGame/src/combat/BasicAttack.cpp) | `Press`, `Update`, `ConsumeHits` | 3단계 연속 공격 입력을 처리하고, 시간에 맞춰 타격을 기록한 뒤 소비자에게 넘긴다. |
 | 적 동작 | [EnemySystem.h](../../SimpleGame/src/combat/EnemySystem.h), [EnemySystem.cpp](../../SimpleGame/src/combat/EnemySystem.cpp) | `Update` | 활성 적을 시간 간격에 맞춰 갱신하고 플레이어에게 들어오는 피해를 반환한다. |
+| 적 피해 | [EnemySystem.cpp](../../SimpleGame/src/combat/EnemySystem.cpp) | `ApplyHit` | 체력 하한을 적용한 뒤 플레이어 타격으로 감소한 체력을 피해 숫자에 전달한다. |
+| 피해 숫자 | [DamageNumbers.h](../../SimpleGame/src/combat/DamageNumbers.h), [DamageNumbers.cpp](../../SimpleGame/src/combat/DamageNumbers.cpp) | `Add`, `Update`, `Draw` | 평타별 표시 항목을 만들고 같은 스킬 시전과 몬스터의 피해는 합산한다. 각 표시 항목의 시간과 화면 위치를 계산한다. |
+| 피해 숫자 월드 연결 | [GameSessionWorld.cpp](../../SimpleGame/src/app/GameSessionWorld.cpp) | `UpdateDamageNumbers`, `DrawDamageNumbers` | 지역별 표시 항목을 갱신하고 각 지역의 원점을 적용해 전투 화면에 그린다. |
 | 스킬 | [SkillSystem.h](../../SimpleGame/src/player/SkillSystem.h), [SkillSystem.cpp](../../SimpleGame/src/player/SkillSystem.cpp) | `Update` | 남은 재사용 대기 시간을 줄이고 완료된 항목을 제거한다. |
 
 프로젝트 코드가 바뀌면 선언과 구현을 대조해 이 표를 갱신한다.
@@ -379,3 +382,24 @@ Chapter1Sprites::Load는 챕터 3 인물 시트의 다섯 대기 자세를 알�
 | --- | --- | --- |
 | [GameUiTheme.h](../../SimpleGame/src/ui/GameUiTheme.h) | `Ink`, `Surface`, `Border`, `Text`, `Muted`, `Gold`, `Panel`, `Window`, `Button`, `Slot`, `Meter` | 남청·차콜 배경, 어두운 인셋/테두리, 회색 글자와 차분한 강조색을 모든 UI가 공유한다. 버튼 누름/비활성 상태도 같은 팔레트로 구분한다. |
 | [GameView.cpp](../../SimpleGame/src/ui/GameView.cpp), [TitleScreenView.cpp](../../SimpleGame/src/ui/TitleScreenView.cpp), [InventoryView.cpp](../../SimpleGame/src/ui/InventoryView.cpp), [SkillView.cpp](../../SimpleGame/src/ui/SkillView.cpp), [ExpeditionView.cpp](../../SimpleGame/src/ui/ExpeditionView.cpp), [InteractionBubbleView.cpp](../../SimpleGame/src/ui/InteractionBubbleView.cpp) | `DrawHud`, `Draw`, `DrawGuide`, `DrawMap`, `DrawJournal`, `DrawPrompt`, `DrawDescription` | 공통 테마 외의 하단 바·시작 배경·장비/스킬 카드·지도 바닥·대사 배경도 다크 테마로 맞춘다. 배치와 입력을 변경하지 않는다. |
+
+## 2026-11-10 챕터 3 NPC 상태 시트와 실행 검증
+
+| 파일 | 함수·형식 | 역할 |
+| --- | --- | --- |
+| [Chapter3Sprites](../../SimpleGame/src/chapters/Chapter3Sprites.cpp) | `Frame`, `Load`, `Draw` | NPC별 1개 시트의 IDLE/WALK/검격/쇠뇌 프레임과 지연 로드·해제를 담당한다. std::array 고정 자원/constexpr 메타데이터, 고정 배율·머리 X/발 Y 피벗과 UV를 사용한다. |
+| [Chapter3Props](../../SimpleGame/src/chapters/Chapter3Props.cpp) | `Draw` | 원고·기초·기록·상자·운반대·브레이크·수레·승인서 8소품을 Renderer의 공용 텍스처 캐시에 연결한다. |
+| [Chapter3View](../../SimpleGame/src/chapters/Chapter3View.cpp) | `DrawActor`, `DrawEnemy`, `DrawLandmark`, `AddActors` | 실제 이동/경고/공격 예고/소진 상태에 클립을 연결하고, 완료 표식·정치 상태와 순찰 고유 액터를 표시한다. |
+| [인덱서](../../tools/sprites/index_chapter3_atlases.py) | `read_png`, `main` | PNG 원본을 수정하지 않고 RGBA/alpha·투명 경계/잘림·해시를 검사하며 C++ 메타데이터·JSON·HTML을 생성한다. |
+| [VisualPlaytest](../../SimpleGame/src/verification/VisualPlaytest.cpp) | `RunChapter3`, `RunChapter3VisualPlaytest` | 숨김 WGL의 88프레임 렌더·확대표, 두 직업의 실제 도보/포탈/전투 완주, 5단계 파일 저장/복원·사망 재도전·새 프로세스 이어하기를 검사한다. LOCALAPPDATA가 지정 산출물/profile인지 선검사한다. |
+
+Release x64, C01/C02/C03/오픈월드 회귀와 C03 자동 완주·저장 복원 실행 통과. 마법사 사망 후 장거리 복귀는 검사기에서 기존 도로를 경유하며 게임 A* 예산은 유지한다. 브라우저 자동 제어는 URL 확인 실패로 중단되어 HTML 연속 재생 육안 통과로 주장하지 않는다. [자산·재생](../../SimpleGame/Assets/Chapter3/StateSheets-v2/README.md), [전체 검증과 한계](../../docs/implementation/CHAPTER_03_IMPLEMENTATION.md)를 따른다.
+
+## 2026-11-11 챕터 1~18 오픈월드 타일 시안
+
+| 파일 | 함수·형식 | 역할 |
+| --- | --- | --- |
+| [타일 제작기](../../tools/sprites/build_chapter_tile_drafts.py) | `surface`, `route_tile`, `shore_tile`, `decal`, `Atlas` | 원본 픽셀 지형·접합 가능한 방향 마스크·투명 장식과 숫자 ID 아틀라스를 생성한다. |
+| [타일 제작기](../../tools/sprites/build_chapter_tile_drafts.py) | `place_tiles`, `map_image`, `return_variant`, `assert_tiles` | 대표 배치를 숫자 CSV 네 레이어로 작성하고 60도 지면 투영 시안을 그린다. C18 귀환은 C14 바닥·물가·도로를 참조하며 새 표식만 둔다. 바닥 변형 테두리와 도로 알파 접합을 확인한다. |
+
+[타일 시안과 검사 범위](../../SimpleGame/Assets/Environment/Tiles/ChapterDraft-v1/README.md). 독립 검사에서 PNG 알파·숫자 격자 73장·합성 이미지 19장의 픽셀 일치, 내부 도로 연결과 강의 연속성을 확인했다.

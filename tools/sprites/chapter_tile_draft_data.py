@@ -1,0 +1,90 @@
+"""Art directions for representative tile compositions, not canonical map layouts."""
+
+# Texture, base, shade, light, accent.
+MATERIALS = {
+    'meadow': ('grass', '576c42', '35492f', '829359', 'b0a969'),
+    'woodland': ('grass', '384b38', '24382d', '5c7148', '8b8853'),
+    'moss': ('grass', '465b42', '2b443a', '75805a', 'a2a166'),
+    'field': ('furrow', '75583c', '4c3a2c', 'a18353', 'c9a26b'),
+    'earth': ('grit', '977248', '674d38', 'b49360', 'd5b27d'),
+    'ash': ('grit', '564a45', '383339', '80685b', 'b07d57'),
+    'canyon': ('rock', '89583e', '573e32', 'b87d51', 'cf9c67'),
+    'mountain': ('rock', '535563', '383d4d', '858697', 'a8a5ab'),
+    'mine': ('rock', '494340', '2b292e', '756554', '94765d'),
+    'river': ('water', '2e6268', '21454e', '4f9390', '91bbb0'),
+    'flood': ('water', '315b70', '213a54', '558b9e', '99c1c5'),
+    'rift': ('rift', '292d43', '202537', '51687c', 'a1cecb'),
+    'timber': ('wood', '795839', '49362c', 'ad8450', 'c9a375'),
+    'city': ('stone', '777060', '4d4742', 'a49a80', 'c6b495'),
+    'plaza': ('stone', '91806b', '66594f', 'bfae8e', 'd7c499'),
+    'archive': ('slab', '5b615d', '3a4141', '858a7b', 'b9aa8b'),
+    'fort': ('stone', '626069', '393947', '8a8994', 'ad9f90'),
+    'sanctuary': ('slab', '69755e', '444f47', '9da685', 'c4b990'),
+    'accord': ('slab', '796b61', '4d4748', 'ab9580', 'c8a97c'),
+    'white': ('slab', 'a4a0a7', '646572', 'd0c7be', 'eee0c9'),
+    'observatory': ('slab', '4c5067', '2c3147', '767b98', 'a69cbe'),
+    'blood': ('slab', '69444b', '442b3a', '96636a', 'c69080'),
+    'royal': ('slab', '5a7476', '3b505d', '8fa1a0', 'd3bb80'),
+    'basalt': ('rock', '51404e', '322b3c', '786172', '9b7a7c'),
+    'hellstone': ('slab', '634555', '372c3f', '865e70', 'a87987'),
+    'copper': ('metal', '835b4f', '4b3e43', 'b68967', 'd9a977'),
+    'channel': ('metal', '516563', '303f46', '719189', 'a4b893'),
+    'ossuary': ('slab', '625c6d', '403a50', '958999', 'b9aeb1'),
+}
+
+# Transparent ornaments and state marks drawn as original pixel geometry.
+DECALS = {
+    'fern': ('plant', '90a962'), 'pine': ('plant', '64865b'),
+    'rubble': ('debris', 'a39382'), 'crop': ('crop', 'b0ac65'),
+    'scorch': ('crack', 'c08258'), 'rune': ('rune', 'dbb775'),
+    'track': ('rail', 'bd9270'), 'archive_mark': ('rune', 'a9c0b2'),
+    'silt': ('wave', '88aab3'), 'survey': ('rune', 'd1c591'),
+    'observer': ('eye', 'bba4ed'), 'blood_seal': ('rune', 'e88682'),
+    'vein': ('crack', '9bdcda'), 'sealed': ('rune', 'e1bc7c'),
+    'claim': ('rune', 'eea679'), 'supply': ('wave', 'a6d4a2'),
+    'war': ('crack', 'e99579'), 'death': ('rune', 'c3b5e5'),
+}
+
+# Chapter title, sample caption, terrain palette, route, mark, layout template.
+CHAPTERS = [
+    ('국경 마을·북쪽 숲·폐광', '경작지 옆 흙길과 목교, 폐광 입구', 'meadow woodland field mine', 'earth', 'crop fern track', 'village'),
+    ('회색벽·협곡·성채', '협곡 굽이길과 회색벽 성채 접근로', 'canyon ash fort fort', 'city', 'rubble', 'canyon'),
+    ('아르겐·기록관', '시장 포장과 기록관 석재 구획', 'city plaza archive archive', 'plaza', 'archive_mark rubble', 'city'),
+    ('로덴 전초촌·숲·성역', '전초촌에서 숲길을 거쳐 성역과 수문으로', 'meadow woodland moss sanctuary', 'earth', 'fern pine rune', 'forest'),
+    ('아르카스 회담 시설', '외곽 피난로와 그을리고 잠긴 회담 시설', 'accord ash accord archive', 'city', 'scorch silt', 'accord'),
+    ('검은 척추 산맥', '암반 능선과 치료소로 갈라지는 후송로', 'mountain mine moss royal', 'city', 'survey rubble', 'ridge'),
+    ('백색성', '밝은 회랑에서 지하 창고와 봉인실로', 'white fort white observatory', 'white', 'rune sealed', 'castle'),
+    ('검은 관측소', '세 기록실을 잇는 갈림 회랑과 동기화실', 'observatory fort observatory observatory', 'channel', 'observer', 'observatory'),
+    ('혈문성', '혈문성 회랑과 현계 고리 주위의 석재 바닥', 'blood hellstone fort blood', 'copper', 'blood_seal', 'ring'),
+    ('국경 전선·왕정', '전선 흙바닥과 왕정 접견 구역', 'earth ash fort royal', 'city', 'survey rubble', 'royal'),
+    ('수문 계곡·후송로', '수문 아래 굽은 계곡과 부상자 목교', 'canyon moss mountain timber', 'earth', 'rubble silt', 'evac'),
+    ('분단된 왕정', '왕정 바닥에 열린 용맥 균열과 양측 통로', 'royal royal royal royal', 'royal', 'vein rune', 'divide'),
+    ('첫 번째 지옥문', '양측 전선이 만나는 첫 문과 중앙 단면', 'earth ash basalt hellstone', 'city', 'survey sealed', 'front'),
+    ('중심문 외핵', '중심문 계측 바닥과 보조 고정 지점', 'basalt hellstone royal hellstone', 'copper', 'rune vein', 'gate'),
+    ('정복의 왕', '공용 지옥 바닥과 세 점령 구역의 소유 표식', 'basalt hellstone blood hellstone', 'copper', 'claim', 'strongholds'),
+    ('기근의 왕', '세 관로가 중앙 우물로 모이는 바닥', 'basalt hellstone channel hellstone', 'channel', 'supply', 'channels'),
+    ('전쟁핵 전선', '분리 우회로와 재합류하는 전쟁핵 구역', 'basalt hellstone blood hellstone', 'copper', 'war claim', 'war'),
+    ('무덤 왕좌', '무덤 내핵 회랑과 봉인 표식', 'ossuary hellstone basalt hellstone', 'copper', 'death sealed', 'tomb'),
+]
+
+# Authored sample route control points. Consecutive points share an axis.
+ROUTES = {
+    'village': [[(0, 6), (5, 6), (5, 4), (10, 4), (10, 6), (17, 6)], [(3, 6), (3, 1)], [(14, 6), (14, 2)]],
+    'canyon': [[(0, 7), (4, 7), (4, 3), (11, 3), (11, 6), (17, 6)], [(11, 3), (15, 3), (15, 1)]],
+    'city': [[(0, 5), (17, 5)], [(5, 2), (5, 8)], [(12, 2), (12, 8)], [(5, 2), (12, 2)]],
+    'forest': [[(0, 6), (4, 6), (4, 3), (10, 3), (10, 5), (17, 5)], [(12, 5), (12, 2), (15, 2)]],
+    'accord': [[(0, 7), (5, 7), (5, 4), (16, 4)], [(8, 4), (8, 1)], [(14, 4), (14, 8)]],
+    'ridge': [[(0, 8), (5, 8), (5, 5), (10, 5), (10, 2), (17, 2)], [(5, 5), (2, 5), (2, 2)], [(10, 5), (15, 5), (15, 8)]],
+    'castle': [[(0, 5), (17, 5)], [(4, 5), (4, 2), (13, 2), (13, 5)], [(8, 5), (8, 8)]],
+    'observatory': [[(0, 5), (17, 5)], [(5, 5), (5, 2), (9, 2), (9, 5)], [(9, 5), (9, 8), (13, 8), (13, 5)]],
+    'ring': [[(0, 5), (5, 5), (5, 2), (13, 2), (13, 8), (5, 8), (5, 5)], [(13, 5), (17, 5)]],
+    'royal': [[(0, 7), (7, 7), (7, 5), (17, 5)], [(11, 2), (11, 8)], [(15, 2), (15, 8)], [(11, 2), (15, 2)]],
+    'evac': [[(0, 6), (5, 6), (5, 4), (13, 4), (13, 7), (17, 7)], [(5, 6), (5, 8)]],
+    'divide': [[(0, 5), (7, 5)], [(10, 5), (17, 5)], [(5, 2), (5, 8)], [(12, 2), (12, 8)]],
+    'front': [[(0, 5), (17, 5)], [(4, 2), (4, 8)], [(13, 2), (13, 8)], [(8, 3), (8, 7)]],
+    'gate': [[(0, 5), (17, 5)], [(6, 5), (6, 2), (12, 2), (12, 5)], [(9, 5), (9, 8)]],
+    'strongholds': [[(0, 5), (17, 5)], [(4, 5), (4, 2)], [(8, 5), (8, 8)], [(13, 5), (13, 2)]],
+    'channels': [[(0, 2), (5, 2), (5, 5), (17, 5)], [(0, 5), (5, 5)], [(0, 8), (5, 8), (5, 5)]],
+    'war': [[(0, 5), (4, 5), (4, 2), (12, 2), (12, 5), (17, 5)], [(4, 5), (4, 8), (12, 8), (12, 5)]],
+    'tomb': [[(0, 5), (17, 5)], [(6, 2), (6, 8)], [(11, 2), (11, 8)], [(14, 5), (14, 2)]],
+}

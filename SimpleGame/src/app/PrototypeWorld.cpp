@@ -270,7 +270,12 @@ void PrototypeWorld::Update(
 {
     Stream();
     UpdatePlayerState();
-    if (!m_Started || m_Paused || MenuOpen() || m_Level.IsDefeated())
+    const bool gameplayPaused = !m_Started || m_Paused || MenuOpen();
+    if (!gameplayPaused)
+    {
+        m_Level.UpdateDamageNumbers(dt);
+    }
+    if (gameplayPaused || m_Level.IsDefeated())
     {
         m_Attack.Reset();
         m_Moving = false;
@@ -516,6 +521,7 @@ void PrototypeWorld::Draw(Renderer& r, int width, int height)
     if (m_Started)
     {
         CheondanView::DrawScreen(r, m_KnightSkills, width, height);
+        m_Level.DrawDamageNumbers(r, SceneCamera(m_CameraX, m_CameraY, width, height));
     }
     if (m_Started)
     {

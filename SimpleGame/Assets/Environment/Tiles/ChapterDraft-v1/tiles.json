@@ -1,0 +1,3308 @@
+{
+  "tile_pixels": 32,
+  "direction_bits": {
+    "north": 1,
+    "east": 2,
+    "south": 4,
+    "west": 8
+  },
+  "layers": [
+    "ground",
+    "bank",
+    "road",
+    "mark"
+  ],
+  "atlas": "tiles.png",
+  "tiles": [
+    {
+      "id": 0,
+      "layer": "empty",
+      "key": "empty",
+      "rect": [
+        0,
+        0,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 1,
+      "key": "meadow-0",
+      "layer": "ground",
+      "material": "meadow",
+      "variation": 0,
+      "rect": [
+        32,
+        0,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 2,
+      "key": "meadow-1",
+      "layer": "ground",
+      "material": "meadow",
+      "variation": 1,
+      "rect": [
+        64,
+        0,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 3,
+      "key": "meadow-2",
+      "layer": "ground",
+      "material": "meadow",
+      "variation": 2,
+      "rect": [
+        96,
+        0,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 4,
+      "key": "woodland-0",
+      "layer": "ground",
+      "material": "woodland",
+      "variation": 0,
+      "rect": [
+        128,
+        0,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 5,
+      "key": "woodland-1",
+      "layer": "ground",
+      "material": "woodland",
+      "variation": 1,
+      "rect": [
+        160,
+        0,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 6,
+      "key": "woodland-2",
+      "layer": "ground",
+      "material": "woodland",
+      "variation": 2,
+      "rect": [
+        192,
+        0,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 7,
+      "key": "moss-0",
+      "layer": "ground",
+      "material": "moss",
+      "variation": 0,
+      "rect": [
+        224,
+        0,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 8,
+      "key": "moss-1",
+      "layer": "ground",
+      "material": "moss",
+      "variation": 1,
+      "rect": [
+        256,
+        0,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 9,
+      "key": "moss-2",
+      "layer": "ground",
+      "material": "moss",
+      "variation": 2,
+      "rect": [
+        288,
+        0,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 10,
+      "key": "field-0",
+      "layer": "ground",
+      "material": "field",
+      "variation": 0,
+      "rect": [
+        320,
+        0,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 11,
+      "key": "field-1",
+      "layer": "ground",
+      "material": "field",
+      "variation": 1,
+      "rect": [
+        352,
+        0,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 12,
+      "key": "field-2",
+      "layer": "ground",
+      "material": "field",
+      "variation": 2,
+      "rect": [
+        384,
+        0,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 13,
+      "key": "earth-0",
+      "layer": "ground",
+      "material": "earth",
+      "variation": 0,
+      "rect": [
+        416,
+        0,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 14,
+      "key": "earth-1",
+      "layer": "ground",
+      "material": "earth",
+      "variation": 1,
+      "rect": [
+        448,
+        0,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 15,
+      "key": "earth-2",
+      "layer": "ground",
+      "material": "earth",
+      "variation": 2,
+      "rect": [
+        480,
+        0,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 16,
+      "key": "ash-0",
+      "layer": "ground",
+      "material": "ash",
+      "variation": 0,
+      "rect": [
+        0,
+        32,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 17,
+      "key": "ash-1",
+      "layer": "ground",
+      "material": "ash",
+      "variation": 1,
+      "rect": [
+        32,
+        32,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 18,
+      "key": "ash-2",
+      "layer": "ground",
+      "material": "ash",
+      "variation": 2,
+      "rect": [
+        64,
+        32,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 19,
+      "key": "canyon-0",
+      "layer": "ground",
+      "material": "canyon",
+      "variation": 0,
+      "rect": [
+        96,
+        32,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 20,
+      "key": "canyon-1",
+      "layer": "ground",
+      "material": "canyon",
+      "variation": 1,
+      "rect": [
+        128,
+        32,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 21,
+      "key": "canyon-2",
+      "layer": "ground",
+      "material": "canyon",
+      "variation": 2,
+      "rect": [
+        160,
+        32,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 22,
+      "key": "mountain-0",
+      "layer": "ground",
+      "material": "mountain",
+      "variation": 0,
+      "rect": [
+        192,
+        32,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 23,
+      "key": "mountain-1",
+      "layer": "ground",
+      "material": "mountain",
+      "variation": 1,
+      "rect": [
+        224,
+        32,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 24,
+      "key": "mountain-2",
+      "layer": "ground",
+      "material": "mountain",
+      "variation": 2,
+      "rect": [
+        256,
+        32,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 25,
+      "key": "mine-0",
+      "layer": "ground",
+      "material": "mine",
+      "variation": 0,
+      "rect": [
+        288,
+        32,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 26,
+      "key": "mine-1",
+      "layer": "ground",
+      "material": "mine",
+      "variation": 1,
+      "rect": [
+        320,
+        32,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 27,
+      "key": "mine-2",
+      "layer": "ground",
+      "material": "mine",
+      "variation": 2,
+      "rect": [
+        352,
+        32,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 28,
+      "key": "river-0",
+      "layer": "ground",
+      "material": "river",
+      "variation": 0,
+      "rect": [
+        384,
+        32,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 29,
+      "key": "river-1",
+      "layer": "ground",
+      "material": "river",
+      "variation": 1,
+      "rect": [
+        416,
+        32,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 30,
+      "key": "river-2",
+      "layer": "ground",
+      "material": "river",
+      "variation": 2,
+      "rect": [
+        448,
+        32,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 31,
+      "key": "flood-0",
+      "layer": "ground",
+      "material": "flood",
+      "variation": 0,
+      "rect": [
+        480,
+        32,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 32,
+      "key": "flood-1",
+      "layer": "ground",
+      "material": "flood",
+      "variation": 1,
+      "rect": [
+        0,
+        64,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 33,
+      "key": "flood-2",
+      "layer": "ground",
+      "material": "flood",
+      "variation": 2,
+      "rect": [
+        32,
+        64,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 34,
+      "key": "rift-0",
+      "layer": "ground",
+      "material": "rift",
+      "variation": 0,
+      "rect": [
+        64,
+        64,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 35,
+      "key": "rift-1",
+      "layer": "ground",
+      "material": "rift",
+      "variation": 1,
+      "rect": [
+        96,
+        64,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 36,
+      "key": "rift-2",
+      "layer": "ground",
+      "material": "rift",
+      "variation": 2,
+      "rect": [
+        128,
+        64,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 37,
+      "key": "timber-0",
+      "layer": "ground",
+      "material": "timber",
+      "variation": 0,
+      "rect": [
+        160,
+        64,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 38,
+      "key": "timber-1",
+      "layer": "ground",
+      "material": "timber",
+      "variation": 1,
+      "rect": [
+        192,
+        64,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 39,
+      "key": "timber-2",
+      "layer": "ground",
+      "material": "timber",
+      "variation": 2,
+      "rect": [
+        224,
+        64,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 40,
+      "key": "city-0",
+      "layer": "ground",
+      "material": "city",
+      "variation": 0,
+      "rect": [
+        256,
+        64,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 41,
+      "key": "city-1",
+      "layer": "ground",
+      "material": "city",
+      "variation": 1,
+      "rect": [
+        288,
+        64,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 42,
+      "key": "city-2",
+      "layer": "ground",
+      "material": "city",
+      "variation": 2,
+      "rect": [
+        320,
+        64,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 43,
+      "key": "plaza-0",
+      "layer": "ground",
+      "material": "plaza",
+      "variation": 0,
+      "rect": [
+        352,
+        64,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 44,
+      "key": "plaza-1",
+      "layer": "ground",
+      "material": "plaza",
+      "variation": 1,
+      "rect": [
+        384,
+        64,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 45,
+      "key": "plaza-2",
+      "layer": "ground",
+      "material": "plaza",
+      "variation": 2,
+      "rect": [
+        416,
+        64,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 46,
+      "key": "archive-0",
+      "layer": "ground",
+      "material": "archive",
+      "variation": 0,
+      "rect": [
+        448,
+        64,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 47,
+      "key": "archive-1",
+      "layer": "ground",
+      "material": "archive",
+      "variation": 1,
+      "rect": [
+        480,
+        64,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 48,
+      "key": "archive-2",
+      "layer": "ground",
+      "material": "archive",
+      "variation": 2,
+      "rect": [
+        0,
+        96,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 49,
+      "key": "fort-0",
+      "layer": "ground",
+      "material": "fort",
+      "variation": 0,
+      "rect": [
+        32,
+        96,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 50,
+      "key": "fort-1",
+      "layer": "ground",
+      "material": "fort",
+      "variation": 1,
+      "rect": [
+        64,
+        96,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 51,
+      "key": "fort-2",
+      "layer": "ground",
+      "material": "fort",
+      "variation": 2,
+      "rect": [
+        96,
+        96,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 52,
+      "key": "sanctuary-0",
+      "layer": "ground",
+      "material": "sanctuary",
+      "variation": 0,
+      "rect": [
+        128,
+        96,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 53,
+      "key": "sanctuary-1",
+      "layer": "ground",
+      "material": "sanctuary",
+      "variation": 1,
+      "rect": [
+        160,
+        96,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 54,
+      "key": "sanctuary-2",
+      "layer": "ground",
+      "material": "sanctuary",
+      "variation": 2,
+      "rect": [
+        192,
+        96,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 55,
+      "key": "accord-0",
+      "layer": "ground",
+      "material": "accord",
+      "variation": 0,
+      "rect": [
+        224,
+        96,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 56,
+      "key": "accord-1",
+      "layer": "ground",
+      "material": "accord",
+      "variation": 1,
+      "rect": [
+        256,
+        96,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 57,
+      "key": "accord-2",
+      "layer": "ground",
+      "material": "accord",
+      "variation": 2,
+      "rect": [
+        288,
+        96,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 58,
+      "key": "white-0",
+      "layer": "ground",
+      "material": "white",
+      "variation": 0,
+      "rect": [
+        320,
+        96,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 59,
+      "key": "white-1",
+      "layer": "ground",
+      "material": "white",
+      "variation": 1,
+      "rect": [
+        352,
+        96,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 60,
+      "key": "white-2",
+      "layer": "ground",
+      "material": "white",
+      "variation": 2,
+      "rect": [
+        384,
+        96,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 61,
+      "key": "observatory-0",
+      "layer": "ground",
+      "material": "observatory",
+      "variation": 0,
+      "rect": [
+        416,
+        96,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 62,
+      "key": "observatory-1",
+      "layer": "ground",
+      "material": "observatory",
+      "variation": 1,
+      "rect": [
+        448,
+        96,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 63,
+      "key": "observatory-2",
+      "layer": "ground",
+      "material": "observatory",
+      "variation": 2,
+      "rect": [
+        480,
+        96,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 64,
+      "key": "blood-0",
+      "layer": "ground",
+      "material": "blood",
+      "variation": 0,
+      "rect": [
+        0,
+        128,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 65,
+      "key": "blood-1",
+      "layer": "ground",
+      "material": "blood",
+      "variation": 1,
+      "rect": [
+        32,
+        128,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 66,
+      "key": "blood-2",
+      "layer": "ground",
+      "material": "blood",
+      "variation": 2,
+      "rect": [
+        64,
+        128,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 67,
+      "key": "royal-0",
+      "layer": "ground",
+      "material": "royal",
+      "variation": 0,
+      "rect": [
+        96,
+        128,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 68,
+      "key": "royal-1",
+      "layer": "ground",
+      "material": "royal",
+      "variation": 1,
+      "rect": [
+        128,
+        128,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 69,
+      "key": "royal-2",
+      "layer": "ground",
+      "material": "royal",
+      "variation": 2,
+      "rect": [
+        160,
+        128,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 70,
+      "key": "basalt-0",
+      "layer": "ground",
+      "material": "basalt",
+      "variation": 0,
+      "rect": [
+        192,
+        128,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 71,
+      "key": "basalt-1",
+      "layer": "ground",
+      "material": "basalt",
+      "variation": 1,
+      "rect": [
+        224,
+        128,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 72,
+      "key": "basalt-2",
+      "layer": "ground",
+      "material": "basalt",
+      "variation": 2,
+      "rect": [
+        256,
+        128,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 73,
+      "key": "hellstone-0",
+      "layer": "ground",
+      "material": "hellstone",
+      "variation": 0,
+      "rect": [
+        288,
+        128,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 74,
+      "key": "hellstone-1",
+      "layer": "ground",
+      "material": "hellstone",
+      "variation": 1,
+      "rect": [
+        320,
+        128,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 75,
+      "key": "hellstone-2",
+      "layer": "ground",
+      "material": "hellstone",
+      "variation": 2,
+      "rect": [
+        352,
+        128,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 76,
+      "key": "copper-0",
+      "layer": "ground",
+      "material": "copper",
+      "variation": 0,
+      "rect": [
+        384,
+        128,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 77,
+      "key": "copper-1",
+      "layer": "ground",
+      "material": "copper",
+      "variation": 1,
+      "rect": [
+        416,
+        128,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 78,
+      "key": "copper-2",
+      "layer": "ground",
+      "material": "copper",
+      "variation": 2,
+      "rect": [
+        448,
+        128,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 79,
+      "key": "channel-0",
+      "layer": "ground",
+      "material": "channel",
+      "variation": 0,
+      "rect": [
+        480,
+        128,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 80,
+      "key": "channel-1",
+      "layer": "ground",
+      "material": "channel",
+      "variation": 1,
+      "rect": [
+        0,
+        160,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 81,
+      "key": "channel-2",
+      "layer": "ground",
+      "material": "channel",
+      "variation": 2,
+      "rect": [
+        32,
+        160,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 82,
+      "key": "ossuary-0",
+      "layer": "ground",
+      "material": "ossuary",
+      "variation": 0,
+      "rect": [
+        64,
+        160,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 83,
+      "key": "ossuary-1",
+      "layer": "ground",
+      "material": "ossuary",
+      "variation": 1,
+      "rect": [
+        96,
+        160,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 84,
+      "key": "ossuary-2",
+      "layer": "ground",
+      "material": "ossuary",
+      "variation": 2,
+      "rect": [
+        128,
+        160,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 85,
+      "key": "route-channel-1",
+      "layer": "road",
+      "material": "channel",
+      "mask": 1,
+      "rect": [
+        160,
+        160,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 86,
+      "key": "route-channel-2",
+      "layer": "road",
+      "material": "channel",
+      "mask": 2,
+      "rect": [
+        192,
+        160,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 87,
+      "key": "route-channel-3",
+      "layer": "road",
+      "material": "channel",
+      "mask": 3,
+      "rect": [
+        224,
+        160,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 88,
+      "key": "route-channel-4",
+      "layer": "road",
+      "material": "channel",
+      "mask": 4,
+      "rect": [
+        256,
+        160,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 89,
+      "key": "route-channel-5",
+      "layer": "road",
+      "material": "channel",
+      "mask": 5,
+      "rect": [
+        288,
+        160,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 90,
+      "key": "route-channel-6",
+      "layer": "road",
+      "material": "channel",
+      "mask": 6,
+      "rect": [
+        320,
+        160,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 91,
+      "key": "route-channel-7",
+      "layer": "road",
+      "material": "channel",
+      "mask": 7,
+      "rect": [
+        352,
+        160,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 92,
+      "key": "route-channel-8",
+      "layer": "road",
+      "material": "channel",
+      "mask": 8,
+      "rect": [
+        384,
+        160,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 93,
+      "key": "route-channel-9",
+      "layer": "road",
+      "material": "channel",
+      "mask": 9,
+      "rect": [
+        416,
+        160,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 94,
+      "key": "route-channel-10",
+      "layer": "road",
+      "material": "channel",
+      "mask": 10,
+      "rect": [
+        448,
+        160,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 95,
+      "key": "route-channel-11",
+      "layer": "road",
+      "material": "channel",
+      "mask": 11,
+      "rect": [
+        480,
+        160,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 96,
+      "key": "route-channel-12",
+      "layer": "road",
+      "material": "channel",
+      "mask": 12,
+      "rect": [
+        0,
+        192,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 97,
+      "key": "route-channel-13",
+      "layer": "road",
+      "material": "channel",
+      "mask": 13,
+      "rect": [
+        32,
+        192,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 98,
+      "key": "route-channel-14",
+      "layer": "road",
+      "material": "channel",
+      "mask": 14,
+      "rect": [
+        64,
+        192,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 99,
+      "key": "route-channel-15",
+      "layer": "road",
+      "material": "channel",
+      "mask": 15,
+      "rect": [
+        96,
+        192,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 100,
+      "key": "route-city-1",
+      "layer": "road",
+      "material": "city",
+      "mask": 1,
+      "rect": [
+        128,
+        192,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 101,
+      "key": "route-city-2",
+      "layer": "road",
+      "material": "city",
+      "mask": 2,
+      "rect": [
+        160,
+        192,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 102,
+      "key": "route-city-3",
+      "layer": "road",
+      "material": "city",
+      "mask": 3,
+      "rect": [
+        192,
+        192,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 103,
+      "key": "route-city-4",
+      "layer": "road",
+      "material": "city",
+      "mask": 4,
+      "rect": [
+        224,
+        192,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 104,
+      "key": "route-city-5",
+      "layer": "road",
+      "material": "city",
+      "mask": 5,
+      "rect": [
+        256,
+        192,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 105,
+      "key": "route-city-6",
+      "layer": "road",
+      "material": "city",
+      "mask": 6,
+      "rect": [
+        288,
+        192,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 106,
+      "key": "route-city-7",
+      "layer": "road",
+      "material": "city",
+      "mask": 7,
+      "rect": [
+        320,
+        192,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 107,
+      "key": "route-city-8",
+      "layer": "road",
+      "material": "city",
+      "mask": 8,
+      "rect": [
+        352,
+        192,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 108,
+      "key": "route-city-9",
+      "layer": "road",
+      "material": "city",
+      "mask": 9,
+      "rect": [
+        384,
+        192,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 109,
+      "key": "route-city-10",
+      "layer": "road",
+      "material": "city",
+      "mask": 10,
+      "rect": [
+        416,
+        192,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 110,
+      "key": "route-city-11",
+      "layer": "road",
+      "material": "city",
+      "mask": 11,
+      "rect": [
+        448,
+        192,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 111,
+      "key": "route-city-12",
+      "layer": "road",
+      "material": "city",
+      "mask": 12,
+      "rect": [
+        480,
+        192,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 112,
+      "key": "route-city-13",
+      "layer": "road",
+      "material": "city",
+      "mask": 13,
+      "rect": [
+        0,
+        224,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 113,
+      "key": "route-city-14",
+      "layer": "road",
+      "material": "city",
+      "mask": 14,
+      "rect": [
+        32,
+        224,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 114,
+      "key": "route-city-15",
+      "layer": "road",
+      "material": "city",
+      "mask": 15,
+      "rect": [
+        64,
+        224,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 115,
+      "key": "route-copper-1",
+      "layer": "road",
+      "material": "copper",
+      "mask": 1,
+      "rect": [
+        96,
+        224,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 116,
+      "key": "route-copper-2",
+      "layer": "road",
+      "material": "copper",
+      "mask": 2,
+      "rect": [
+        128,
+        224,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 117,
+      "key": "route-copper-3",
+      "layer": "road",
+      "material": "copper",
+      "mask": 3,
+      "rect": [
+        160,
+        224,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 118,
+      "key": "route-copper-4",
+      "layer": "road",
+      "material": "copper",
+      "mask": 4,
+      "rect": [
+        192,
+        224,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 119,
+      "key": "route-copper-5",
+      "layer": "road",
+      "material": "copper",
+      "mask": 5,
+      "rect": [
+        224,
+        224,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 120,
+      "key": "route-copper-6",
+      "layer": "road",
+      "material": "copper",
+      "mask": 6,
+      "rect": [
+        256,
+        224,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 121,
+      "key": "route-copper-7",
+      "layer": "road",
+      "material": "copper",
+      "mask": 7,
+      "rect": [
+        288,
+        224,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 122,
+      "key": "route-copper-8",
+      "layer": "road",
+      "material": "copper",
+      "mask": 8,
+      "rect": [
+        320,
+        224,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 123,
+      "key": "route-copper-9",
+      "layer": "road",
+      "material": "copper",
+      "mask": 9,
+      "rect": [
+        352,
+        224,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 124,
+      "key": "route-copper-10",
+      "layer": "road",
+      "material": "copper",
+      "mask": 10,
+      "rect": [
+        384,
+        224,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 125,
+      "key": "route-copper-11",
+      "layer": "road",
+      "material": "copper",
+      "mask": 11,
+      "rect": [
+        416,
+        224,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 126,
+      "key": "route-copper-12",
+      "layer": "road",
+      "material": "copper",
+      "mask": 12,
+      "rect": [
+        448,
+        224,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 127,
+      "key": "route-copper-13",
+      "layer": "road",
+      "material": "copper",
+      "mask": 13,
+      "rect": [
+        480,
+        224,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 128,
+      "key": "route-copper-14",
+      "layer": "road",
+      "material": "copper",
+      "mask": 14,
+      "rect": [
+        0,
+        256,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 129,
+      "key": "route-copper-15",
+      "layer": "road",
+      "material": "copper",
+      "mask": 15,
+      "rect": [
+        32,
+        256,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 130,
+      "key": "route-earth-1",
+      "layer": "road",
+      "material": "earth",
+      "mask": 1,
+      "rect": [
+        64,
+        256,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 131,
+      "key": "route-earth-2",
+      "layer": "road",
+      "material": "earth",
+      "mask": 2,
+      "rect": [
+        96,
+        256,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 132,
+      "key": "route-earth-3",
+      "layer": "road",
+      "material": "earth",
+      "mask": 3,
+      "rect": [
+        128,
+        256,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 133,
+      "key": "route-earth-4",
+      "layer": "road",
+      "material": "earth",
+      "mask": 4,
+      "rect": [
+        160,
+        256,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 134,
+      "key": "route-earth-5",
+      "layer": "road",
+      "material": "earth",
+      "mask": 5,
+      "rect": [
+        192,
+        256,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 135,
+      "key": "route-earth-6",
+      "layer": "road",
+      "material": "earth",
+      "mask": 6,
+      "rect": [
+        224,
+        256,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 136,
+      "key": "route-earth-7",
+      "layer": "road",
+      "material": "earth",
+      "mask": 7,
+      "rect": [
+        256,
+        256,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 137,
+      "key": "route-earth-8",
+      "layer": "road",
+      "material": "earth",
+      "mask": 8,
+      "rect": [
+        288,
+        256,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 138,
+      "key": "route-earth-9",
+      "layer": "road",
+      "material": "earth",
+      "mask": 9,
+      "rect": [
+        320,
+        256,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 139,
+      "key": "route-earth-10",
+      "layer": "road",
+      "material": "earth",
+      "mask": 10,
+      "rect": [
+        352,
+        256,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 140,
+      "key": "route-earth-11",
+      "layer": "road",
+      "material": "earth",
+      "mask": 11,
+      "rect": [
+        384,
+        256,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 141,
+      "key": "route-earth-12",
+      "layer": "road",
+      "material": "earth",
+      "mask": 12,
+      "rect": [
+        416,
+        256,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 142,
+      "key": "route-earth-13",
+      "layer": "road",
+      "material": "earth",
+      "mask": 13,
+      "rect": [
+        448,
+        256,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 143,
+      "key": "route-earth-14",
+      "layer": "road",
+      "material": "earth",
+      "mask": 14,
+      "rect": [
+        480,
+        256,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 144,
+      "key": "route-earth-15",
+      "layer": "road",
+      "material": "earth",
+      "mask": 15,
+      "rect": [
+        0,
+        288,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 145,
+      "key": "route-plaza-1",
+      "layer": "road",
+      "material": "plaza",
+      "mask": 1,
+      "rect": [
+        32,
+        288,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 146,
+      "key": "route-plaza-2",
+      "layer": "road",
+      "material": "plaza",
+      "mask": 2,
+      "rect": [
+        64,
+        288,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 147,
+      "key": "route-plaza-3",
+      "layer": "road",
+      "material": "plaza",
+      "mask": 3,
+      "rect": [
+        96,
+        288,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 148,
+      "key": "route-plaza-4",
+      "layer": "road",
+      "material": "plaza",
+      "mask": 4,
+      "rect": [
+        128,
+        288,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 149,
+      "key": "route-plaza-5",
+      "layer": "road",
+      "material": "plaza",
+      "mask": 5,
+      "rect": [
+        160,
+        288,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 150,
+      "key": "route-plaza-6",
+      "layer": "road",
+      "material": "plaza",
+      "mask": 6,
+      "rect": [
+        192,
+        288,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 151,
+      "key": "route-plaza-7",
+      "layer": "road",
+      "material": "plaza",
+      "mask": 7,
+      "rect": [
+        224,
+        288,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 152,
+      "key": "route-plaza-8",
+      "layer": "road",
+      "material": "plaza",
+      "mask": 8,
+      "rect": [
+        256,
+        288,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 153,
+      "key": "route-plaza-9",
+      "layer": "road",
+      "material": "plaza",
+      "mask": 9,
+      "rect": [
+        288,
+        288,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 154,
+      "key": "route-plaza-10",
+      "layer": "road",
+      "material": "plaza",
+      "mask": 10,
+      "rect": [
+        320,
+        288,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 155,
+      "key": "route-plaza-11",
+      "layer": "road",
+      "material": "plaza",
+      "mask": 11,
+      "rect": [
+        352,
+        288,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 156,
+      "key": "route-plaza-12",
+      "layer": "road",
+      "material": "plaza",
+      "mask": 12,
+      "rect": [
+        384,
+        288,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 157,
+      "key": "route-plaza-13",
+      "layer": "road",
+      "material": "plaza",
+      "mask": 13,
+      "rect": [
+        416,
+        288,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 158,
+      "key": "route-plaza-14",
+      "layer": "road",
+      "material": "plaza",
+      "mask": 14,
+      "rect": [
+        448,
+        288,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 159,
+      "key": "route-plaza-15",
+      "layer": "road",
+      "material": "plaza",
+      "mask": 15,
+      "rect": [
+        480,
+        288,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 160,
+      "key": "route-royal-1",
+      "layer": "road",
+      "material": "royal",
+      "mask": 1,
+      "rect": [
+        0,
+        320,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 161,
+      "key": "route-royal-2",
+      "layer": "road",
+      "material": "royal",
+      "mask": 2,
+      "rect": [
+        32,
+        320,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 162,
+      "key": "route-royal-3",
+      "layer": "road",
+      "material": "royal",
+      "mask": 3,
+      "rect": [
+        64,
+        320,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 163,
+      "key": "route-royal-4",
+      "layer": "road",
+      "material": "royal",
+      "mask": 4,
+      "rect": [
+        96,
+        320,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 164,
+      "key": "route-royal-5",
+      "layer": "road",
+      "material": "royal",
+      "mask": 5,
+      "rect": [
+        128,
+        320,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 165,
+      "key": "route-royal-6",
+      "layer": "road",
+      "material": "royal",
+      "mask": 6,
+      "rect": [
+        160,
+        320,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 166,
+      "key": "route-royal-7",
+      "layer": "road",
+      "material": "royal",
+      "mask": 7,
+      "rect": [
+        192,
+        320,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 167,
+      "key": "route-royal-8",
+      "layer": "road",
+      "material": "royal",
+      "mask": 8,
+      "rect": [
+        224,
+        320,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 168,
+      "key": "route-royal-9",
+      "layer": "road",
+      "material": "royal",
+      "mask": 9,
+      "rect": [
+        256,
+        320,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 169,
+      "key": "route-royal-10",
+      "layer": "road",
+      "material": "royal",
+      "mask": 10,
+      "rect": [
+        288,
+        320,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 170,
+      "key": "route-royal-11",
+      "layer": "road",
+      "material": "royal",
+      "mask": 11,
+      "rect": [
+        320,
+        320,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 171,
+      "key": "route-royal-12",
+      "layer": "road",
+      "material": "royal",
+      "mask": 12,
+      "rect": [
+        352,
+        320,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 172,
+      "key": "route-royal-13",
+      "layer": "road",
+      "material": "royal",
+      "mask": 13,
+      "rect": [
+        384,
+        320,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 173,
+      "key": "route-royal-14",
+      "layer": "road",
+      "material": "royal",
+      "mask": 14,
+      "rect": [
+        416,
+        320,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 174,
+      "key": "route-royal-15",
+      "layer": "road",
+      "material": "royal",
+      "mask": 15,
+      "rect": [
+        448,
+        320,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 175,
+      "key": "route-timber-1",
+      "layer": "road",
+      "material": "timber",
+      "mask": 1,
+      "rect": [
+        480,
+        320,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 176,
+      "key": "route-timber-2",
+      "layer": "road",
+      "material": "timber",
+      "mask": 2,
+      "rect": [
+        0,
+        352,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 177,
+      "key": "route-timber-3",
+      "layer": "road",
+      "material": "timber",
+      "mask": 3,
+      "rect": [
+        32,
+        352,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 178,
+      "key": "route-timber-4",
+      "layer": "road",
+      "material": "timber",
+      "mask": 4,
+      "rect": [
+        64,
+        352,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 179,
+      "key": "route-timber-5",
+      "layer": "road",
+      "material": "timber",
+      "mask": 5,
+      "rect": [
+        96,
+        352,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 180,
+      "key": "route-timber-6",
+      "layer": "road",
+      "material": "timber",
+      "mask": 6,
+      "rect": [
+        128,
+        352,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 181,
+      "key": "route-timber-7",
+      "layer": "road",
+      "material": "timber",
+      "mask": 7,
+      "rect": [
+        160,
+        352,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 182,
+      "key": "route-timber-8",
+      "layer": "road",
+      "material": "timber",
+      "mask": 8,
+      "rect": [
+        192,
+        352,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 183,
+      "key": "route-timber-9",
+      "layer": "road",
+      "material": "timber",
+      "mask": 9,
+      "rect": [
+        224,
+        352,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 184,
+      "key": "route-timber-10",
+      "layer": "road",
+      "material": "timber",
+      "mask": 10,
+      "rect": [
+        256,
+        352,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 185,
+      "key": "route-timber-11",
+      "layer": "road",
+      "material": "timber",
+      "mask": 11,
+      "rect": [
+        288,
+        352,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 186,
+      "key": "route-timber-12",
+      "layer": "road",
+      "material": "timber",
+      "mask": 12,
+      "rect": [
+        320,
+        352,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 187,
+      "key": "route-timber-13",
+      "layer": "road",
+      "material": "timber",
+      "mask": 13,
+      "rect": [
+        352,
+        352,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 188,
+      "key": "route-timber-14",
+      "layer": "road",
+      "material": "timber",
+      "mask": 14,
+      "rect": [
+        384,
+        352,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 189,
+      "key": "route-timber-15",
+      "layer": "road",
+      "material": "timber",
+      "mask": 15,
+      "rect": [
+        416,
+        352,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 190,
+      "key": "route-white-1",
+      "layer": "road",
+      "material": "white",
+      "mask": 1,
+      "rect": [
+        448,
+        352,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 191,
+      "key": "route-white-2",
+      "layer": "road",
+      "material": "white",
+      "mask": 2,
+      "rect": [
+        480,
+        352,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 192,
+      "key": "route-white-3",
+      "layer": "road",
+      "material": "white",
+      "mask": 3,
+      "rect": [
+        0,
+        384,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 193,
+      "key": "route-white-4",
+      "layer": "road",
+      "material": "white",
+      "mask": 4,
+      "rect": [
+        32,
+        384,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 194,
+      "key": "route-white-5",
+      "layer": "road",
+      "material": "white",
+      "mask": 5,
+      "rect": [
+        64,
+        384,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 195,
+      "key": "route-white-6",
+      "layer": "road",
+      "material": "white",
+      "mask": 6,
+      "rect": [
+        96,
+        384,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 196,
+      "key": "route-white-7",
+      "layer": "road",
+      "material": "white",
+      "mask": 7,
+      "rect": [
+        128,
+        384,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 197,
+      "key": "route-white-8",
+      "layer": "road",
+      "material": "white",
+      "mask": 8,
+      "rect": [
+        160,
+        384,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 198,
+      "key": "route-white-9",
+      "layer": "road",
+      "material": "white",
+      "mask": 9,
+      "rect": [
+        192,
+        384,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 199,
+      "key": "route-white-10",
+      "layer": "road",
+      "material": "white",
+      "mask": 10,
+      "rect": [
+        224,
+        384,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 200,
+      "key": "route-white-11",
+      "layer": "road",
+      "material": "white",
+      "mask": 11,
+      "rect": [
+        256,
+        384,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 201,
+      "key": "route-white-12",
+      "layer": "road",
+      "material": "white",
+      "mask": 12,
+      "rect": [
+        288,
+        384,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 202,
+      "key": "route-white-13",
+      "layer": "road",
+      "material": "white",
+      "mask": 13,
+      "rect": [
+        320,
+        384,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 203,
+      "key": "route-white-14",
+      "layer": "road",
+      "material": "white",
+      "mask": 14,
+      "rect": [
+        352,
+        384,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 204,
+      "key": "route-white-15",
+      "layer": "road",
+      "material": "white",
+      "mask": 15,
+      "rect": [
+        384,
+        384,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 205,
+      "key": "shore-1",
+      "layer": "bank",
+      "mask": 1,
+      "rect": [
+        416,
+        384,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 206,
+      "key": "shore-2",
+      "layer": "bank",
+      "mask": 2,
+      "rect": [
+        448,
+        384,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 207,
+      "key": "shore-3",
+      "layer": "bank",
+      "mask": 3,
+      "rect": [
+        480,
+        384,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 208,
+      "key": "shore-4",
+      "layer": "bank",
+      "mask": 4,
+      "rect": [
+        0,
+        416,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 209,
+      "key": "shore-5",
+      "layer": "bank",
+      "mask": 5,
+      "rect": [
+        32,
+        416,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 210,
+      "key": "shore-6",
+      "layer": "bank",
+      "mask": 6,
+      "rect": [
+        64,
+        416,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 211,
+      "key": "shore-7",
+      "layer": "bank",
+      "mask": 7,
+      "rect": [
+        96,
+        416,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 212,
+      "key": "shore-8",
+      "layer": "bank",
+      "mask": 8,
+      "rect": [
+        128,
+        416,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 213,
+      "key": "shore-9",
+      "layer": "bank",
+      "mask": 9,
+      "rect": [
+        160,
+        416,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 214,
+      "key": "shore-10",
+      "layer": "bank",
+      "mask": 10,
+      "rect": [
+        192,
+        416,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 215,
+      "key": "shore-11",
+      "layer": "bank",
+      "mask": 11,
+      "rect": [
+        224,
+        416,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 216,
+      "key": "shore-12",
+      "layer": "bank",
+      "mask": 12,
+      "rect": [
+        256,
+        416,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 217,
+      "key": "shore-13",
+      "layer": "bank",
+      "mask": 13,
+      "rect": [
+        288,
+        416,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 218,
+      "key": "shore-14",
+      "layer": "bank",
+      "mask": 14,
+      "rect": [
+        320,
+        416,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 219,
+      "key": "shore-15",
+      "layer": "bank",
+      "mask": 15,
+      "rect": [
+        352,
+        416,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 220,
+      "key": "decal-fern",
+      "layer": "mark",
+      "rect": [
+        384,
+        416,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 221,
+      "key": "decal-pine",
+      "layer": "mark",
+      "rect": [
+        416,
+        416,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 222,
+      "key": "decal-rubble",
+      "layer": "mark",
+      "rect": [
+        448,
+        416,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 223,
+      "key": "decal-crop",
+      "layer": "mark",
+      "rect": [
+        480,
+        416,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 224,
+      "key": "decal-scorch",
+      "layer": "mark",
+      "rect": [
+        0,
+        448,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 225,
+      "key": "decal-rune",
+      "layer": "mark",
+      "rect": [
+        32,
+        448,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 226,
+      "key": "decal-track",
+      "layer": "mark",
+      "rect": [
+        64,
+        448,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 227,
+      "key": "decal-archive_mark",
+      "layer": "mark",
+      "rect": [
+        96,
+        448,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 228,
+      "key": "decal-silt",
+      "layer": "mark",
+      "rect": [
+        128,
+        448,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 229,
+      "key": "decal-survey",
+      "layer": "mark",
+      "rect": [
+        160,
+        448,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 230,
+      "key": "decal-observer",
+      "layer": "mark",
+      "rect": [
+        192,
+        448,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 231,
+      "key": "decal-blood_seal",
+      "layer": "mark",
+      "rect": [
+        224,
+        448,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 232,
+      "key": "decal-vein",
+      "layer": "mark",
+      "rect": [
+        256,
+        448,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 233,
+      "key": "decal-sealed",
+      "layer": "mark",
+      "rect": [
+        288,
+        448,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 234,
+      "key": "decal-claim",
+      "layer": "mark",
+      "rect": [
+        320,
+        448,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 235,
+      "key": "decal-supply",
+      "layer": "mark",
+      "rect": [
+        352,
+        448,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 236,
+      "key": "decal-war",
+      "layer": "mark",
+      "rect": [
+        384,
+        448,
+        32,
+        32
+      ]
+    },
+    {
+      "id": 237,
+      "key": "decal-death",
+      "layer": "mark",
+      "rect": [
+        416,
+        448,
+        32,
+        32
+      ]
+    }
+  ],
+  "chapters": [
+    {
+      "chapter": 1,
+      "title": "국경 마을·북쪽 숲·폐광",
+      "caption": "경작지 옆 흙길과 목교, 폐광 입구",
+      "width": 18,
+      "height": 10,
+      "layers": {
+        "ground": "maps/c01-ground.csv",
+        "bank": "maps/c01-bank.csv",
+        "road": "maps/c01-road.csv",
+        "mark": "maps/c01-mark.csv"
+      }
+    },
+    {
+      "chapter": 2,
+      "title": "회색벽·협곡·성채",
+      "caption": "협곡 굽이길과 회색벽 성채 접근로",
+      "width": 18,
+      "height": 10,
+      "layers": {
+        "ground": "maps/c02-ground.csv",
+        "bank": "maps/c02-bank.csv",
+        "road": "maps/c02-road.csv",
+        "mark": "maps/c02-mark.csv"
+      }
+    },
+    {
+      "chapter": 3,
+      "title": "아르겐·기록관",
+      "caption": "시장 포장과 기록관 석재 구획",
+      "width": 18,
+      "height": 10,
+      "layers": {
+        "ground": "maps/c03-ground.csv",
+        "bank": "maps/c03-bank.csv",
+        "road": "maps/c03-road.csv",
+        "mark": "maps/c03-mark.csv"
+      }
+    },
+    {
+      "chapter": 4,
+      "title": "로덴 전초촌·숲·성역",
+      "caption": "전초촌에서 숲길을 거쳐 성역과 수문으로",
+      "width": 18,
+      "height": 10,
+      "layers": {
+        "ground": "maps/c04-ground.csv",
+        "bank": "maps/c04-bank.csv",
+        "road": "maps/c04-road.csv",
+        "mark": "maps/c04-mark.csv"
+      }
+    },
+    {
+      "chapter": 5,
+      "title": "아르카스 회담 시설",
+      "caption": "외곽 피난로와 그을리고 잠긴 회담 시설",
+      "width": 18,
+      "height": 10,
+      "layers": {
+        "ground": "maps/c05-ground.csv",
+        "bank": "maps/c05-bank.csv",
+        "road": "maps/c05-road.csv",
+        "mark": "maps/c05-mark.csv"
+      }
+    },
+    {
+      "chapter": 6,
+      "title": "검은 척추 산맥",
+      "caption": "암반 능선과 치료소로 갈라지는 후송로",
+      "width": 18,
+      "height": 10,
+      "layers": {
+        "ground": "maps/c06-ground.csv",
+        "bank": "maps/c06-bank.csv",
+        "road": "maps/c06-road.csv",
+        "mark": "maps/c06-mark.csv"
+      }
+    },
+    {
+      "chapter": 7,
+      "title": "백색성",
+      "caption": "밝은 회랑에서 지하 창고와 봉인실로",
+      "width": 18,
+      "height": 10,
+      "layers": {
+        "ground": "maps/c07-ground.csv",
+        "bank": "maps/c07-bank.csv",
+        "road": "maps/c07-road.csv",
+        "mark": "maps/c07-mark.csv"
+      }
+    },
+    {
+      "chapter": 8,
+      "title": "검은 관측소",
+      "caption": "세 기록실을 잇는 갈림 회랑과 동기화실",
+      "width": 18,
+      "height": 10,
+      "layers": {
+        "ground": "maps/c08-ground.csv",
+        "bank": "maps/c08-bank.csv",
+        "road": "maps/c08-road.csv",
+        "mark": "maps/c08-mark.csv"
+      }
+    },
+    {
+      "chapter": 9,
+      "title": "혈문성",
+      "caption": "혈문성 회랑과 현계 고리 주위의 석재 바닥",
+      "width": 18,
+      "height": 10,
+      "layers": {
+        "ground": "maps/c09-ground.csv",
+        "bank": "maps/c09-bank.csv",
+        "road": "maps/c09-road.csv",
+        "mark": "maps/c09-mark.csv"
+      }
+    },
+    {
+      "chapter": 10,
+      "title": "국경 전선·왕정",
+      "caption": "전선 흙바닥과 왕정 접견 구역",
+      "width": 18,
+      "height": 10,
+      "layers": {
+        "ground": "maps/c10-ground.csv",
+        "bank": "maps/c10-bank.csv",
+        "road": "maps/c10-road.csv",
+        "mark": "maps/c10-mark.csv"
+      }
+    },
+    {
+      "chapter": 11,
+      "title": "수문 계곡·후송로",
+      "caption": "수문 아래 굽은 계곡과 부상자 목교",
+      "width": 18,
+      "height": 10,
+      "layers": {
+        "ground": "maps/c11-ground.csv",
+        "bank": "maps/c11-bank.csv",
+        "road": "maps/c11-road.csv",
+        "mark": "maps/c11-mark.csv"
+      }
+    },
+    {
+      "chapter": 12,
+      "title": "분단된 왕정",
+      "caption": "왕정 바닥에 열린 용맥 균열과 양측 통로",
+      "width": 18,
+      "height": 10,
+      "layers": {
+        "ground": "maps/c12-ground.csv",
+        "bank": "maps/c12-bank.csv",
+        "road": "maps/c12-road.csv",
+        "mark": "maps/c12-mark.csv"
+      }
+    },
+    {
+      "chapter": 13,
+      "title": "첫 번째 지옥문",
+      "caption": "양측 전선이 만나는 첫 문과 중앙 단면",
+      "width": 18,
+      "height": 10,
+      "layers": {
+        "ground": "maps/c13-ground.csv",
+        "bank": "maps/c13-bank.csv",
+        "road": "maps/c13-road.csv",
+        "mark": "maps/c13-mark.csv"
+      }
+    },
+    {
+      "chapter": 14,
+      "title": "중심문 외핵",
+      "caption": "중심문 계측 바닥과 보조 고정 지점",
+      "width": 18,
+      "height": 10,
+      "layers": {
+        "ground": "maps/c14-ground.csv",
+        "bank": "maps/c14-bank.csv",
+        "road": "maps/c14-road.csv",
+        "mark": "maps/c14-mark.csv"
+      }
+    },
+    {
+      "chapter": 15,
+      "title": "정복의 왕",
+      "caption": "공용 지옥 바닥과 세 점령 구역의 소유 표식",
+      "width": 18,
+      "height": 10,
+      "layers": {
+        "ground": "maps/c15-ground.csv",
+        "bank": "maps/c15-bank.csv",
+        "road": "maps/c15-road.csv",
+        "mark": "maps/c15-mark.csv"
+      }
+    },
+    {
+      "chapter": 16,
+      "title": "기근의 왕",
+      "caption": "세 관로가 중앙 우물로 모이는 바닥",
+      "width": 18,
+      "height": 10,
+      "layers": {
+        "ground": "maps/c16-ground.csv",
+        "bank": "maps/c16-bank.csv",
+        "road": "maps/c16-road.csv",
+        "mark": "maps/c16-mark.csv"
+      }
+    },
+    {
+      "chapter": 17,
+      "title": "전쟁핵 전선",
+      "caption": "분리 우회로와 재합류하는 전쟁핵 구역",
+      "width": 18,
+      "height": 10,
+      "layers": {
+        "ground": "maps/c17-ground.csv",
+        "bank": "maps/c17-bank.csv",
+        "road": "maps/c17-road.csv",
+        "mark": "maps/c17-mark.csv"
+      }
+    },
+    {
+      "chapter": 18,
+      "title": "무덤 왕좌",
+      "caption": "무덤 내핵 회랑과 봉인 표식",
+      "width": 18,
+      "height": 10,
+      "layers": {
+        "ground": "maps/c18-ground.csv",
+        "bank": "maps/c18-bank.csv",
+        "road": "maps/c18-road.csv",
+        "mark": "maps/c18-mark.csv"
+      }
+    }
+  ],
+  "variants": [
+    {
+      "chapter": 18,
+      "base_chapter": 14,
+      "preview": "preview/c18-return.png",
+      "layers": {
+        "ground": "maps/c14-ground.csv",
+        "bank": "maps/c14-bank.csv",
+        "road": "maps/c14-road.csv",
+        "mark": "maps/c18-return-mark.csv"
+      }
+    }
+  ]
+}

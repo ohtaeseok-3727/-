@@ -216,7 +216,8 @@ void GameSession::StrikeProjectile(WorldPosition from,
                                    std::unordered_set<std::uint64_t>& hitTargets,
                                    const LevelMap& sourceMap,
                                    float height,
-                                   std::optional<WorldPosition> sightOrigin)
+                                   std::optional<WorldPosition> sightOrigin,
+                                   const DamageCast& cast)
 {
     const auto& map = m_OpenWorld ? m_Regions[m_Region].map : sourceMap;
     const auto worldFrom = from, worldTo = to;
@@ -235,7 +236,8 @@ void GameSession::StrikeProjectile(WorldPosition from,
         hitTargets,
         map,
         height,
-        sightOrigin ? std::optional<WorldPosition>(LocalPlayer(*sightOrigin)) : std::nullopt));
+        sightOrigin ? std::optional<WorldPosition>(LocalPlayer(*sightOrigin)) : std::nullopt,
+        cast));
     m_Chapter->StrikeProjectileObjects(
         from,
         to,
@@ -264,7 +266,8 @@ void GameSession::StrikeProjectile(WorldPosition from,
                         region.map,
                         height,
                         sightOrigin ? std::optional<WorldPosition>(m_Atlas.ToLocal(i, *sightOrigin))
-                                    : std::nullopt),
+                                    : std::nullopt,
+                        cast),
                     region.loot);
             }
         }

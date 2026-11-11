@@ -51,7 +51,9 @@ class GameSession
     const Chapter* FindChapter(const std::string& id) const;
     void Reset(int profession, unsigned seed, LevelMap& map);
     void Strike(int step, WorldPosition player, bool faceLeft, const LevelMap& map);
-    void StrikeArea(WorldPosition center, float radius, int damage);
+    void StrikeArea(WorldPosition center, float radius, int damage, const DamageCast& cast = {});
+    void UpdateDamageNumbers(float dt);
+    void DrawDamageNumbers(Renderer& renderer, const SceneCamera& camera) const;
     void Update(float dt, WorldPosition player, const LevelMap& map, bool interactionHeld = false);
     void Revive();
     WorldPosition ConsumePush();
@@ -84,7 +86,8 @@ class GameSession
                           std::unordered_set<std::uint64_t>& hitTargets,
                           const LevelMap& map,
                           float height = LevelTuning::ProjectileHeight,
-                          std::optional<WorldPosition> sightOrigin = std::nullopt);
+                          std::optional<WorldPosition> sightOrigin = std::nullopt,
+                          const DamageCast& cast = {});
 
   private:
     void ActivateRegion(std::size_t region);

@@ -15,6 +15,9 @@ MapId Chapter3::InitialMap() const
 void Chapter3::Reset()
 {
     m_State = {};
+    m_VisualTime = 0.f;
+    m_BossMoving = m_BossFaceLeft = false;
+    m_ThreateningGuard = -1;
     m_Impact = {};
     m_Courier = {360.f, -250.f};
     m_CourierLeg = 0;

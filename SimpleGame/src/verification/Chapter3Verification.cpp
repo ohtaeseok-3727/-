@@ -161,6 +161,10 @@ namespace
         f.chapter.Retry(f.enemies);
         Require(f.chapter.ExportFlags().at("C03_PREWAR_EXPEDITION") == 1,
                 "Retry lost proven evidence");
+        f.Tick({-850.f, -1800.f}, false, 800);
+        Require(f.chapter.Goal()->label == "움직이는 원본 운반대" &&
+                    f.chapter.ExportFlags().at("C03_PREWAR_EXPEDITION") == 1,
+                "Cart deadline did not restart interception with evidence intact");
         f.FollowGoal(30);
         Require(f.chapter.Goal()->object == Brake, "Moving cart interaction failed");
         f.Tick(f.Site(Brake).position, true, 42);
